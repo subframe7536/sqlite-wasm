@@ -1,0 +1,67 @@
+{
+  "name": "@subframe7536/sqlite-wasm",
+  "version": "0.0.0",
+  "description": "typesafe wa-sqlite wrapper, persist data to IndexedDB or OPFS",
+  "author": "subframe7536",
+  "license": "MIT",
+  "repository": "",
+  "keywords": [
+    "typescript",
+    "sqlite",
+    "wasm",
+    "IndexedDB"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./idb": {
+      "import": "./dist/idb.mjs",
+      "require": "./dist/idb.js"
+    },
+    "./opfs": {
+      "import": "./dist/opfs.mjs",
+      "require": "./dist/opfs.js"
+    },
+    "./wasm": "./dist/wa-sqlite.wasm",
+    "./wasm-async": "./dist/wa-sqlite-async.wasm"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "typesVersions": {
+    "*": {
+      "idb": [
+        "./dist/idb.d.ts"
+      ],
+      "opfs": [
+        "./dist/opfs.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "tsc --noEmit && eslint . --max-warnings 0",
+    "format": "eslint . --fix",
+    "build": "tsup",
+    "release": "pnpm lint && pnpm run build && bumpp --all && npm publish"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@subframe7536/type-utils": "^0.1.3"
+  },
+  "devDependencies": {
+    "@subframe7536/eslint-config": "^0.3.7",
+    "@types/node": "^20.8.10",
+    "bumpp": "^9.2.0",
+    "eslint": "^8.52.0",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "wa-sqlite": "github:rhashimoto/wa-sqlite#v0.9.9"
+  }
+}
