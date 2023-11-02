@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "@subframe7536/type-utils/tsconfig.json",
   "compilerOptions": {
     "types": [
       "vite/client"

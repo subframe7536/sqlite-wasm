@@ -1,6 +1,6 @@
 {
   "name": "@subframe7536/sqlite-wasm",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "typesafe wa-sqlite wrapper, persist data to IndexedDB or OPFS",
   "author": "subframe7536",
   "license": "MIT",
@@ -43,7 +43,7 @@
     "dist"
   ],
   "scripts": {
-    "lint": "tsc --noEmit && eslint . --max-warnings 0",
+    "lint": "tsc --noEmit && eslint ./src --max-warnings 0",
     "format": "eslint . --fix",
     "build": "tsup",
     "release": "pnpm lint && pnpm run build && bumpp --all && npm publish"
