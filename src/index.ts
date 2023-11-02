@@ -6,11 +6,20 @@ export type InitOptions = {
   sqlite: SQLiteAPI
 }
 
+export type SQLiteDB = {
+  db: number
+  sqlite: SQLiteAPI
+  close(): Promise<void>
+  changes(): number
+  lastInsertRowId(): Promise<number>
+  run(sql: string, parameters?: readonly unknown[]): Promise<Record<string, SQLiteCompatibleType>[]>
+}
+
 /**
  * load db
  * @param options init options
  */
-export async function initSQLite(options: Promisable<InitOptions>) {
+export async function initSQLite(options: Promisable<InitOptions>): Promise<SQLiteDB> {
   const { fileName, sqlite } = await options
   const db = await sqlite.open_v2(fileName)
   return {
@@ -23,10 +32,10 @@ export async function initSQLite(options: Promisable<InitOptions>) {
       return sqlite.changes(db)
     },
     async lastInsertRowId() {
-      return await new Promise(resolve => sqlite.exec(
+      return await new Promise<number>(resolve => sqlite.exec(
         db,
         'SELECT last_insert_rowid()',
-        ([id]) => resolve(id),
+        ([id]) => resolve(id as number),
       ))
     },
     async run(sql: string, parameters?: readonly unknown[]) {
