@@ -73,6 +73,23 @@ export function getAsyncWasmURL() {
   return new URL('@subframe7536/sqlite-wasm/wasm-async', import.meta.url).href
 }
 
-export function isOpfsSupported() {
-  return 'getDirectory' in navigator?.storage
+/**
+ * check if [OPFS SyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle) supported
+ *
+ * **MUST RUN IN WEB WORKER**
+ */
+export async function isOpfsSupported() {
+  const root = await navigator?.storage.getDirectory?.()
+  if (!root) {
+    return false
+  }
+  const checkFileName = '_check.txt'
+  try {
+    const handle = await root.getFileHandle(checkFileName, { create: true })
+    return 'createSyncAccessHandle' in handle
+  } catch {
+    return false
+  } finally {
+    await root.removeEntry(checkFileName)
+  }
 }

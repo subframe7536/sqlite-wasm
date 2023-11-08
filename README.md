@@ -6,7 +6,7 @@ typesafe [wa-sqlite](https://github.com/rhashimoto/wa-sqlite) wrapper, persist d
 
 #### IndexedDB
 
-use `wa-sqlite-async.wasm`, larger than sync version, better compatibility
+use IDBBatchAtomicVFS with `wa-sqlite-async.wasm`, larger than sync version, better compatibility
 
 ```ts
 import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
@@ -22,7 +22,9 @@ const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
 
 #### OPFS
 
-use `wa-sqlite.wasm`, smaller than async version, [compatibility](https://caniuse.com/native-filesystem-api)
+use AccessHandlePoolVFS with `wa-sqlite.wasm`, smaller than async version, [compatibility](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
+
+**MUST RUN IN WEB WORKER**
 
 ```ts
 import { getSyncWasmURL, initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
@@ -32,7 +34,7 @@ import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
 const url = getSyncWasmURL()
 
 onmessage = async () => {
-  if (!isOpfsSupported()) {
+  if (!await isOpfsSupported()) {
     return
   }
   const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(

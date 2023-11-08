@@ -4,7 +4,7 @@
   "description": "typesafe wa-sqlite wrapper, persist data to IndexedDB or OPFS",
   "author": "subframe7536",
   "license": "MIT",
-  "repository": "",
+  "repository": "https://github.com/subframe7536/sqlite-wasm",
   "keywords": [
     "typescript",
     "sqlite",

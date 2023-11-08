@@ -9,7 +9,9 @@ export type BaseOptions = {
 
 /**
  * store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system),
- * use `wa-sqlite.wasm` (smaller than async version), [compatibility](https://caniuse.com/native-filesystem-api)
+ * use AccessHandlePoolVFS with `wa-sqlite.wasm` (smaller than async version), [compatibility](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
+ *
+ * **MUST RUN IN WEB WORKER**
  * @param fileName db file name
  * @param options wasm file url
  * @example

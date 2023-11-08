@@ -21,7 +21,7 @@ export interface IDBVFSOptions {
 
 /**
  * storage data in IndexedDB,
- * use `wa-sqlite-async.wasm` (larger than sync version), better compatibility
+ * use IDBBatchAtomicVFS with `wa-sqlite-async.wasm` (larger than sync version), better compatibility
  * @param fileName db file name
  * @param options options
  * @example
