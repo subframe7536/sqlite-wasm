@@ -4,4 +4,7 @@ export default defineConfig({
   build: {
     minify: false,
   },
+  server: {
+    fs: { allow: ['..'] },
+  },
 })

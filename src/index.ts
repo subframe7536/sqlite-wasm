@@ -83,7 +83,7 @@ export async function isOpfsSupported() {
   if (!root) {
     return false
   }
-  const checkFileName = '_check.txt'
+  const checkFileName = '_CHECK'
   try {
     const handle = await root.getFileHandle(checkFileName, { create: true })
     return 'createSyncAccessHandle' in handle

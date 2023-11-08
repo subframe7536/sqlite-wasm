@@ -4,7 +4,7 @@ import Worker from './worker?worker'
 
 initSQLite(useIdbStorage('test', {
   // url: 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm',
-  url: getAsyncWasmURL(),
+  // url: getAsyncWasmURL(),
 }))
   .then(async ({ run }) => {
     console.log(await run('CREATE TABLE t1(a INTEGER, b INTEGER, c VARCHAR(100));'))
