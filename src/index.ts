@@ -74,6 +74,12 @@ export function getAsyncWasmURL() {
 }
 
 /**
+ * check if IndexedDB and Web Locks API supported
+ */
+export async function isIdbSupported() {
+  return 'locks' in navigator
+}
+/**
  * check if [OPFS SyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle) supported
  *
  * **MUST RUN IN WEB WORKER**
