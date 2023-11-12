@@ -8,6 +8,8 @@ typesafe [wa-sqlite](https://github.com/rhashimoto/wa-sqlite) wrapper, persist d
 
 use IDBBatchAtomicVFS with `wa-sqlite-async.wasm`, larger than sync version, better compatibility
 
+[minimal IndexedDB backend browser version](https://caniuse.com/mdn-api_lockmanager)
+
 ```ts
 import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 import { getAsyncWasmURL, initSQLite } from '@subframe7536/sqlite-wasm'
@@ -22,7 +24,9 @@ const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
 
 #### OPFS
 
-use AccessHandlePoolVFS with `wa-sqlite.wasm`, smaller than async version, [compatibility](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
+use AccessHandlePoolVFS with `wa-sqlite.wasm`, smaller than async version
+
+[minimal OPFS backend browser version](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
 
 **MUST RUN IN WEB WORKER**
 

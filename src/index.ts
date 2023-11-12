@@ -74,9 +74,10 @@ export function getAsyncWasmURL() {
 }
 
 /**
- * check if IndexedDB and Web Locks API supported
+ * check if IndexedDB and Web Locks API supported,
+ * also is the **minimum version** of browser
  */
-export async function isIdbSupported() {
+export function isIdbSupported() {
   return 'locks' in navigator
 }
 /**
