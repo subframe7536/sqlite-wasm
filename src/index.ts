@@ -1,26 +1,15 @@
 import type { Promisable } from '@subframe7536/type-utils'
-import { SQLITE_ROW } from 'wa-sqlite'
-
-export type InitOptions = {
-  fileName: string
-  sqlite: SQLiteAPI
-}
-
-export type SQLiteDB = {
-  db: number
-  sqlite: SQLiteAPI
-  close(): Promise<void>
-  changes(): number
-  lastInsertRowId(): Promise<number>
-  run(sql: string, parameters?: readonly unknown[]): Promise<Record<string, SQLiteCompatibleType>[]>
-}
+import { Factory, SQLITE_ROW } from 'wa-sqlite'
+import type { InitOptions, SQLiteDB } from './types'
 
 /**
  * load db
  * @param options init options
  */
 export async function initSQLite(options: Promisable<InitOptions>): Promise<SQLiteDB> {
-  const { fileName, sqlite } = await options
+  const { fileName, sqliteModule, vfs } = await options
+  const sqlite = Factory(sqliteModule)
+  sqlite.vfs_register(vfs)
   const db = await sqlite.open_v2(fileName)
   return {
     db,

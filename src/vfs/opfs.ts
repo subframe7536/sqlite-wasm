@@ -1,11 +1,6 @@
-import { Factory } from 'wa-sqlite'
 import SQLiteESMFactory from 'wa-sqlite/dist/wa-sqlite.mjs'
 import { AccessHandlePoolVFS } from 'wa-sqlite/src/examples/AccessHandlePoolVFS.js'
-import type { InitOptions } from '..'
-
-export type BaseOptions = {
-  url?: string
-}
+import type { BaseOptions, InitOptions } from '../types'
 
 /**
  * store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system),
@@ -35,12 +30,10 @@ export async function useOpfsStorage(
   fileName: string,
   options: BaseOptions = {},
 ): Promise<InitOptions> {
-  const SQLiteModule = await SQLiteESMFactory(
+  const sqliteModule = await SQLiteESMFactory(
     options.url ? { locateFile: () => options.url } : undefined,
   )
-  const sqlite = Factory(SQLiteModule)
   const vfs = new AccessHandlePoolVFS(fileName)
   await vfs.isReady
-  sqlite.vfs_register(vfs)
-  return { sqlite, fileName }
+  return { sqliteModule, fileName, vfs }
 }
