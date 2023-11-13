@@ -1,4 +1,4 @@
-import { getSyncWasmURL, initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
+import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
 import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
 
 onmessage = async () => {
@@ -8,7 +8,6 @@ onmessage = async () => {
   initSQLite(useOpfsStorage(
     'test',
     // 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm',
-    // { url: getSyncWasmURL() },
   ))
     .then(async ({ run }) => {
       console.log(await run('CREATE TABLE t1(a INTEGER, b INTEGER, c VARCHAR(100));'))

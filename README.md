@@ -14,8 +14,7 @@ use IDBBatchAtomicVFS with `wa-sqlite-async.wasm`, larger than sync version, bet
 import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 import { getAsyncWasmURL, initSQLite } from '@subframe7536/sqlite-wasm'
 
-// const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
-const url = getAsyncWasmURL()
+const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
 
 const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
   useIdbStorage('test', { url })
@@ -34,11 +33,10 @@ use AccessHandlePoolVFS with `wa-sqlite.wasm`, smaller than async version
 import { getSyncWasmURL, initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
 import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
 
-// const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm',
-const url = getSyncWasmURL()
+const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm'
 
 onmessage = async () => {
-  if (!await isOpfsSupported()) {
+  if (!await isOpfsSupported()) { // this can be called in main thread
     return
   }
   const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(

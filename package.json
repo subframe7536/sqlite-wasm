@@ -45,6 +45,7 @@
   "scripts": {
     "lint": "tsc --noEmit && eslint ./src --max-warnings 0",
     "format": "eslint . --fix",
+    "dev": "tsup --watch",
     "build": "tsup",
     "release": "pnpm lint && pnpm run build && bumpp --all && npm publish"
   },
