@@ -29,26 +29,30 @@ export async function initSQLite(options: Promisable<InitOptions>): Promise<SQLi
     },
     async run(sql: string, parameters?: readonly unknown[]) {
       const str = sqlite.str_new(db, sql)
-      const prepared = await sqlite.prepare_v2(db, sqlite.str_value(str))
-
-      if (!prepared) {
-        return []
-      }
-
-      const stmt = prepared.stmt
       try {
-        parameters?.length && sqlite.bind_collection(stmt, parameters as [])
+        const prepared = await sqlite.prepare_v2(db, sqlite.str_value(str))
 
-        const rows: Record<string, SQLiteCompatibleType>[] = []
-        const cols = sqlite.column_names(stmt)
-
-        while ((await sqlite.step(stmt)) === SQLITE_ROW) {
-          const row = sqlite.row(stmt)
-          rows.push(Object.fromEntries(cols.map((key, i) => [key, row[i]])))
+        if (!prepared) {
+          return []
         }
-        return rows
+
+        const stmt = prepared.stmt
+        try {
+          parameters?.length && sqlite.bind_collection(stmt, parameters as [])
+
+          const rows: Record<string, SQLiteCompatibleType>[] = []
+          const cols = sqlite.column_names(stmt)
+
+          while ((await sqlite.step(stmt)) === SQLITE_ROW) {
+            const row = sqlite.row(stmt)
+            rows.push(Object.fromEntries(cols.map((key, i) => [key, row[i]])))
+          }
+          return rows
+        } finally {
+          await sqlite.finalize(stmt)
+        }
       } finally {
-        await sqlite.finalize(stmt)
+        sqlite.str_finish(str)
       }
     },
   }
