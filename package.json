@@ -62,6 +62,6 @@
     "eslint": "^8.53.0",
     "tsup": "^7.2.0",
     "typescript": "^5.2.2",
-    "wa-sqlite": "github:rhashimoto/wa-sqlite#v0.9.9"
+    "wa-sqlite": "github:rhashimoto/wa-sqlite#180a256aa97632ad56ac786889374388ba32fb28"
   }
 }

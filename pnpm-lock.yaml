@@ -5,7 +5,8 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@subframe7536/type-utils':    specifier: ^0.1.4
+  '@subframe7536/type-utils':
+    specifier: ^0.1.4
     version: 0.1.4
 
 devDependencies:
@@ -28,8 +29,8 @@ devDependencies:
     specifier: ^5.2.2
     version: 5.2.2
   wa-sqlite:
-    specifier: github:rhashimoto/wa-sqlite#v0.9.9
-    version: github.com/rhashimoto/wa-sqlite/5266fd8cdb4b3ced41352ba7b1f0e919ac37027a
+    specifier: github:rhashimoto/wa-sqlite#180a256aa97632ad56ac786889374388ba32fb28
+    version: github.com/rhashimoto/wa-sqlite/180a256aa97632ad56ac786889374388ba32fb28
 
 packages:
 
@@ -3513,8 +3514,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/rhashimoto/wa-sqlite/5266fd8cdb4b3ced41352ba7b1f0e919ac37027a:
-    resolution: {tarball: https://codeload.github.com/rhashimoto/wa-sqlite/tar.gz/5266fd8cdb4b3ced41352ba7b1f0e919ac37027a}
+  github.com/rhashimoto/wa-sqlite/180a256aa97632ad56ac786889374388ba32fb28:
+    resolution: {tarball: https://codeload.github.com/rhashimoto/wa-sqlite/tar.gz/180a256aa97632ad56ac786889374388ba32fb28}
     name: wa-sqlite
     version: 0.9.9
     dev: true

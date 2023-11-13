@@ -10,10 +10,16 @@ export default defineConfig({
   },
   format: ['esm', 'cjs'],
   dts: true,
-  shims: true,
   treeshake: true,
-  external: ['vite', 'esbuild'],
   plugins: [
+    {
+      name: 'classic worker',
+      renderChunk(code) {
+        if (this.format === 'cjs') {
+          return { code: code.replace(/import\.meta\.url/g, 'undefined') }
+        }
+      },
+    },
     {
       name: 'copy-wasm',
       buildEnd() {
