@@ -89,3 +89,36 @@ export async function isOpfsSupported() {
     await root.removeEntry(checkFileName)
   }
 }
+
+/**
+ * check `new Worker(url, { type: 'module' }) support`
+ */
+export function isModuleWorkerSupport(): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    if (typeof Worker === 'undefined') {
+      resolve(false)
+    }
+
+    const url = URL.createObjectURL(
+      new Blob(
+        ['onmessage=()=>{postMessage("")}'],
+        { type: 'text/javascript' },
+      ),
+    )
+
+    const worker = new Worker(url, { type: 'module' })
+
+    worker.onmessage = () => {
+      URL.revokeObjectURL(url)
+      worker.terminate()
+      resolve(true)
+    }
+
+    worker.onerror = () => {
+      worker.terminate()
+      reject(false)
+    }
+
+    worker.postMessage('')
+  })
+}
