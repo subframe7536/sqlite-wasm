@@ -9,7 +9,7 @@ export function isIdbSupported() {
 /**
  * check if [OPFS SyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle) supported
  */
-export function isOpfsSupported(): Promise<boolean> {
+export async function isOpfsSupported(): Promise<boolean> {
   // must call and test, see https://stackoverflow.com/questions/76113945/file-system-access-api-on-safari-ios-createsyncaccesshandle-unknownerror-i
   const inner = async () => {
     const root = await navigator?.storage.getDirectory?.()
@@ -28,32 +28,39 @@ export function isOpfsSupported(): Promise<boolean> {
       await root.removeEntry('_CHECK')
     }
   }
-  return 'importScripts' in globalThis
-    ? inner()
-    : new Promise<boolean>((resolve, reject) => {
-      if (typeof Worker === 'undefined') {
-        resolve(false)
-      }
+  if ('importScripts' in globalThis) {
+    return inner()
+  }
+  try {
+    if (typeof Worker === 'undefined') {
+      return false
+    }
 
-      const url = URL.createObjectURL(
-        new Blob(
-          [`onmessage=()=>{(${inner})().then(postMessage)}`],
-          { type: 'text/javascript' },
-        ),
-      )
+    const url = URL.createObjectURL(
+      new Blob(
+        [`(${inner})().then(postMessage)`],
+        { type: 'text/javascript' },
+      ),
+    )
+    const worker = new Worker(url)
 
-      const worker = new Worker(url, { type: 'module' })
+    const result = await new Promise<boolean>((resolve, reject) => {
       worker.onmessage = ({ data }) => {
-        URL.revokeObjectURL(url)
-        worker.terminate()
         resolve(data)
       }
-      worker.onerror = () => {
-        worker.terminate()
+      worker.onerror = (err) => {
+        err.preventDefault()
         reject(false)
       }
-      worker.postMessage('')
-    }).catch(() => false)
+    })
+
+    worker.terminate()
+    URL.revokeObjectURL(url)
+
+    return result
+  } catch {
+    return false
+  }
 }
 
 /**

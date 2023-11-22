@@ -14,10 +14,11 @@ use IDBBatchAtomicVFS with `wa-sqlite-async.wasm`, larger than sync version, bet
 import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 import { getAsyncWasmURL, initSQLite } from '@subframe7536/sqlite-wasm'
 
+// optional url
 const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
 
 const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
-  useIdbStorage('test', { url })
+  useIdbStorage('IndexedDB', { url })
 )
 ```
 
@@ -33,6 +34,7 @@ use AccessHandlePoolVFS with `wa-sqlite.wasm`, smaller than async version
 import { getSyncWasmURL, initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
 import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
 
+// optional url
 const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm'
 
 onmessage = async () => {
@@ -40,7 +42,7 @@ onmessage = async () => {
     return
   }
   const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
-    useOpfsStorage('test', url)
+    useOpfsStorage('OPFS', url)
   )
 }
 ```
