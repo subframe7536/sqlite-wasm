@@ -2,6 +2,8 @@
 
 typesafe [wa-sqlite](https://github.com/rhashimoto/wa-sqlite) wrapper, persist data to IndexedDB or [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system)
 
+low-level layer for [kysely-wasqlite-worker-dialect](https://github.com/subframe7536/kysely-sqlite-tools/tree/master/packages/dialect-wasqlite-worker)
+
 ### usage
 
 #### IndexedDB
