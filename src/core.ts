@@ -6,11 +6,14 @@ import type { InitOptions, SQLiteDB } from './types'
  * load db
  * @param options init options
  */
-export async function initSQLite(options: Promisable<InitOptions>): Promise<SQLiteDB> {
+export async function initSQLite(options: Promisable<InitOptions>, readonly?: boolean): Promise<SQLiteDB> {
   const { fileName, sqliteModule, vfs } = await options
   const sqlite = Factory(sqliteModule)
   sqlite.vfs_register(vfs)
-  const db = await sqlite.open_v2(fileName)
+  const db = await sqlite.open_v2(
+    path,
+    readonly ? SQLITE_OPEN_READONLY : undefined,
+  )
   return {
     db,
     sqlite,
