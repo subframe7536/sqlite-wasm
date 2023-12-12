@@ -1,7 +1,22 @@
 declare module 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js' {
 
   export class IDBBatchAtomicVFS extends SQLiteVFS {
-    constructor(idbDatabaseName: string, options?: object)
+    constructor(
+      idbDatabaseName: string,
+      options?: {
+      /**
+       * @default "relaxed"
+       */
+        durability?: 'default' | 'strict' | 'relaxed'
+        /**
+         * @default "deferred"
+         */
+        purge?: 'deferred' | 'manual'
+        /**
+         * @default 16
+         */
+        purgeAtLeast?: number
+      })
   }
 }
 declare module 'wa-sqlite/src/examples/AccessHandlePoolVFS.js' {

@@ -1,6 +1,5 @@
 /**
- * check if IndexedDB and Web Locks API supported,
- * also is the **minimum version** of browser
+ * check if IndexedDB and Web Locks API supported
  */
 export function isIdbSupported() {
   return 'locks' in navigator

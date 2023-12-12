@@ -2,12 +2,14 @@ import SQLiteESMFactory from 'wa-sqlite/dist/wa-sqlite.mjs'
 import { AccessHandlePoolVFS } from 'wa-sqlite/src/examples/AccessHandlePoolVFS.js'
 import type { BaseOptions, InitOptions } from '../types'
 
+export { AccessHandlePoolVFS } from 'wa-sqlite/src/examples/AccessHandlePoolVFS.js'
+
 /**
  * store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system),
  * use AccessHandlePoolVFS with `wa-sqlite.wasm` (smaller than async version), [compatibility](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
  *
  * **MUST RUN IN WEB WORKER**
- * @param fileName db file name
+ * @param path db file directory path
  * @param options wasm file url
  * @example
  * // only effect in worker
@@ -27,13 +29,13 @@ import type { BaseOptions, InitOptions } from '../types'
  * }
  */
 export async function useOpfsStorage(
-  fileName: string,
+  path: string,
   options: BaseOptions = {},
 ): Promise<InitOptions> {
   const sqliteModule = await SQLiteESMFactory(
     options.url ? { locateFile: () => options.url } : undefined,
   )
-  const vfs = new AccessHandlePoolVFS(fileName)
+  const vfs = new AccessHandlePoolVFS(path)
   await vfs.isReady
-  return { sqliteModule, fileName, vfs }
+  return { sqliteModule, path, vfs }
 }
