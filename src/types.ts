@@ -24,15 +24,15 @@ export type SQLiteDB = {
   /**
    * close db
    */
-  close(): Promise<void>
+  close: () => Promise<void>
   /**
    * get db changes
    */
-  changes(): number
+  changes: () => number
   /**
    * get lastInsertRowId
    */
-  lastInsertRowId(): Promise<number>
+  lastInsertRowId: () => Promise<number>
   /**
    * run sql and return result list
    * @param sql raw sql with placeholder
@@ -40,7 +40,7 @@ export type SQLiteDB = {
    * @example
    * const results = await run('select ? from test where id = ?', ['name', 1])
    */
-  run(sql: string, parameters?: readonly unknown[]): Promise<Array<Record<string, SQLiteCompatibleType>>>
+  run: (sql: string, parameters?: SQLiteCompatibleType[]) => Promise<Array<Record<string, SQLiteCompatibleType>>>
 }
 
 export type BaseOptions = {
@@ -54,71 +54,71 @@ export interface SQLiteVFS {
   mxPathName?: number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xClose(fileId: number): number
+  xClose: (fileId: number) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xRead(
+  xRead: (
     fileId: number,
     pData: Uint8Array,
     iOffset: number
-  ): number
+  ) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xWrite(
+  xWrite: (
     fileId: number,
     pData: Uint8Array,
     iOffset: number
-  ): number
+  ) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xTruncate(fileId: number, iSize: number): number
+  xTruncate: (fileId: number, iSize: number) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xSync(fileId: number, flags: number): number
+  xSync: (fileId: number, flags: number) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xFileSize(
+  xFileSize: (
     fileId: number,
     pSize64: DataView
-  ): number
+  ) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xLock(fileId: number, flags: number): number
+  xLock: (fileId: number, flags: number) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xUnlock(fileId: number, flags: number): number
+  xUnlock: (fileId: number, flags: number) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xCheckReservedLock(
+  xCheckReservedLock: (
     fileId: number,
     pResOut: DataView
-  ): number
+  ) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xFileControl(
+  xFileControl: (
     fileId: number,
     flags: number,
     pOut: DataView
-  ): number
+  ) => number
 
   /** @see https://sqlite.org/c3ref/io_methods.html */
-  xDeviceCharacteristics(fileId: number): number
+  xDeviceCharacteristics: (fileId: number) => number
 
   /** @see https://sqlite.org/c3ref/vfs.html */
-  xOpen(
+  xOpen: (
     name: string | null,
     fileId: number,
     flags: number,
     pOutFlags: DataView
-  ): number
+  ) => number
 
   /** @see https://sqlite.org/c3ref/vfs.html */
-  xDelete(name: string, syncDir: number): number
+  xDelete: (name: string, syncDir: number) => number
 
   /** @see https://sqlite.org/c3ref/vfs.html */
-  xAccess(
+  xAccess: (
     name: string,
     flags: number,
     pResOut: DataView
-  ): number
+  ) => number
 }

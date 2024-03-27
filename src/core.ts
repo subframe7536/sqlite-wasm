@@ -43,7 +43,7 @@ export async function initSQLite(options: Promisable<InitOptions>, readonly?: bo
 
         const stmt = prepared.stmt
         try {
-          parameters?.length && sqlite.bind_collection(stmt, parameters as [])
+          parameters?.length && sqlite.bind_collection(stmt, parameters)
 
           const rows: Record<string, SQLiteCompatibleType>[] = []
           const cols = sqlite.column_names(stmt)
