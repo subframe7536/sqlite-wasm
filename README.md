@@ -1,10 +1,25 @@
 ## sqlite-wasm
 
-typesafe [wa-sqlite](https://github.com/rhashimoto/wa-sqlite) wrapper, persist data to IndexedDB or [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system)
+typesafe [wa-sqlite](https://github.com/rhashimoto/wa-sqlite) wrapper, run in memory or persist data to IndexedDB or [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system)
 
 low-level layer for [kysely-wasqlite-worker-dialect](https://github.com/subframe7536/kysely-sqlite-tools/tree/master/packages/dialect-wasqlite-worker)
 
 ### Usage
+
+#### Memory
+
+use MemoryVFS with `wa-sqlite.wasm`, no data persistence
+
+```ts
+import { getSyncWasmURL, initSQLite, isOpfsSupported, useMemoryStorage } from '@subframe7536/sqlite-wasm'
+
+// optional url
+const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm'
+
+const { run, changes, lastInsertRowId, close } = await initSQLite(
+  useMemoryStorage({ url })
+)
+```
 
 #### IndexedDB
 

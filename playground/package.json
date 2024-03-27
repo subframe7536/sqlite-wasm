@@ -8,6 +8,6 @@
     "@subframe7536/sqlite-wasm": "link:.."
   },
   "devDependencies": {
-    "vite": "^5.0.8"
+    "vite": "^5.0.13"
   }
 }

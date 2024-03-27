@@ -2,7 +2,8 @@
   "extends": "@subframe7536/type-utils/tsconfig.json",
   "compilerOptions": {
     "types": [
-      "wa-sqlite/src/types"
+      "wa-sqlite/src/types",
+      "@types/node"
     ]
   },
   "include": [

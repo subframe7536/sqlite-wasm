@@ -54,20 +54,23 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@subframe7536/type-utils": "^0.1.4"
+    "@subframe7536/type-utils": "^0.1.6"
   },
   "devDependencies": {
-    "@subframe7536/eslint-config": "^0.5.4",
-    "@types/node": "^20.10.4",
-    "bumpp": "^9.2.0",
-    "eslint": "^8.55.0",
-    "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "wa-sqlite": "github:rhashimoto/wa-sqlite#180a256aa97632ad56ac786889374388ba32fb28"
+    "@subframe7536/eslint-config": "^0.5.13",
+    "@types/node": "^20.11.30",
+    "bumpp": "^9.4.0",
+    "eslint": "^8.57.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3",
+    "wa-sqlite": "github:rhashimoto/wa-sqlite#d2a2f1c652721da3c2141c723c31a401e7ff3b46"
   },
   "pnpm": {
     "overrides": {
       "has": "npm:@nolyfill/has@latest"
+    },
+    "patchedDependencies": {
+      "wa-sqlite@0.9.12": "patches/wa-sqlite@0.9.12.patch"
     }
   }
 }

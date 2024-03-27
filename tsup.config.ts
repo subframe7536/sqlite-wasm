@@ -11,6 +11,8 @@ export default defineConfig({
   format: ['esm', 'cjs'],
   dts: true,
   treeshake: true,
+  tsconfig: './tsconfig.json',
+  noExternal: ['wa-sqlite'],
   plugins: [
     {
       name: 'classic worker',

@@ -1,22 +1,12 @@
 import SQLiteAsyncESMFactory from 'wa-sqlite/dist/wa-sqlite-async.mjs'
+import type { IDBBatchAtomicVFSOptions } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
 import { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
 import type { BaseOptions, InitOptions } from '../types'
 
 export { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
+export type { IDBBatchAtomicVFSOptions } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
 
-export interface IDBVFSOptions {
-  /**
-   * @default "relaxed"
-   */
-  durability?: 'default' | 'strict' | 'relaxed'
-  /**
-   * @default "deferred"
-   */
-  purge?: 'deferred' | 'manual'
-  /**
-   * @default 16
-   */
-  purgeAtLeast?: number
+export interface IDBVFSOptions extends IDBBatchAtomicVFSOptions {
   /**
    * @default 'idb-sqlite-vfs'
    */

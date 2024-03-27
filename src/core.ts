@@ -1,6 +1,6 @@
 import type { Promisable } from '@subframe7536/type-utils'
 import { Factory, SQLITE_OPEN_READONLY, SQLITE_ROW } from 'wa-sqlite'
-import type { InitOptions, SQLiteDB } from './types'
+import type { InitOptions, SQLiteCompatibleType, SQLiteDB } from './types'
 
 /**
  * load db
@@ -32,7 +32,7 @@ export async function initSQLite(options: Promisable<InitOptions>, readonly?: bo
         ([id]) => resolve(id as number),
       ))
     },
-    async run(sql: string, parameters?: readonly unknown[]) {
+    async run(sql: string, parameters?: SQLiteCompatibleType[]) {
       const str = sqlite.str_new(db, sql)
       try {
         const prepared = await sqlite.prepare_v2(db, sqlite.str_value(str))
