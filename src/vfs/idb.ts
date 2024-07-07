@@ -31,7 +31,7 @@ export type IDBVFSOptions = IDBBatchAtomicVFSOptions & {
  */
 export async function useIdbStorage(
   fileName: string,
-  options: IDBVFSOptions & BaseOptions = { },
+  options: IDBVFSOptions & BaseOptions = {},
 ): Promise<Options> {
   const {
     url,
