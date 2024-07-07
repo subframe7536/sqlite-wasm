@@ -5,6 +5,19 @@ declare class ISQLiteVFS extends Base {
   public static create(name: string, module: any, options?: any): Promisable<SQLiteVFS>
 }
 
+export type IDBBatchAtomicVFSOptions = {
+  /**
+   * patched options for `navigator.locks.request()`
+   * @default 'shared+hint'
+   */
+  lockPolicy?: 'exclusive' | 'shared' | 'shared+hint'
+  /**
+   * timeout for the lock
+   * @default Infinity
+   */
+  lockTimeout?: number
+}
+
 export type Options = {
   path: string
   sqliteModule: any

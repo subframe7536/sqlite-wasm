@@ -1,10 +1,8 @@
 import SQLiteAsyncESMFactory from 'wa-sqlite/dist/wa-sqlite-async.mjs'
-import type { IDBBatchAtomicVFSOptions } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
 import { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
-import type { BaseOptions, Options } from '../types'
+import type { BaseOptions, IDBBatchAtomicVFSOptions, Options } from '../types'
 
 export { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
-export type { IDBBatchAtomicVFSOptions } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
 
 export type IDBVFSOptions = IDBBatchAtomicVFSOptions & {
   /**
@@ -45,10 +43,11 @@ export async function useIdbStorage(
   const sqliteModule = await SQLiteAsyncESMFactory(
     url ? { locateFile: () => url } : undefined,
   )
-  const vfsOptions = { idbName, lockPolicy, lockTimeout, readonly }
+  const vfsOptions = { idbName, lockPolicy, lockTimeout }
   /// keep-sorted
   return {
     path: fileName.endsWith('.db') ? fileName : `${fileName}.db`,
+    readonly,
     sqliteModule,
     vfsFn: IDBBatchAtomicVFS.create,
     vfsOptions,

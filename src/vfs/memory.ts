@@ -13,6 +13,7 @@ export async function useMemoryStorage(
   /// keep-sorted
   return {
     path: ':memory:',
+    readonly: options.readonly,
     sqliteModule,
     vfsFn: (MemoryVFS as any).create,
   }

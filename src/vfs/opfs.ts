@@ -38,6 +38,7 @@ export async function useOpfsStorage(
   /// keep-sorted
   return {
     path,
+    readonly: options.readonly,
     sqliteModule,
     vfsFn: OPFSCoopSyncVFS.create,
   }
