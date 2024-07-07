@@ -41,7 +41,7 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
 
 #### OPFS
 
-use AccessHandlePoolVFS with `wa-sqlite.wasm`, smaller than async version
+use OPFSCoopSyncVFS with `wa-sqlite.wasm`, smaller than async version
 
 [minimal OPFS backend browser version](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
 
