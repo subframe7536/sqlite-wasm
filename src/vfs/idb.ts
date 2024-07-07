@@ -40,11 +40,12 @@ export async function useIdbStorage(
     idbName = 'idb-sqlite-vfs',
     lockPolicy = 'shared+hint',
     lockTimeout = Infinity,
+    readonly,
   } = options
   const sqliteModule = await SQLiteAsyncESMFactory(
     url ? { locateFile: () => url } : undefined,
   )
-  const vfsOptions = { idbName, lockPolicy, lockTimeout }
+  const vfsOptions = { idbName, lockPolicy, lockTimeout, readonly }
   /// keep-sorted
   return {
     path: fileName.endsWith('.db') ? fileName : `${fileName}.db`,

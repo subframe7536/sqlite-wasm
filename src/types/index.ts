@@ -10,6 +10,7 @@ export type Options = {
   sqliteModule: any
   vfsFn: typeof ISQLiteVFS['create']
   vfsOptions?: any
+  readonly?: boolean
 }
 
 export type SQLiteDB = {
@@ -53,6 +54,5 @@ export type SQLiteDB = {
 
 export type BaseOptions = {
   url?: string
+  readonly?: boolean
 }
-
-export type SQLiteCompatibleType = number | string | Uint8Array | Array<number> | bigint | null

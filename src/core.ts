@@ -1,13 +1,13 @@
 import type { Promisable } from '@subframe7536/type-utils'
 import { Factory, SQLITE_OPEN_READONLY, SQLITE_ROW } from 'wa-sqlite'
-import type { Options, SQLiteCompatibleType, SQLiteDB } from './types'
+import type { Options, SQLiteDB } from './types'
 
 /**
- * load db
+ * load SQLite database, presets: `useMemoryStorage`, `useIdbStorage`, `useOpfsStorage`
  * @param options init options
  */
-export async function initSQLite(options: Promisable<Options>, readonly?: boolean): Promise<SQLiteDB> {
-  const { path, sqliteModule, vfsFn, vfsOptions } = await options
+export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB> {
+  const { path, sqliteModule, vfsFn, vfsOptions, readonly } = await options
   const sqlite = Factory(sqliteModule)
   const vfs = await vfsFn(path, sqliteModule, vfsOptions)
   sqlite.vfs_register(vfs, true)
