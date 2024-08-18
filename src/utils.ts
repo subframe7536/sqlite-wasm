@@ -1,7 +1,7 @@
 /**
  * check if IndexedDB and Web Locks API supported
  */
-export function isIdbSupported() {
+export function isIdbSupported(): boolean {
   return 'locks' in navigator
 }
 
@@ -10,7 +10,7 @@ export function isIdbSupported() {
  */
 export async function isOpfsSupported(): Promise<boolean> {
   // must call and test, see https://stackoverflow.com/questions/76113945/file-system-access-api-on-safari-ios-createsyncaccesshandle-unknownerror-i
-  const inner = async () => {
+  const inner = async (): Promise<boolean> => {
     const root = await navigator?.storage.getDirectory?.()
     if (!root) {
       return false

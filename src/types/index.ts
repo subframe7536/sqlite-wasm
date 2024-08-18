@@ -1,6 +1,7 @@
 import type { Promisable } from '@subframe7536/type-utils'
 import { Base } from 'wa-sqlite/src/VFS.js'
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 declare class ISQLiteVFS extends Base {
   public static create(name: string, module: any, options?: any): Promisable<SQLiteVFS>
 }
@@ -55,6 +56,15 @@ export type SQLiteDB = {
    * get lastInsertRowId
    */
   lastInsertRowId: () => Promise<number>
+  /**
+   * run sql and return result list
+   * @param onData trigger onn stream has data received
+   * @param sql raw sql with placeholder
+   * @param parameters params that replace the placeholder
+   * @example
+   * const results = await run('select ? from test where id = ?', ['name', 1])
+   */
+  stream: (onData: (data: Record<string, SQLiteCompatibleType>) => void, sql: string, parameters?: SQLiteCompatibleType[]) => Promise<void>
   /**
    * run sql and return result list
    * @param sql raw sql with placeholder

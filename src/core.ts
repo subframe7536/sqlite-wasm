@@ -15,35 +15,46 @@ export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB
     path,
     readonly ? SQLITE_OPEN_READONLY : undefined,
   )
-  return {
-    path,
-    vfs,
-    db,
-    sqlite,
-    async close() {
-      await sqlite.close(db)
-    },
-    changes() {
-      return sqlite.changes(db)
-    },
-    async lastInsertRowId() {
-      return await new Promise<number>(resolve => sqlite.exec(
-        db,
-        'SELECT last_insert_rowid()',
-        ([id]) => resolve(id as number),
-      ))
-    },
-    async run(sql, parameters) {
-      const results = []
-      for await (const stmt of sqlite.statements(db, sql)) {
-        parameters?.length && sqlite.bind_collection(stmt, parameters)
-        const cols = sqlite.column_names(stmt)
-        while (await sqlite.step(stmt) === SQLITE_ROW) {
-          const row = sqlite.row(stmt)
-          results.push(Object.fromEntries(cols.map((key, i) => [key, row[i]])))
-        }
+  const close: SQLiteDB['close'] = async () => {
+    await sqlite.close(db)
+  }
+  const changes: SQLiteDB['changes'] = () => {
+    return sqlite.changes(db)
+  }
+  const lastInsertRowId: SQLiteDB['lastInsertRowId'] = async () => {
+    return await new Promise<number>(resolve => sqlite.exec(
+      db,
+      'SELECT last_insert_rowid()',
+      ([id]) => resolve(id as number),
+    ))
+  }
+  const stream: SQLiteDB['stream'] = async (onData, sql, parameters) => {
+    for await (const stmt of sqlite.statements(db, sql)) {
+      if (parameters?.length) {
+        sqlite.bind_collection(stmt, parameters)
       }
-      return results
-    },
+      const cols = sqlite.column_names(stmt)
+      while (await sqlite.step(stmt) === SQLITE_ROW) {
+        const row = sqlite.row(stmt)
+        onData(Object.fromEntries(cols.map((key, i) => [key, row[i]])))
+      }
+    }
+  }
+  const run: SQLiteDB['run'] = async (sql, parameters) => {
+    const results: any[] = []
+    await stream(data => results.push(data), sql, parameters)
+    return results
+  }
+  /// keep-sorted
+  return {
+    changes,
+    close,
+    db,
+    lastInsertRowId,
+    path,
+    run,
+    sqlite,
+    stream,
+    vfs,
   }
 }
