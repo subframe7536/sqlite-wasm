@@ -57,12 +57,12 @@
     "@subframe7536/type-utils": "^0.1.6"
   },
   "devDependencies": {
-    "@subframe7536/eslint-config": "^0.6.6",
-    "@types/node": "^20.14.10",
-    "bumpp": "^9.4.1",
-    "eslint": "^9.6.0",
-    "tsup": "^8.1.0",
-    "typescript": "^5.5.3",
+    "@subframe7536/eslint-config": "^0.7.5",
+    "@types/node": "^20.15.0",
+    "bumpp": "^9.5.1",
+    "eslint": "^9.9.0",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
     "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.0"
   }
 }
