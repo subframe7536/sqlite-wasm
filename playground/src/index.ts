@@ -1,10 +1,19 @@
-import { initSQLite, isIdbSupported, isModuleWorkerSupport, isOpfsSupported, useMemoryStorage } from '@subframe7536/sqlite-wasm'
-import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
+import syncUrl from 'wa-sqlite/dist/wa-sqlite.wasm?url'
+import url from 'wa-sqlite/dist/wa-sqlite-async.wasm?url'
 import { mitt } from 'zen-mitt'
+import {
+  initSQLite,
+  isIdbSupported,
+  isModuleWorkerSupport,
+  isOpfsSupported,
+  useMemoryStorage,
+} from '../../src'
+import { useIdbStorage } from '../../src/vfs/idb'
 import { runSQL } from './runSQL'
 import OpfsWorker from './worker?worker'
 
 const { run, close } = await initSQLite(useIdbStorage('test.db', {
+  url,
   // url: 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm',
 }))
 
@@ -15,7 +24,7 @@ console.log('support module worker:', supportModuleWorker)
 console.log('support IDBBatchAtomicVFS:', supportIDB)
 console.log('support OPFSCoopSyncVFS:', supportOPFS)
 await runSQL(run)
-await runSQL((await initSQLite(useMemoryStorage())).run)
+await runSQL((await initSQLite(useMemoryStorage({ url: syncUrl }))).run)
 
 const worker = new OpfsWorker()
 const ee = mitt<{

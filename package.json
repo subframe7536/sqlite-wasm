@@ -46,7 +46,7 @@
   "scripts": {
     "lint": "tsc --noEmit && eslint ./src --max-warnings 0 --fix",
     "format": "eslint . --fix",
-    "dev": "tsup --watch",
+    "dev": "vite serve playground",
     "build": "tsup",
     "release": "pnpm lint && pnpm run build && bumpp --all && npm publish"
   },
@@ -64,6 +64,8 @@
     "eslint": "^9.13.0",
     "tsup": "^8.3.0",
     "typescript": "^5.6.3",
-    "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.3"
+    "vite": "^5.4.9",
+    "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.3",
+    "zen-mitt": "^3.0.0"
   }
 }

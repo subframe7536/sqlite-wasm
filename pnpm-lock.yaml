@@ -30,9 +30,15 @@ importers:
       typescript:
         specifier: ^5.6.3
         version: 5.6.3
+      vite:
+        specifier: ^5.4.9
+        version: 5.4.9(@types/node@20.16.13)
       wa-sqlite:
         specifier: github:rhashimoto/wa-sqlite#v1.0.3
         version: https://codeload.github.com/rhashimoto/wa-sqlite/tar.gz/03dc36d230b59cbaa21d8b4639f79404c966bff8
+      zen-mitt:
+        specifier: ^3.0.0
+        version: 3.0.0
 
   playground:
     dependencies:

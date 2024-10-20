@@ -1,5 +1,6 @@
-import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
-import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
+import url from 'wa-sqlite/dist/wa-sqlite.wasm?url'
+import { initSQLite, isOpfsSupported } from '../../src'
+import { useOpfsStorage } from '../../src/vfs/opfs'
 import { runSQLStream } from './runSQL'
 
 onmessage = async () => {
@@ -8,6 +9,7 @@ onmessage = async () => {
   }
   const { run, stream, lastInsertRowId, changes } = await initSQLite(useOpfsStorage(
     'test',
+    { url },
     // 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm',
   ))
   await runSQLStream(run, stream, data => postMessage(data))
