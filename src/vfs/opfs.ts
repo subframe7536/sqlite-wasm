@@ -1,6 +1,6 @@
 import type { BaseOptions, Options } from '../types'
-import SQLiteESMFactory from 'wa-sqlite/dist/wa-sqlite.mjs'
 import { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
+import SQLiteESMFactory from '../../wa-sqlite-fts5/wa-sqlite.mjs'
 
 export { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
 
@@ -13,11 +13,10 @@ export { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
  * @param options wasm file url
  * @example
  * // only effect in worker
- * import { getSyncWasmURL, initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
+ * import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
  * import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
  *
- * // const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm',
- * const url = getSyncWasmURL()
+ * const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm'
  *
  * onmessage = async () => {
  *   if (!isOpfsSupported()) {

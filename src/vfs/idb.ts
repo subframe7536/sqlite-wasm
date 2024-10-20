@@ -1,7 +1,7 @@
 import type { BaseOptions, IDBBatchAtomicVFSOptions, Options } from '../types'
-import SQLiteAsyncESMFactory from 'wa-sqlite/dist/wa-sqlite-async.mjs'
 import { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
 import { IDBMirrorVFS } from 'wa-sqlite/src/examples/IDBMirrorVFS.js'
+import SQLiteAsyncESMFactory from '../../wa-sqlite-fts5/wa-sqlite-async.mjs'
 
 export { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
 export { IDBMirrorVFS } from 'wa-sqlite/src/examples/IDBMirrorVFS.js'
@@ -16,10 +16,9 @@ export type IDBVFSOptions = IDBBatchAtomicVFSOptions
  * @example
  * ```ts
  * import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
- * import { getAsyncWasmURL, initSQLite } from '@subframe7536/sqlite-wasm'
+ * import { initSQLite } from '@subframe7536/sqlite-wasm'
  *
- * // const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
- * const url = getAsyncWasmURL()
+ * const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
  *
  * const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
  *   useIdbStorage('test', { url })
@@ -59,10 +58,9 @@ export async function useIdbStorage(
  * @example
  * ```ts
  * import { useIdbMemoryStorage } from '@subframe7536/sqlite-wasm/idb'
- * import { getAsyncWasmURL, initSQLite } from '@subframe7536/sqlite-wasm'
+ * import { initSQLite } from '@subframe7536/sqlite-wasm'
  *
- * // const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
- * const url = getAsyncWasmURL()
+ * const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
  *
  * const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
  *   useIdbMemoryStorage('test', { url })
