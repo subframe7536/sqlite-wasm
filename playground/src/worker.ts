@@ -14,7 +14,7 @@ onmessage = async () => {
   ))
   await runSQLStream(run, stream, data => postMessage(data))
   console.log(lastInsertRowId(), changes())
-  customFunction(sqlite, db, 'testtest', (a: number, b: number) => a + b)
+  customFunction(sqlite, db, 'testtest', () => crypto.randomUUID())
   console.log(
     await run('select testtest(1,2)'),
   )
