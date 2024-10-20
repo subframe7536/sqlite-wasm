@@ -8,7 +8,7 @@ import {
   isOpfsSupported,
   useMemoryStorage,
 } from '../../src'
-import { useIdbStorage } from '../../src/vfs/idb'
+import { useIdbMemoryStorage, useIdbStorage } from '../../src/vfs/idb'
 import { runSQL } from './runSQL'
 import OpfsWorker from './worker?worker'
 

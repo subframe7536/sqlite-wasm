@@ -23,7 +23,7 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
 
 #### IndexedDB
 
-use IDBBatchAtomicVFS with `wa-sqlite-async.wasm`, larger than sync version, better compatibility
+use `IDBBatchAtomicVFS` with `wa-sqlite-async.wasm`, larger than sync version, better compatibility
 
 [minimal IndexedDB backend browser version](https://caniuse.com/mdn-api_lockmanager)
 
@@ -41,7 +41,7 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
 
 #### OPFS
 
-use OPFSCoopSyncVFS with `wa-sqlite.wasm`, smaller than async version
+use `OPFSCoopSyncVFS` with `wa-sqlite.wasm`, smaller than async version
 
 [minimal OPFS backend browser version](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
 

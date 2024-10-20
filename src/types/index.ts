@@ -29,36 +29,39 @@ export type Options = {
 
 export type SQLiteDB = {
   /**
-   * file name (IDBBatchAtomicVFS) or directory path (AccessHandlePoolVFS)
+   * File name (`IDBBatchAtomicVFS`) or directory path (`OPFSCoopSyncVFS`)
    */
   path: string
   /**
-   * db pointer
+   * DB pointer
    */
   db: number
   /**
-   * sqlite apis
+   * SQLite apis
    */
   sqlite: SQLiteAPI
+  /**
+   * Wasm build module
+   */
   sqliteModule: any
   /**
-   * sqlite vfs
+   * SQLite vfs
    */
   vfs: SQLiteVFS
   /**
-   * close db
+   * Close db
    */
   close: () => Promise<void>
   /**
-   * get db changes
+   * Get db changes
    */
   changes: () => number
   /**
-   * get lastInsertRowId
+   * Get lastInsertRowId
    */
   lastInsertRowId: () => number
   /**
-   * run sql and return result list
+   * Run sql and return result list
    * @param onData trigger onn stream has data received
    * @param sql raw sql with placeholder
    * @param parameters params that replace the placeholder
@@ -67,7 +70,7 @@ export type SQLiteDB = {
    */
   stream: (onData: (data: Record<string, SQLiteCompatibleType>) => void, sql: string, parameters?: SQLiteCompatibleType[]) => Promise<void>
   /**
-   * run sql and return result list
+   * Run sql and return result list
    * @param sql raw sql with placeholder
    * @param parameters params that replace the placeholder
    * @example
