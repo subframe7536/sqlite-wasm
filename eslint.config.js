@@ -1,3 +1,7 @@
-const { defineEslintConfig } = require('@subframe7536/eslint-config')
+import { defineEslintConfig } from '@subframe7536/eslint-config'
 
-module.exports = defineEslintConfig()
+export default defineEslintConfig({
+  overrideRules: {
+    'antfu/no-top-level-await': 'off',
+  },
+})

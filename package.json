@@ -1,5 +1,6 @@
 {
   "name": "@subframe7536/sqlite-wasm",
+  "type": "module",
   "version": "0.3.1",
   "description": "typesafe wa-sqlite wrapper, persist data to IndexedDB or OPFS",
   "author": "subframe7536",
@@ -13,16 +14,16 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./idb": {
-      "import": "./dist/idb.mjs",
-      "require": "./dist/idb.js"
+      "import": "./dist/idb.js",
+      "require": "./dist/idb.cjs"
     },
     "./opfs": {
-      "import": "./dist/opfs.mjs",
-      "require": "./dist/opfs.js"
+      "import": "./dist/opfs.js",
+      "require": "./dist/opfs.cjs"
     },
     "./wasm": "./dist/wa-sqlite.wasm",
     "./wasm-async": "./dist/wa-sqlite-async.wasm"
@@ -57,12 +58,12 @@
     "@subframe7536/type-utils": "^0.1.6"
   },
   "devDependencies": {
-    "@subframe7536/eslint-config": "^0.7.5",
-    "@types/node": "^20.15.0",
-    "bumpp": "^9.5.1",
-    "eslint": "^9.9.0",
-    "tsup": "^8.2.4",
-    "typescript": "^5.5.4",
-    "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.0"
+    "@subframe7536/eslint-config": "^0.9.4",
+    "@types/node": "^20.16.13",
+    "bumpp": "^9.7.1",
+    "eslint": "^9.13.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3",
+    "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.3"
   }
 }

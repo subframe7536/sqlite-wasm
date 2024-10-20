@@ -1,6 +1,6 @@
+import type { BaseOptions, Options } from '../types'
 import SQLiteESMFactory from 'wa-sqlite/dist/wa-sqlite.mjs'
 import { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
-import type { BaseOptions, Options } from '../types'
 
 export { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
 

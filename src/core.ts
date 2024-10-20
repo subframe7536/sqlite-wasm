@@ -1,6 +1,6 @@
 import type { Promisable } from '@subframe7536/type-utils'
-import { Factory, SQLITE_OPEN_READONLY, SQLITE_ROW } from 'wa-sqlite'
 import type { Options, SQLiteDB } from './types'
+import { Factory, SQLITE_OPEN_READONLY, SQLITE_ROW } from 'wa-sqlite'
 
 /**
  * load SQLite database, presets: `useMemoryStorage`, `useIdbStorage`, `useOpfsStorage`
@@ -54,6 +54,7 @@ export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB
     path,
     run,
     sqlite,
+    sqliteModule,
     stream,
     vfs,
   }

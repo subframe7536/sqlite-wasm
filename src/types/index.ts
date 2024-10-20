@@ -40,6 +40,7 @@ export type SQLiteDB = {
    * sqlite apis
    */
   sqlite: SQLiteAPI
+  sqliteModule: any
   /**
    * sqlite vfs
    */
@@ -55,7 +56,7 @@ export type SQLiteDB = {
   /**
    * get lastInsertRowId
    */
-  lastInsertRowId: () => Promise<number>
+  lastInsertRowId: () => number
   /**
    * run sql and return result list
    * @param onData trigger onn stream has data received

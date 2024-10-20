@@ -1,6 +1,6 @@
+import type { BaseOptions, Options } from '../types'
 import SQLiteESMFactory from 'wa-sqlite/dist/wa-sqlite.mjs'
 import { MemoryVFS } from 'wa-sqlite/src/examples/MemoryVFS.js'
-import type { BaseOptions, Options } from '../types'
 
 export { MemoryVFS } from 'wa-sqlite/src/examples/MemoryVFS.js'
 

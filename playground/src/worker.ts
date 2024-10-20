@@ -6,11 +6,11 @@ onmessage = async () => {
   if (!await isOpfsSupported()) {
     return
   }
-  const { run, stream } = await initSQLite(useOpfsStorage(
+  const { run, stream, lastInsertRowId, changes } = await initSQLite(useOpfsStorage(
     'test',
     // 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm',
   ))
-  console.log('start')
   await runSQLStream(run, stream, data => postMessage(data))
+  console.log(lastInsertRowId(), changes())
   postMessage('done')
 }

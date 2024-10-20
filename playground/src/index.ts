@@ -1,8 +1,8 @@
-import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 import { initSQLite, isIdbSupported, isModuleWorkerSupport, isOpfsSupported, useMemoryStorage } from '@subframe7536/sqlite-wasm'
+import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 import { mitt } from 'zen-mitt'
-import OpfsWorker from './worker?worker'
 import { runSQL } from './runSQL'
+import OpfsWorker from './worker?worker'
 
 const { run, close } = await initSQLite(useIdbStorage('test.db', {
   // url: 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm',
@@ -19,8 +19,8 @@ await runSQL((await initSQLite(useMemoryStorage())).run)
 
 const worker = new OpfsWorker()
 const ee = mitt<{
-  data: any
-  done: void
+  data: [any]
+  done: []
 }>()
 worker.onmessage = ({ data }) => {
   if (data === 'done') {

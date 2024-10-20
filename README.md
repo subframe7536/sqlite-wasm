@@ -28,8 +28,8 @@ use IDBBatchAtomicVFS with `wa-sqlite-async.wasm`, larger than sync version, bet
 [minimal IndexedDB backend browser version](https://caniuse.com/mdn-api_lockmanager)
 
 ```ts
-import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 import { getAsyncWasmURL, initSQLite } from '@subframe7536/sqlite-wasm'
+import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 
 // optional url
 const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
