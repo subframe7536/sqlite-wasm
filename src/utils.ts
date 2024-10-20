@@ -1,3 +1,5 @@
+import { SQLITE_DETERMINISTIC, SQLITE_DIRECTONLY, SQLITE_UTF8 } from 'wa-sqlite'
+
 /**
  * check if IndexedDB and Web Locks API supported
  */
@@ -80,6 +82,40 @@ export function isModuleWorkerSupport(): boolean {
     // eslint-disable-next-line no-unsafe-finally
     return supports
   }
+}
+
+export function def<N extends string, T extends SQLiteCompatibleType[]>(
+  sqlite: SQLiteAPI,
+  db: number,
+  fnName: N,
+  fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null,
+  option: {
+    deterministic?: boolean
+    directOnly?: boolean
+    varargs?: boolean
+  } = {},
+): void {
+  let flags = SQLITE_UTF8
+  if (option.deterministic) {
+    flags |= SQLITE_DETERMINISTIC
+  }
+  if (option.directOnly) {
+    flags |= SQLITE_DIRECTONLY
+  }
+  sqlite.create_function(
+    db,
+    fnName,
+    (option.varargs || fn.length === 0) ? -1 : fn.length,
+    flags,
+    0,
+    (ctx, value) => {
+      const args = [] as unknown as T
+      for (let i = 0; i < fn.length; i++) {
+        args.push(sqlite.value(value[i]))
+      }
+      return sqlite.result(ctx, fn(...args))
+    },
+  )
 }
 
 // todo: import/export
