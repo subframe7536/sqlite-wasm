@@ -71,6 +71,7 @@
     "eslint": "^9.13.0",
     "tsup": "^8.3.0",
     "typescript": "^5.6.3",
+    "uuidv7": "^1.0.2",
     "vite": "^5.4.9",
     "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.3",
     "zen-mitt": "^3.0.0"

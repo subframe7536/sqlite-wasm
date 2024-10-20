@@ -1,3 +1,4 @@
+import { uuidv7 } from 'uuidv7'
 import url from 'wa-sqlite/dist/wa-sqlite.wasm?url'
 import { customFunction, initSQLite, isOpfsSupported } from '../../src'
 import { useOpfsStorage } from '../../src/vfs/opfs'
@@ -14,7 +15,7 @@ onmessage = async () => {
   ))
   await runSQLStream(run, stream, data => postMessage(data))
   console.log(lastInsertRowId(), changes())
-  customFunction(sqlite, db, 'testtest', () => crypto.randomUUID())
+  customFunction(sqlite, db, 'testtest', () => uuidv7())
   console.log(
     await run('select testtest(1,2)'),
   )
