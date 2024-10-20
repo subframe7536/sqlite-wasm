@@ -19,14 +19,10 @@ export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB
     await sqlite.close(db)
   }
   const changes: SQLiteDB['changes'] = () => {
-    return sqlite.changes(db)
+    return sqliteModule._sqlite3_changes(db)
   }
-  const lastInsertRowId: SQLiteDB['lastInsertRowId'] = async () => {
-    return await new Promise<number>(resolve => sqlite.exec(
-      db,
-      'SELECT last_insert_rowid()',
-      ([id]) => resolve(id as number),
-    ))
+  const lastInsertRowId: SQLiteDB['lastInsertRowId'] = () => {
+    return sqliteModule._sqlite3_last_insert_rowid(db)
   }
   const stream: SQLiteDB['stream'] = async (onData, sql, parameters) => {
     for await (const stmt of sqlite.statements(db, sql)) {
