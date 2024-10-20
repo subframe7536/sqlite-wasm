@@ -1,7 +1,7 @@
 {
   "name": "@subframe7536/sqlite-wasm",
   "type": "module",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "typesafe wa-sqlite wrapper, persist data to IndexedDB or OPFS",
   "author": "subframe7536",
   "license": "MIT",
