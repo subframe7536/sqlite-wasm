@@ -7,6 +7,7 @@ export default defineConfig({
     index: 'src/index.ts',
     idb: 'src/vfs/idb.ts',
     opfs: 'src/vfs/opfs.ts',
+    constant: 'src/constant.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -28,11 +29,11 @@ export default defineConfig({
         if (this.format === 'esm') {
           Promise.all([
             copyFile(
-              './node_modules/wa-sqlite/dist/wa-sqlite.wasm',
+              './wa-sqlite-fts5/wa-sqlite.wasm',
               './dist/wa-sqlite.wasm',
             ),
             copyFile(
-              './node_modules/wa-sqlite/dist/wa-sqlite-async.wasm',
+              './wa-sqlite-fts5/wa-sqlite-async.wasm',
               './dist/wa-sqlite-async.wasm',
             ),
           ])
