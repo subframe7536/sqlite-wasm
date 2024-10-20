@@ -84,7 +84,7 @@ export function isModuleWorkerSupport(): boolean {
   }
 }
 
-export function def<N extends string, T extends SQLiteCompatibleType[]>(
+export function customFunction<N extends string, T extends SQLiteCompatibleType[]>(
   sqlite: SQLiteAPI,
   db: number,
   fnName: N,

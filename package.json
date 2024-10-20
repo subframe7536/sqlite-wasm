@@ -41,6 +41,9 @@
       ],
       "opfs": [
         "./dist/opfs.d.ts"
+      ],
+      "constant": [
+        "./dist/constant.d.ts"
       ]
     }
   },

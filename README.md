@@ -83,14 +83,14 @@ onmessage = async () => {
 ### Custom Function
 
 ```ts
-import { def, initSQLite, useMemoryStorage } from '@subframe7536/sqlite-wasm'
+import { customFunction, initSQLite, useMemoryStorage } from '@subframe7536/sqlite-wasm'
 
 // optional url
 const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm'
 
 const { sqlite, db, run } = await initSQLite(useMemoryStorage({ url }))
 
-def(sqlite, db, 'testFn', (a: number, b: number) => a + b)
+customFunction(sqlite, db, 'testFn', (a: number, b: number) => a + b, {/* options */})
 
 await run('select testFn(1,2) as a')
 // [{ a: 3 }]
