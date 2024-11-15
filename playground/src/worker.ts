@@ -1,6 +1,6 @@
 import { uuidv7 } from 'uuidv7'
 // eslint-disable-next-line antfu/no-import-dist
-import url from '../../../dist/wa-sqlite.wasm?url'
+import url from '../../dist/wa-sqlite.wasm?url'
 import { customFunction, initSQLite, isOpfsSupported } from '../../src'
 import { useOpfsStorage } from '../../src/vfs/opfs'
 import { runSQLStream } from './runSQL'
@@ -16,9 +16,9 @@ onmessage = async () => {
   ))
   await runSQLStream(run, stream, data => postMessage(data))
   console.log(lastInsertRowId(), changes())
-  customFunction(sqlite, db, 'testtest', () => uuidv7())
+  customFunction(sqlite, db, 'uuidv7', () => uuidv7())
   console.log(
-    await run('select testtest(1,2)'),
+    await run('select uuidv7() as a'),
   )
   postMessage('done')
 }

@@ -1,7 +1,7 @@
 import { mitt } from 'zen-mitt'
 /* eslint-disable antfu/no-import-dist */
-import syncUrl from '../../../dist/wa-sqlite.wasm?url'
-import url from '../../../dist/wa-sqlite-async.wasm?url'
+import syncUrl from '../../dist/wa-sqlite.wasm?url'
+import url from '../../dist/wa-sqlite-async.wasm?url'
 import {
   initSQLite,
   isIdbSupported,

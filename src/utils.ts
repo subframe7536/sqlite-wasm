@@ -84,6 +84,23 @@ export function isModuleWorkerSupport(): boolean {
   }
 }
 
+/**
+ * Create custom function, run js script in SQLite
+ *
+ * @example
+ * ```ts
+ * import { customFunction, initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
+ * import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
+ * import { uuidv7 } from 'uuidv7'
+ *
+ * const { run, sqlite, db } = await initSQLite(
+ *   useOpfsStorage('test')
+ * )
+ * customFunction(sqlite, db, 'uuidv7', () => uuidv7())
+ * console.log(await run('select uuidv7() as a'))
+ * // [{ "a": "01932f1b-b663-7714-af4d-17a3d9efc7b3" }]
+ * ```
+ */
 export function customFunction<N extends string, T extends SQLiteCompatibleType[]>(
   sqlite: SQLiteAPI,
   db: number,

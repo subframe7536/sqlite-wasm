@@ -83,17 +83,16 @@ onmessage = async () => {
 ### Custom Function
 
 ```ts
-import { customFunction, initSQLite, useMemoryStorage } from '@subframe7536/sqlite-wasm'
+import { customFunction, initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
+import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
+import { uuidv7 } from 'uuidv7'
 
-// optional url
-const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm'
-
-const { sqlite, db, run } = await initSQLite(useMemoryStorage({ url }))
-
-customFunction(sqlite, db, 'testFn', (a: number, b: number) => a + b, {/* options */})
-
-await run('select testFn(1,2) as a')
-// [{ a: 3 }]
+const { run, sqlite, db } = await initSQLite(
+  useOpfsStorage('test')
+)
+customFunction(sqlite, db, 'uuidv7', () => uuidv7())
+console.log(await run('select uuidv7() as a'))
+// // [{ "a": "01932f1b-b663-7714-af4d-17a3d9efc7b3" }]
 ```
 
 ## License
