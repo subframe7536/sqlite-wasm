@@ -69,11 +69,13 @@
     "@types/node": "^20.16.13",
     "bumpp": "^9.7.1",
     "eslint": "^9.13.0",
+    "ofetch": "^1.4.1",
+    "tar": "^7.4.3",
     "tsup": "^8.3.0",
     "typescript": "^5.6.3",
     "uuidv7": "^1.0.2",
     "vite": "^5.4.9",
-    "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.3",
+    "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.4",
     "zen-mitt": "^3.0.0"
   }
 }

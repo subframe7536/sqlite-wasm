@@ -1,5 +1,5 @@
 # wa-sqlite fts5
 
-Download from https://github.com/subframe7536/sqwab/releases
+Download from https://github.com/subframe7536/sqwab
 
-Tag: `v1729389754`
+Tag vv1731642572

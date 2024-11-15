@@ -1,6 +1,7 @@
-import syncUrl from 'wa-sqlite/dist/wa-sqlite.wasm?url'
-import url from 'wa-sqlite/dist/wa-sqlite-async.wasm?url'
 import { mitt } from 'zen-mitt'
+/* eslint-disable antfu/no-import-dist */
+import syncUrl from '../../../dist/wa-sqlite.wasm?url'
+import url from '../../../dist/wa-sqlite-async.wasm?url'
 import {
   initSQLite,
   isIdbSupported,
@@ -8,7 +9,7 @@ import {
   isOpfsSupported,
   useMemoryStorage,
 } from '../../src'
-import { useIdbMemoryStorage, useIdbStorage } from '../../src/vfs/idb'
+import { useIdbStorage } from '../../src/vfs/idb'
 import { runSQL } from './runSQL'
 import OpfsWorker from './worker?worker'
 
@@ -41,10 +42,10 @@ worker.onmessage = ({ data }) => {
 function test(): AsyncIterableIterator<any> {
   let resolver: ((value: IteratorResult<any>) => void) | null = null
 
-  ee.on('data', (data) => {
+  ee.on('data', (...data) => {
     if (resolver) {
       console.log('data')
-      resolver({ value: data })
+      resolver({ value: data[0] })
       resolver = null
     }
   })
