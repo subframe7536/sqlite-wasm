@@ -148,5 +148,3 @@ export function createFunction<N extends string, T extends SQLiteCompatibleType[
 ): void {
   return customFunction(core.sqlite, core.db, fnName, fn, options)
 }
-
-// todo: import/export

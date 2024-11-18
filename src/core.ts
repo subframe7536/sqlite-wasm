@@ -1,6 +1,6 @@
 import type { Promisable } from '@subframe7536/type-utils'
 import type { Options, SQLiteDB, SQLiteDBCore } from './types'
-import { Factory, SQLITE_OPEN_READONLY, SQLITE_ROW } from 'wa-sqlite'
+import { Factory, SQLITE_OPEN_CREATE, SQLITE_OPEN_READONLY, SQLITE_OPEN_READWRITE, SQLITE_ROW } from 'wa-sqlite'
 
 /**
  * Load SQLite database, presets: `useMemoryStorage`, `useIdbStorage`, `useIdbMemoryStorage`, `useOpfsStorage`
@@ -11,11 +11,11 @@ export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB
   /// keep-sorted
   return {
     ...core,
-    changes: changes.bind(null, core),
-    close: close.bind(null, core),
-    lastInsertRowId: lastInsertRowId.bind(null, core),
-    run: run.bind(null, core),
-    stream: stream.bind(null, core),
+    changes: () => changes(core),
+    close: () => close(core),
+    lastInsertRowId: () => lastInsertRowId(core),
+    run: (...args) => run(core, ...args),
+    stream: (...args) => stream(core, ...args),
   }
 }
 
@@ -34,7 +34,7 @@ export async function initSQLiteCore(
   sqlite.vfs_register(vfs, true)
   const db = await sqlite.open_v2(
     path,
-    readonly ? SQLITE_OPEN_READONLY : undefined,
+    readonly ? SQLITE_OPEN_READONLY : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
   )
   /// keep-sorted
   return {

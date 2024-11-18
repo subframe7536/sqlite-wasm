@@ -83,6 +83,14 @@ export type SQLiteDB = SQLiteDBCore & {
 }
 
 export type BaseOptions = {
+  /**
+   * Custom wasm url
+   */
   url?: string
+  /**
+   * Open SQLite file with `SQLITE_OPEN_READONLY`
+   *
+   * If absent, open with `SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE`
+   */
   readonly?: boolean
 }
