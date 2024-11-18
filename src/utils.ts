@@ -1,3 +1,4 @@
+import type { SQLiteDBCore } from './types'
 import { SQLITE_DETERMINISTIC, SQLITE_DIRECTONLY, SQLITE_UTF8 } from 'wa-sqlite'
 
 /**
@@ -106,23 +107,23 @@ export function customFunction<N extends string, T extends SQLiteCompatibleType[
   db: number,
   fnName: N,
   fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null,
-  option: {
+  options: {
     deterministic?: boolean
     directOnly?: boolean
     varargs?: boolean
   } = {},
 ): void {
   let flags = SQLITE_UTF8
-  if (option.deterministic) {
+  if (options.deterministic) {
     flags |= SQLITE_DETERMINISTIC
   }
-  if (option.directOnly) {
+  if (options.directOnly) {
     flags |= SQLITE_DIRECTONLY
   }
   sqlite.create_function(
     db,
     fnName,
-    (option.varargs || fn.length === 0) ? -1 : fn.length,
+    (options.varargs || fn.length === 0) ? -1 : fn.length,
     flags,
     0,
     (ctx, value) => {
@@ -133,6 +134,19 @@ export function customFunction<N extends string, T extends SQLiteCompatibleType[
       return sqlite.result(ctx, fn(...args))
     },
   )
+}
+
+export function createFunction<N extends string, T extends SQLiteCompatibleType[]>(
+  core: SQLiteDBCore,
+  fnName: N,
+  fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null,
+  options: {
+    deterministic?: boolean
+    directOnly?: boolean
+    varargs?: boolean
+  } = {},
+): void {
+  return customFunction(core.sqlite, core.db, fnName, fn, options)
 }
 
 // todo: import/export

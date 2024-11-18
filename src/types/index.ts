@@ -27,7 +27,7 @@ export type Options = {
   readonly?: boolean
 }
 
-export type SQLiteDB = {
+export type SQLiteDBCore = {
   /**
    * File name (`IDBBatchAtomicVFS`) or directory path (`OPFSCoopSyncVFS`)
    */
@@ -48,6 +48,9 @@ export type SQLiteDB = {
    * SQLite vfs
    */
   vfs: SQLiteVFS
+}
+
+export type SQLiteDB = SQLiteDBCore & {
   /**
    * Close db
    */
@@ -55,11 +58,11 @@ export type SQLiteDB = {
   /**
    * Get db changes
    */
-  changes: () => number
+  changes: () => number | bigint
   /**
    * Get lastInsertRowId
    */
-  lastInsertRowId: () => number
+  lastInsertRowId: () => number | bigint
   /**
    * Run sql and return result list
    * @param onData trigger onn stream has data received
