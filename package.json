@@ -61,11 +61,9 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "dependencies": {
-    "@subframe7536/type-utils": "^0.1.6"
-  },
   "devDependencies": {
     "@subframe7536/eslint-config": "^0.9.4",
+    "@subframe7536/type-utils": "^0.1.6",
     "@types/node": "^20.16.13",
     "bumpp": "^9.7.1",
     "eslint": "^9.13.0",

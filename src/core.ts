@@ -1,5 +1,4 @@
-import type { Promisable } from '@subframe7536/type-utils'
-import type { Options, SQLiteDB, SQLiteDBCore } from './types'
+import type { Options, Promisable, SQLiteDB, SQLiteDBCore } from './types'
 import { Factory, SQLITE_OPEN_CREATE, SQLITE_OPEN_READONLY, SQLITE_OPEN_READWRITE, SQLITE_ROW } from 'wa-sqlite'
 
 /**
@@ -31,7 +30,7 @@ export async function initSQLiteCore(
   const { path, sqliteModule, vfsFn, vfsOptions, readonly } = await options
   const sqlite = Factory(sqliteModule)
   const vfs = await vfsFn(path, sqliteModule, vfsOptions)
-  sqlite.vfs_register(vfs, true)
+  sqlite.vfs_register(vfs as unknown as SQLiteVFS, true)
   const db = await sqlite.open_v2(
     path,
     readonly ? SQLITE_OPEN_READONLY : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,

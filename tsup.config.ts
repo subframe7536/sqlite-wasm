@@ -10,7 +10,7 @@ export default defineConfig({
     constant: 'src/constant.ts',
   },
   format: ['esm', 'cjs'],
-  dts: true,
+  dts: { resolve: true },
   treeshake: true,
   tsconfig: './tsconfig.json',
   noExternal: ['wa-sqlite'],

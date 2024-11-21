@@ -1,9 +1,49 @@
-import type { Promisable } from '@subframe7536/type-utils'
-import { Base } from 'wa-sqlite/src/VFS.js'
+import type { Base } from 'wa-sqlite/src/VFS.js'
 
-// eslint-disable-next-line unused-imports/no-unused-vars
-declare class ISQLiteVFS extends Base {
-  public static create(name: string, module: any, options?: any): Promisable<SQLiteVFS>
+export type Promisable<T> = T | Promise<T>
+
+export interface FacadeVFS extends Base {
+  close: () => void | Promise<void>
+
+  isReady: () => boolean | Promise<boolean>
+
+  hasAsyncMethod: (methodName: string) => boolean
+
+  getFilename: (pFile: number) => string
+
+  jOpen: (filename: string, pFile: number, flags: number, pOutFlags: DataView) => number | Promise<number>
+
+  jDelete: (filename: string, syncDir: number) => number | Promise<number>
+
+  jAccess: (filename: string, flags: number, pResOut: DataView) => number | Promise<number>
+
+  jFullPathname: (filename: string, zOut: Uint8Array) => number | Promise<number>
+
+  jGetLastError: (zBuf: Uint8Array) => number | Promise<number>
+
+  jClose: (pFile: number) => number | Promise<number>
+
+  jRead: (pFile: number, pData: Uint8Array, iOffset: number) => number | Promise<number>
+
+  jWrite: (pFile: number, pData: Uint8Array, iOffset: number) => number | Promise<number>
+
+  jTruncate: (pFile: number, size: number) => number | Promise<number>
+
+  jSync: (pFile: number, flags: number) => number | Promise<number>
+
+  jFileSize: (pFile: number, pSize: DataView) => number | Promise<number>
+
+  jLock: (pFile: number, lockType: number) => number | Promise<number>
+
+  jUnlock: (pFile: number, lockType: number) => number | Promise<number>
+
+  jCheckReservedLock: (pFile: number, pResOut: DataView) => number | Promise<number>
+
+  jFileControl: (pFile: number, op: number, pArg: DataView) => number | Promise<number>
+
+  jSectorSize: (pFile: number) => number | Promise<number>
+
+  jDeviceCharacteristics: (pFile: number) => number | Promise<number>
 }
 
 export type IDBBatchAtomicVFSOptions = {
@@ -22,7 +62,7 @@ export type IDBBatchAtomicVFSOptions = {
 export type Options = {
   path: string
   sqliteModule: any
-  vfsFn: typeof ISQLiteVFS['create']
+  vfsFn: (name: string, module: any, options?: any) => Promisable<FacadeVFS>
   vfsOptions?: any
   readonly?: boolean
 }
@@ -47,7 +87,7 @@ export type SQLiteDBCore = {
   /**
    * SQLite vfs
    */
-  vfs: SQLiteVFS
+  vfs: FacadeVFS
 }
 
 export type SQLiteDB = SQLiteDBCore & {
