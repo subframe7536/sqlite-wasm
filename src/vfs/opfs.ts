@@ -23,7 +23,7 @@ export { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
  *     return
  *   }
  *   const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
- *     useOpfsStorage('test', { url })
+ *     useOpfsStorage('test.db', { url })
  *   )
  * }
  */

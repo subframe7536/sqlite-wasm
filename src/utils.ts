@@ -136,7 +136,7 @@ export function customFunction<N extends string, T extends SQLiteCompatibleType[
   )
 }
 
-export function createFunction<N extends string, T extends SQLiteCompatibleType[]>(
+export function customFunctionCore<N extends string, T extends SQLiteCompatibleType[]>(
   core: SQLiteDBCore,
   fnName: N,
   fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null,

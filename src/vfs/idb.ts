@@ -21,7 +21,7 @@ export type IDBVFSOptions = IDBBatchAtomicVFSOptions
  * const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
  *
  * const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
- *   useIdbStorage('test', { url })
+ *   useIdbStorage('test.db', { url })
  * )
  * ```
  */
@@ -63,7 +63,7 @@ export async function useIdbStorage(
  * const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
  *
  * const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
- *   useIdbMemoryStorage('test', { url })
+ *   useIdbMemoryStorage('test.db', { url })
  * )
  * ```
  */

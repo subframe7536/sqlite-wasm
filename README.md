@@ -35,7 +35,7 @@ import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
 
 const { run, changes, lastInsertRowId, close } = await initSQLite(
-  useIdbStorage('IndexedDB', { url })
+  useIdbStorage('test.db', { url })
 )
 ```
 
@@ -51,7 +51,7 @@ import { useIdbMemoryStorage } from '@subframe7536/sqlite-wasm/idb'
 const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
 
 const { run, changes, lastInsertRowId, close } = await initSQLite(
-  useIdbMemoryStorage('IndexedDB', { url })
+  useIdbMemoryStorage('test.db', { url })
 )
 ```
 
@@ -75,7 +75,7 @@ onmessage = async () => {
     return
   }
   const { run, changes, lastInsertRowId, close } = await initSQLite(
-    useOpfsStorage('OPFS', url)
+    useOpfsStorage('test.db', url)
   )
 }
 ```
