@@ -16,7 +16,8 @@ export { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
  * import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
  * import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
  *
- * const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm'
+ * // optional url
+ * const url = "https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite.wasm"
  *
  * onmessage = async () => {
  *   if (!isOpfsSupported()) {

@@ -31,7 +31,7 @@ async function downloadAndExtractRelease(tag, releaseUrl, outputDir) {
 
     console.log('Extraction completed')
 
-    writeFileSync(`${outputDir}/README.md`, `# wa-sqlite fts5\n\nDownload from https://github.com/subframe7536/sqwab\n\nTag v${tag}\n`, 'utf-8')
+    writeFileSync(`${outputDir}/README.md`, `# wa-sqlite fts5\n\nDownload from https://github.com/subframe7536/sqwab\n\nTag \`${tag}\`\n`, 'utf-8')
   } catch (error) {
     console.error(error)
   } finally {

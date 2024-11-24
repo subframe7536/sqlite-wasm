@@ -14,7 +14,7 @@ Use `MemoryVFS` with `wa-sqlite.wasm`, no data persistence
 import { initSQLite, isOpfsSupported, useMemoryStorage } from '@subframe7536/sqlite-wasm'
 
 // optional url
-const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm'
+const url = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite.wasm'
 
 const { run, changes, lastInsertRowId, close } = await initSQLite(
   useMemoryStorage({ url })
@@ -32,7 +32,7 @@ import { initSQLite } from '@subframe7536/sqlite-wasm'
 import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 
 // optional url
-const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
+const url = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite-async.wasm'
 
 const { run, changes, lastInsertRowId, close } = await initSQLite(
   useIdbStorage('test.db', { url })
@@ -48,7 +48,7 @@ import { initSQLite } from '@subframe7536/sqlite-wasm'
 import { useIdbMemoryStorage } from '@subframe7536/sqlite-wasm/idb'
 
 // optional url
-const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite-async.wasm'
+const url = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite-async.wasm'
 
 const { run, changes, lastInsertRowId, close } = await initSQLite(
   useIdbMemoryStorage('test.db', { url })
@@ -68,7 +68,7 @@ import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
 import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
 
 // optional url
-const url = 'https://cdn.jsdelivr.net/gh/rhashimoto/wa-sqlite@v0.9.9/dist/wa-sqlite.wasm'
+const url = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite.wasm'
 
 onmessage = async () => {
   if (!await isOpfsSupported()) { // this can be called in main thread
