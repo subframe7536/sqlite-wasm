@@ -95,6 +95,18 @@ console.log(await run('select uuidv7() as a'))
 // // [{ "a": "01932f1b-b663-7714-af4d-17a3d9efc7b3" }]
 ```
 
+### Fine-Grain Functions
+
+```ts
+import { close, customFunctionCore, initSQLiteCore, run } from '@subframe7536/sqlite-wasm'
+
+const core = initSQLiteCore(/* options */)
+
+customFunctionCore(core, 'test', num => num)
+run(core, 'select test(?)', [1])
+close(core)
+```
+
 ## License
 
 MIT
