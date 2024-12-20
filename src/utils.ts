@@ -12,29 +12,38 @@ export function isIdbSupported(): boolean {
  * check if [OPFS SyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle) supported
  */
 export async function isOpfsSupported(): Promise<boolean> {
-  // must call and test, see https://stackoverflow.com/questions/76113945/file-system-access-api-on-safari-ios-createsyncaccesshandle-unknownerror-i
-  const inner = async (): Promise<boolean> => {
-    const root = await navigator?.storage.getDirectory?.()
-    if (!root) {
-      return false
+  // must write file to test, see https://stackoverflow.com/questions/76113945/file-system-access-api-on-safari-ios-createsyncaccesshandle-unknownerror-i
+  const inner = (): Promise<boolean> => new Promise((resolve) => {
+    if (typeof navigator?.storage?.getDirectory !== 'function') {
+      resolve(false)
+      return
     }
-    try {
-      const handle = await root.getFileHandle('_CHECK', { create: true })
-      // @ts-expect-error check
-      const access = await handle.createSyncAccessHandle()
-      access.close()
-      return true
-    } catch {
-      return false
-    } finally {
-      await root.removeEntry('_CHECK')
-    }
-  }
+
+    navigator.storage.getDirectory()
+      .then((root) => {
+        if (!root) {
+          resolve(false)
+          return
+        }
+
+        root.getFileHandle('_CHECK', { create: true })
+          // @ts-expect-error no type
+          .then(handle => handle.createSyncAccessHandle())
+          .then(access => (access.close(), root.removeEntry('_CHECK')))
+          .then(() => resolve(true))
+          .catch(() => root.removeEntry('_CHECK')
+            .then(() => resolve(false))
+            .catch(() => resolve(false)),
+          )
+      })
+      .catch(() => resolve(false))
+  })
+
   if ('importScripts' in globalThis) {
-    return inner()
+    return await inner()
   }
   try {
-    if (typeof Worker === 'undefined') {
+    if (typeof Worker === 'undefined' || typeof Promise === 'undefined') {
       return false
     }
 
@@ -47,13 +56,8 @@ export async function isOpfsSupported(): Promise<boolean> {
     const worker = new Worker(url)
 
     const result = await new Promise<boolean>((resolve, reject) => {
-      worker.onmessage = ({ data }) => {
-        resolve(data)
-      }
-      worker.onerror = (err) => {
-        err.preventDefault()
-        reject(false)
-      }
+      worker.onmessage = ({ data }) => resolve(data)
+      worker.onerror = err => (err.preventDefault(), reject(false))
     })
 
     worker.terminate()
