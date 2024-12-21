@@ -4,10 +4,11 @@ import { defineConfig } from 'tsup'
 export default defineConfig({
   clean: true,
   entry: {
-    index: 'src/index.ts',
-    idb: 'src/vfs/idb.ts',
-    opfs: 'src/vfs/opfs.ts',
-    constant: 'src/constant.ts',
+    'index': 'src/index.ts',
+    'idb': 'src/vfs/idb.ts',
+    'idb-memory': 'src/vfs/idb-memory.ts',
+    'opfs': 'src/vfs/opfs.ts',
+    'constant': 'src/constant.ts',
   },
   format: ['esm', 'cjs'],
   dts: { resolve: true },

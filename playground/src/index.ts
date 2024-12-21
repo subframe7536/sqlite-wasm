@@ -9,11 +9,11 @@ import {
   useMemoryStorage,
   withExistDB,
 } from '../../src/index'
-import { useIdbMemoryStorage as useIdbStorage } from '../../src/vfs/idb'
+import { useIdbMemoryStorage } from '../../src/vfs/idb-memory'
 import { runSQL } from './runSQL'
 import OpfsWorker from './worker?worker'
 
-let db = await initSQLite(useIdbStorage('test.db', { url }))
+let db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
 
 const supportModuleWorker = isModuleWorkerSupport()
 const supportIDB = isIdbSupported()
@@ -23,7 +23,7 @@ console.log('support IDBBatchAtomicVFS:', supportIDB)
 console.log('support OPFSCoopSyncVFS:', supportOPFS)
 document.querySelector('.main')?.addEventListener('click', async () => {
   if (!db) {
-    db = await initSQLite(useIdbStorage('test.db', { url }))
+    db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
   }
   await runSQL(db.run)
   await runSQL((await initSQLite(useMemoryStorage({ url: syncUrl }))).run)
@@ -39,7 +39,7 @@ document.querySelector('.import')?.addEventListener('click', async () => {
     return
   }
   db = await initSQLite(
-    useIdbStorage('test.db', withExistDB(file, { url })),
+    useIdbMemoryStorage('test.db', withExistDB(file, { url })),
   )
   console.log(
     await db.run(`SELECT "type", "tbl_name" AS "table", CASE WHEN "sql" LIKE '%PRIMARY KEY AUTOINCREMENT%' THEN 1 ELSE "name" END AS "name" FROM "sqlite_master"`),

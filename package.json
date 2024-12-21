@@ -21,6 +21,10 @@
       "import": "./dist/idb.js",
       "require": "./dist/idb.cjs"
     },
+    "./idb-memory": {
+      "import": "./dist/idb-memory.js",
+      "require": "./dist/idb-memory.cjs"
+    },
     "./opfs": {
       "import": "./dist/opfs.js",
       "require": "./dist/opfs.cjs"
@@ -38,6 +42,9 @@
     "*": {
       "idb": [
         "./dist/idb.d.ts"
+      ],
+      "idb-memory": [
+        "./dist/idb-memory.d.ts"
       ],
       "opfs": [
         "./dist/opfs.d.ts"
