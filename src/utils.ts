@@ -1,5 +1,6 @@
-import type { SQLiteDBCore } from './types'
+import type { BaseOptions, SQLiteDBCore } from './types'
 import { SQLITE_DETERMINISTIC, SQLITE_DIRECTONLY, SQLITE_UTF8 } from 'wa-sqlite'
+import { importDatabase } from './io'
 
 /**
  * check if IndexedDB and Web Locks API supported
@@ -151,4 +152,19 @@ export function customFunctionCore<N extends string, T extends SQLiteCompatibleT
   } = {},
 ): void {
   return customFunction(core.sqlite, core.db, fnName, fn, options)
+}
+
+/**
+ * Parse options with imported database blob
+ * @param data database blob
+ * @param options extra options
+ */
+export function withExistDB<T extends BaseOptions>(
+  data: File | ReadableStream,
+  options?: Omit<T, 'beforeOpen'>,
+): T {
+  return {
+    ...options,
+    beforeOpen: (vfs, path) => importDatabase(vfs, path, data),
+  } as T
 }

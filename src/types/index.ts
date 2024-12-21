@@ -59,7 +59,7 @@ export type IDBBatchAtomicVFSOptions = {
   lockTimeout?: number
 }
 
-export type Options = {
+export type Options = Omit<BaseOptions, 'url'> & {
   path: string
   sqliteModule: any
   vfsFn: (name: string, module: any, options?: any) => Promisable<FacadeVFS>
@@ -74,8 +74,13 @@ export type SQLiteDBCore = {
   path: string
   /**
    * DB pointer
+   * @deprecated use pointer instead
    */
   db: number
+  /**
+   * SQLite db pointer
+   */
+  pointer: number
   /**
    * SQLite apis
    */
@@ -111,7 +116,11 @@ export type SQLiteDB = SQLiteDBCore & {
    * @example
    * const results = await run('select ? from test where id = ?', ['name', 1])
    */
-  stream: (onData: (data: Record<string, SQLiteCompatibleType>) => void, sql: string, parameters?: SQLiteCompatibleType[]) => Promise<void>
+  stream: (
+    onData: (data: Record<string, SQLiteCompatibleType>) => void,
+    sql: string,
+    parameters?: SQLiteCompatibleType[]
+  ) => Promise<void>
   /**
    * Run sql and return result list
    * @param sql raw sql with placeholder
@@ -119,7 +128,14 @@ export type SQLiteDB = SQLiteDBCore & {
    * @example
    * const results = await run('select ? from test where id = ?', ['name', 1])
    */
-  run: (sql: string, parameters?: SQLiteCompatibleType[]) => Promise<Array<Record<string, SQLiteCompatibleType>>>
+  run: (
+    sql: string,
+    parameters?: SQLiteCompatibleType[]
+  ) => Promise<Array<Record<string, SQLiteCompatibleType>>>
+  /**
+   * Export database to `Uint8Array`
+   */
+  dump: () => Promise<Uint8Array>
 }
 
 export type BaseOptions = {
@@ -133,4 +149,8 @@ export type BaseOptions = {
    * If absent, open with `SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE`
    */
   readonly?: boolean
+  /**
+   * Callback before `sqlite.open_v2(path)`
+   */
+  beforeOpen?: (vfs: FacadeVFS, path: string) => Promisable<void>
 }

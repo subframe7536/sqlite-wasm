@@ -1,5 +1,12 @@
 import type { Options, Promisable, SQLiteDB, SQLiteDBCore } from './types'
-import { Factory, SQLITE_OPEN_CREATE, SQLITE_OPEN_READONLY, SQLITE_OPEN_READWRITE, SQLITE_ROW } from 'wa-sqlite'
+import {
+  Factory,
+  SQLITE_OPEN_CREATE,
+  SQLITE_OPEN_READONLY,
+  SQLITE_OPEN_READWRITE,
+  SQLITE_ROW,
+} from 'wa-sqlite'
+import { exportDatabase } from './io'
 
 /**
  * Load SQLite database, presets: `useMemoryStorage`, `useIdbStorage`, `useIdbMemoryStorage`, `useOpfsStorage`
@@ -12,6 +19,7 @@ export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB
     ...core,
     changes: () => changes(core),
     close: () => close(core),
+    dump: () => exportDatabase(core.vfs, core.path),
     lastInsertRowId: () => lastInsertRowId(core),
     run: (...args) => run(core, ...args),
     stream: (...args) => stream(core, ...args),
@@ -27,18 +35,20 @@ export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB
 export async function initSQLiteCore(
   options: Promisable<Options>,
 ): Promise<SQLiteDBCore> {
-  const { path, sqliteModule, vfsFn, vfsOptions, readonly } = await options
+  const { path, sqliteModule, vfsFn, vfsOptions, readonly, beforeOpen } = await options
   const sqlite = Factory(sqliteModule)
   const vfs = await vfsFn(path, sqliteModule, vfsOptions)
   sqlite.vfs_register(vfs as unknown as SQLiteVFS, true)
-  const db = await sqlite.open_v2(
+  beforeOpen?.(vfs, path)
+  const pointer = await sqlite.open_v2(
     path,
     readonly ? SQLITE_OPEN_READONLY : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
   )
   /// keep-sorted
   return {
-    db,
+    db: pointer,
     path,
+    pointer,
     sqlite,
     sqliteModule,
     vfs,

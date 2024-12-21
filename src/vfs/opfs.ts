@@ -32,14 +32,15 @@ export async function useOpfsStorage(
   path: string,
   options: BaseOptions = {},
 ): Promise<Options> {
+  const { url, ...rest } = options
   const sqliteModule = await SQLiteESMFactory(
     options.url ? { locateFile: () => options.url } : undefined,
   )
   /// keep-sorted
   return {
     path,
-    readonly: options.readonly,
     sqliteModule,
     vfsFn: OPFSCoopSyncVFS.create,
+    ...rest,
   }
 }

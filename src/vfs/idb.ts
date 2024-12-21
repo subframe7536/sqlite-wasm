@@ -34,7 +34,7 @@ export async function useIdbStorage(
     url,
     lockPolicy = 'shared+hint',
     lockTimeout = Infinity,
-    readonly,
+    ...rest
   } = options
   const sqliteModule = await SQLiteAsyncESMFactory(
     url ? { locateFile: () => url } : undefined,
@@ -44,10 +44,10 @@ export async function useIdbStorage(
   /// keep-sorted
   return {
     path: idbName,
-    readonly,
     sqliteModule,
-    vfsFn: IDBMirrorVFS.create,
+    vfsFn: IDBBatchAtomicVFS.create,
     vfsOptions,
+    ...rest,
   }
 }
 
@@ -73,18 +73,15 @@ export async function useIdbMemoryStorage(
   fileName: string,
   options: BaseOptions = {},
 ): Promise<Options> {
-  const {
-    url,
-    readonly,
-  } = options
+  const { url, ...rest } = options
   const sqliteModule = await SQLiteAsyncESMFactory(
     url ? { locateFile: () => url } : undefined,
   )
   /// keep-sorted
   return {
     path: fileName.endsWith('.db') ? fileName : `${fileName}.db`,
-    readonly,
     sqliteModule,
-    vfsFn: IDBBatchAtomicVFS.create,
+    vfsFn: IDBMirrorVFS.create,
+    ...rest,
   }
 }
