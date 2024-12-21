@@ -21,6 +21,7 @@ async function getLatestTag() {
 
     // The tags are returned in chronological order, so the first one is the latest
     const latestTag = tags[0].name
+    console.log(JSON.stringify(tags[0]))
     return latestTag
   } catch (error) {
     console.error('Error fetching latest tag:', error)
@@ -36,12 +37,13 @@ async function downloadAndExtractRelease(tag, outputDir) {
     rmSync(outputDir, { recursive: true })
   }
   mkdirSync(outputDir, { recursive: true })
-  const releaseUrl = `https://${githubProxy}/${REPO}/releases/download/${tag}/wa-sqlite.dist.tgz`
+  const releaseUrl = `https://github.com/${REPO}/releases/${tag}`
+  const downloadUrl = `https://${githubProxy}/${REPO}/releases/download/${tag}/wa-sqlite.dist.tgz`
   const target = `wasqlite-fts5-${tag}.tgz`
   try {
     if (!existsSync(target)) {
-      console.log(`Downloading from ${releaseUrl}`)
-      const resp = await fetch(releaseUrl, {
+      console.log(`Downloading from ${downloadUrl}`)
+      const resp = await fetch(downloadUrl, {
         method: 'GET',
         headers: {
           'Accept': 'application/gzip',
@@ -64,7 +66,11 @@ async function downloadAndExtractRelease(tag, outputDir) {
 
     console.log('Updating README.md')
 
-    writeFileSync(`${outputDir}/README.md`, `# wa-sqlite fts5\n\nDownload from https://github.com/${REPO}\n\nTag \`${tag}\`\n`, 'utf-8')
+    writeFileSync(
+      `${outputDir}/README.md`,
+      `# wa-sqlite fts5\n\nDownload from https://github.com/${REPO}\n\nTag [\`${tag}\`](${releaseUrl})\n`,
+      'utf-8',
+    )
   } finally {
     if (existsSync(target)) {
       rmSync(target)
