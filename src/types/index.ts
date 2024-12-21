@@ -133,6 +133,10 @@ export type SQLiteDB = SQLiteDBCore & {
     parameters?: SQLiteCompatibleType[]
   ) => Promise<Array<Record<string, SQLiteCompatibleType>>>
   /**
+   * Import database from `File` or `ReadableStream`
+   */
+  sync: (data: File | ReadableStream) => Promise<void>
+  /**
    * Export database to `Uint8Array`
    */
   dump: () => Promise<Uint8Array>

@@ -6,7 +6,7 @@ import {
   SQLITE_OPEN_READWRITE,
   SQLITE_ROW,
 } from 'wa-sqlite'
-import { exportDatabase } from './io'
+import { exportDatabase, importDatabase } from './io'
 
 /**
  * Load SQLite database, presets: `useMemoryStorage`, `useIdbStorage`, `useIdbMemoryStorage`, `useOpfsStorage`
@@ -23,6 +23,7 @@ export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB
     lastInsertRowId: () => lastInsertRowId(core),
     run: (...args) => run(core, ...args),
     stream: (...args) => stream(core, ...args),
+    sync: file => importDatabase(core.vfs, core.path, file),
   }
 }
 

@@ -2,18 +2,21 @@ import { mitt } from 'zen-mitt'
 import url from '../../dist/wa-sqlite-async.wasm?url'
 import syncUrl from '../../dist/wa-sqlite.wasm?url'
 import {
+  importDatabase,
   initSQLite,
   isIdbSupported,
   isModuleWorkerSupport,
   isOpfsSupported,
+  type SQLiteDB,
   useMemoryStorage,
   withExistDB,
 } from '../../src/index'
-import { useIdbMemoryStorage } from '../../src/vfs/idb-memory'
+// import { useIdbMemoryStorage } from '../../src/vfs/idb-memory'
+import { useIdbStorage } from '../../src/vfs/idb'
 import { runSQL } from './runSQL'
 import OpfsWorker from './worker?worker'
 
-let db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
+let db: SQLiteDB
 
 const supportModuleWorker = isModuleWorkerSupport()
 const supportIDB = isIdbSupported()
@@ -23,7 +26,8 @@ console.log('support IDBBatchAtomicVFS:', supportIDB)
 console.log('support OPFSCoopSyncVFS:', supportOPFS)
 document.querySelector('.main')?.addEventListener('click', async () => {
   if (!db) {
-    db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
+    // db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
+    db = await initSQLite(useIdbStorage('test.db', { url }))
   }
   await runSQL(db.run)
   await runSQL((await initSQLite(useMemoryStorage({ url: syncUrl }))).run)
@@ -39,8 +43,10 @@ document.querySelector('.import')?.addEventListener('click', async () => {
     return
   }
   db = await initSQLite(
-    useIdbMemoryStorage('test.db', withExistDB(file, { url })),
+    // useIdbMemoryStorage('test.db', withExistDB(file, { url })),
+    useIdbStorage('test.db', { url }),
   )
+  await importDatabase(db.vfs, db.path, file)
   console.log(
     await db.run(`SELECT "type", "tbl_name" AS "table", CASE WHEN "sql" LIKE '%PRIMARY KEY AUTOINCREMENT%' THEN 1 ELSE "name" END AS "name" FROM "sqlite_master"`),
   )
