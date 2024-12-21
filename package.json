@@ -55,6 +55,7 @@
     "format": "eslint . --fix",
     "dev": "vite serve playground",
     "build": "tsup",
+    "update": "node download.mjs",
     "release": "pnpm lint && pnpm run build && bumpp --all && npm publish"
   },
   "publishConfig": {
@@ -62,18 +63,18 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@subframe7536/eslint-config": "^0.9.4",
+    "@subframe7536/eslint-config": "^1.0.0",
     "@subframe7536/type-utils": "^0.1.6",
-    "@types/node": "^20.16.13",
-    "bumpp": "^9.7.1",
-    "eslint": "^9.13.0",
+    "@types/node": "^22.10.2",
+    "bumpp": "^9.9.1",
+    "eslint": "^9.17.0",
     "ofetch": "^1.4.1",
     "tar": "^7.4.3",
-    "tsup": "^8.3.0",
-    "typescript": "^5.6.3",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
     "uuidv7": "^1.0.2",
-    "vite": "^5.4.9",
-    "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.4",
+    "vite": "^6.0.5",
+    "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.5",
     "zen-mitt": "^3.0.0"
   }
 }

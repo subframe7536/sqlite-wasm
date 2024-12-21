@@ -1,5 +1,4 @@
 import { uuidv7 } from 'uuidv7'
-// eslint-disable-next-line antfu/no-import-dist
 import url from '../../dist/wa-sqlite.wasm?url'
 import { customFunction, initSQLite, isOpfsSupported } from '../../src'
 import { useOpfsStorage } from '../../src/vfs/opfs'
