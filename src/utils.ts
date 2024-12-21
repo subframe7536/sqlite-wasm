@@ -155,9 +155,18 @@ export function customFunctionCore<N extends string, T extends SQLiteCompatibleT
 }
 
 /**
- * Parse options with imported database blob
- * @param data database blob
+ * Parse options with existing database
+ * @param data database File or ReadableStream
  * @param options extra options
+ * @example
+ * ```ts
+ * import { initSQLite, withExistDB } from '@subframe7536/sqlite-wasm'
+ * import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
+ *
+ * const db = initSQLite(
+ *   useIdbStorage('test.db', withExistDB(FileOrReadableStream, { url }))
+ * )
+ * ```
  */
 export function withExistDB<T extends BaseOptions>(
   data: File | ReadableStream,

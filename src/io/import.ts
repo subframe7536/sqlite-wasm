@@ -129,6 +129,12 @@ export async function importDatabaseStream(
   }
 }
 
+/**
+ * Import database from `File` or `ReadableStream`
+ * @param vfs SQLite VFS
+ * @param path db path
+ * @param data existing database
+ */
 export async function importDatabase(vfs: FacadeVFS, path: string, data: File | ReadableStream): Promise<void> {
   return await importDatabaseStream(
     vfs,

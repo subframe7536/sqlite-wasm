@@ -134,6 +134,7 @@ export type SQLiteDB = SQLiteDBCore & {
   ) => Promise<Array<Record<string, SQLiteCompatibleType>>>
   /**
    * Import database from `File` or `ReadableStream`
+   * @param data exising database
    */
   sync: (data: File | ReadableStream) => Promise<void>
   /**

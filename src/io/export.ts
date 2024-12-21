@@ -105,6 +105,11 @@ export async function streamToUint8Array(stream: ReadableStream): Promise<Uint8A
   return result
 }
 
+/**
+ * Export database to `Uint8Array`
+ * @param vfs SQLite VFS
+ * @param path database path
+ */
 export async function exportDatabase(vfs: FacadeVFS, path: string): Promise<Uint8Array> {
   return await streamToUint8Array(dumpReadableStream(vfs, path))
 }

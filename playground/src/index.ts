@@ -159,7 +159,6 @@ async function selectFile(accept?: string): Promise<File> {
       input.remove()
     }
 
-    // 处理用户点击取消的情况
     window.addEventListener('focus', () => {
       setTimeout(() => {
         if (!input.files?.length) {
