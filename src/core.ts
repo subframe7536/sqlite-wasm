@@ -40,7 +40,7 @@ export async function initSQLiteCore(
   const sqlite = Factory(sqliteModule)
   const vfs = await vfsFn(path, sqliteModule, vfsOptions)
   sqlite.vfs_register(vfs as unknown as SQLiteVFS, true)
-  beforeOpen?.(vfs, path)
+  await beforeOpen?.(vfs, path)
   const pointer = await sqlite.open_v2(
     path,
     readonly ? SQLITE_OPEN_READONLY : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
@@ -57,14 +57,15 @@ export async function initSQLiteCore(
 }
 
 export async function close(core: SQLiteDBCore): Promise<void> {
-  await core.sqlite.close(core.db)
+  await core.sqlite.close(core.pointer)
+  await core.vfs.close()
 }
 export function changes(core: SQLiteDBCore): number | bigint {
-  return core.sqliteModule._sqlite3_changes(core.db)
+  return core.sqliteModule._sqlite3_changes(core.pointer)
 }
 
 export function lastInsertRowId(core: SQLiteDBCore): number | bigint {
-  return core.sqliteModule._sqlite3_last_insert_rowid(core.db)
+  return core.sqliteModule._sqlite3_last_insert_rowid(core.pointer)
 }
 
 export async function stream(
@@ -73,8 +74,8 @@ export async function stream(
   sql: string,
   parameters?: SQLiteCompatibleType[],
 ): Promise<void> {
-  const { sqlite, db } = core
-  for await (const stmt of sqlite.statements(db, sql)) {
+  const { sqlite, pointer } = core
+  for await (const stmt of sqlite.statements(pointer, sql)) {
     if (parameters?.length) {
       sqlite.bind_collection(stmt, parameters)
     }

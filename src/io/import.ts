@@ -135,7 +135,11 @@ export async function importDatabaseStream(
  * @param path db path
  * @param data existing database
  */
-export async function importDatabase(vfs: FacadeVFS, path: string, data: File | ReadableStream): Promise<void> {
+export async function importDatabase(
+  vfs: FacadeVFS,
+  path: string,
+  data: File | ReadableStream<Uint8Array>,
+): Promise<void> {
   return await importDatabaseStream(
     vfs,
     path,
