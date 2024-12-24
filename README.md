@@ -144,7 +144,7 @@ await importDatabase(db.vfs, db.path, FileOrReadableStream)
 
 #### NOTICE
 
-Currently only `useIdbStorage` is tested, `useIdbMemoryStorage` will emit error ([upstream](https://github.com/rhashimoto/wa-sqlite/discussions/232))
+Currently import with `useIdbMemoryStorage` will emit error ([upstream](https://github.com/rhashimoto/wa-sqlite/discussions/232))
 
 ### Export current database
 
@@ -164,10 +164,6 @@ const buffer = await db.dump()
 // or use independent function
 const buffer1 = exportDatabase(db.vfs, db.path)
 ```
-
-#### NOTICE
-
-Currently only `useIdbStorage` is tested
 
 ### Custom Function
 
