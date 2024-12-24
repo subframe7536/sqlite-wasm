@@ -1,3 +1,4 @@
+/* eslint-disable antfu/consistent-list-newline */
 // reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/index.js
 import type { FacadeVFS, Promisable } from '../types'
 import {
@@ -15,79 +16,69 @@ import {
 } from '../constant'
 import { check, ignoredDataView } from './common'
 
-async function* pagify(stream: ReadableStream<Uint8Array>): AsyncGenerator<Uint8Array> {
-  const chunks: Uint8Array[] = []
-  const reader = stream.getReader()
+const SQLITE_BINARY_HEADER = new Uint8Array([
+  0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, // SQLite f
+  0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x33, 0x00, // ormat 3\0
+])
 
-  // read file header
-  while (chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0) < 32) {
+async function parseHeaderAndVerify(
+  reader: ReadableStreamDefaultReader<Uint8Array<ArrayBufferLike>>,
+): Promise<Uint8Array<ArrayBufferLike>> {
+  const headerData = await readExactBytes(reader, 32)
+  for (let i = 0; i < SQLITE_BINARY_HEADER.length; i++) {
+    if (headerData[i] !== SQLITE_BINARY_HEADER[i]) {
+      throw new Error('Not a SQLite database file')
+    }
+  }
+  return headerData
+}
+
+async function readExactBytes(
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  size: number,
+): Promise<Uint8Array> {
+  const result = new Uint8Array(size)
+  let offset = 0
+
+  while (offset < size) {
     const { done, value } = await reader.read()
     if (done) {
       throw new Error('Unexpected EOF')
     }
-    chunks.push(value!)
+
+    const bytesToCopy = Math.min(size - offset, value!.length)
+    result.set(value!.subarray(0, bytesToCopy), offset)
+    offset += bytesToCopy
   }
 
-  let copyOffset = 0
-  const header = new DataView(new ArrayBuffer(32))
-  for (const chunk of chunks) {
-    const src = chunk.subarray(0, header.byteLength - copyOffset)
-    const dst = new Uint8Array(header.buffer, copyOffset)
-    dst.set(src)
-    copyOffset += src.byteLength
-  }
+  return result
+}
 
-  if (new TextDecoder().decode(header.buffer.slice(0, 16)) !== 'SQLite format 3\x00') {
-    throw new Error('Not a SQLite database file')
-  }
+async function* pagify(stream: ReadableStream<Uint8Array>): AsyncGenerator<Uint8Array> {
+  const reader = stream.getReader()
 
-  const pageSize = (field => field === 1 ? 65536 : field)(header.getUint16(16))
-  const pageCount = header.getUint32(28)
-  // console.log(`${pageCount} pages, ${pageSize} bytes each, ${pageCount * pageSize} bytes total`)
+  try {
+    const headerData = await parseHeaderAndVerify(reader)
 
-  // copy pages
-  for (let i = 0; i < pageCount; ++i) {
-    while (chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0) < pageSize) {
-      const { done, value } = await reader.read()
-      if (done) {
-        throw new Error('Unexpected EOF')
-      }
-      chunks.push(value!)
+    const view = new DataView(headerData.buffer)
+    const rawPageSize = view.getUint16(16)
+    const pageSize = rawPageSize === 1 ? 65536 : rawPageSize
+    const pageCount = view.getUint32(28)
+
+    for (let i = 0; i < pageCount; i++) {
+      yield await readExactBytes(reader, pageSize)
     }
 
-    let page: Uint8Array
-    if (chunks[0]?.byteLength >= pageSize) {
-      page = chunks[0].subarray(0, pageSize)
-      chunks[0] = chunks[0].subarray(pageSize)
-      if (!chunks[0].byteLength) {
-        chunks.shift()
-      }
-    } else {
-      let copyOffset = 0
-      page = new Uint8Array(pageSize)
-      while (copyOffset < pageSize) {
-        const src = chunks[0].subarray(0, pageSize - copyOffset)
-        const dst = new Uint8Array(page.buffer, copyOffset)
-        dst.set(src)
-        copyOffset += src.byteLength
-
-        chunks[0] = chunks[0].subarray(src.byteLength)
-        if (!chunks[0].byteLength) {
-          chunks.shift()
-        }
-      }
+    const { done } = await reader.read()
+    if (!done) {
+      throw new Error('Unexpected data after last page')
     }
-
-    yield page
-  }
-
-  const { done } = await reader.read()
-  if (!done) {
-    throw new Error('Unexpected data after last page')
+  } finally {
+    reader.releaseLock()
   }
 }
 
-export async function importDatabaseStream(
+export async function importDatabaseToIdb(
   vfs: FacadeVFS,
   path: string,
   stream: ReadableStream<Uint8Array>,
@@ -129,6 +120,21 @@ export async function importDatabaseStream(
   }
 }
 
+async function importDatabaseToOpfs(
+  path: string,
+  source: ReadableStream<Uint8Array>,
+): Promise<void> {
+  const root = await navigator.storage.getDirectory()
+  const handle = await root.getFileHandle(path, { create: true })
+  const [streamForVerify, streamData] = source.tee()
+
+  await parseHeaderAndVerify(streamForVerify.getReader())
+
+  const writable = await handle.createWritable()
+  // `pipeTo()` will auto close `writable`
+  await streamData.pipeTo(writable)
+}
+
 /**
  * Import database from `File` or `ReadableStream`
  * @param vfs SQLite VFS
@@ -140,9 +146,11 @@ export async function importDatabase(
   path: string,
   data: File | ReadableStream<Uint8Array>,
 ): Promise<void> {
-  return await importDatabaseStream(
-    vfs,
-    path,
-    data instanceof File ? data.stream() : data,
-  )
+  const stream = data instanceof globalThis.File ? data.stream() : data
+  // is `OPFSCoopSyncVFS`
+  if ('releaser' in vfs) {
+    await importDatabaseToOpfs(path, stream)
+  } else {
+    await importDatabaseToIdb(vfs, path, stream)
+  }
 }
