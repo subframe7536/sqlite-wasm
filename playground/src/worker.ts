@@ -10,9 +10,13 @@ onmessage = async ({ data }) => {
   }
   const db = await initSQLite(useOpfsStorage(
     'test.db',
-    data ? withExistDB(data, { url }) : { url },
+    (data && data !== 'dl') ? withExistDB(data, { url }) : { url },
     // { url },
   ))
+  if (data === 'dl') {
+    postMessage(await db.dump())
+    return
+  }
   // if (data) {
   //   await db.sync(data)
   // }

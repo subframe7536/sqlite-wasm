@@ -6,7 +6,7 @@ import {
   SQLITE_OPEN_MAIN_DB,
   SQLITE_OPEN_READONLY,
 } from '../constant'
-import { check, ignoredDataView } from './common'
+import { check, getHandleFromPath, ignoredDataView, isOpfsVFS } from './common'
 
 export function dumpReadableStream(vfs: FacadeVFS, path: string): ReadableStream {
   const source = getExistDataSource(vfs, path)
@@ -111,5 +111,10 @@ export async function streamToUint8Array(stream: ReadableStream): Promise<Uint8A
  * @param path database path
  */
 export async function exportDatabase(vfs: FacadeVFS, path: string): Promise<Uint8Array> {
-  return await streamToUint8Array(dumpReadableStream(vfs, path))
+  return isOpfsVFS(vfs)
+    ? await getHandleFromPath(path)
+      .then(handle => handle.getFile())
+      .then(file => file.arrayBuffer())
+      .then(buf => new Uint8Array(buf))
+    : await streamToUint8Array(dumpReadableStream(vfs, path))
 }

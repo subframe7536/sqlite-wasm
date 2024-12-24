@@ -14,7 +14,7 @@ import {
   SQLITE_OPEN_READWRITE,
   SQLITE_SYNC_NORMAL,
 } from '../constant'
-import { check, ignoredDataView } from './common'
+import { check, getHandleFromPath, ignoredDataView, isOpfsVFS } from './common'
 
 const SQLITE_BINARY_HEADER = new Uint8Array([
   0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, // SQLite f
@@ -124,8 +124,7 @@ async function importDatabaseToOpfs(
   path: string,
   source: ReadableStream<Uint8Array>,
 ): Promise<void> {
-  const root = await navigator.storage.getDirectory()
-  const handle = await root.getFileHandle(path, { create: true })
+  const handle = await getHandleFromPath(path)
   const [streamForVerify, streamData] = source.tee()
 
   await parseHeaderAndVerify(streamForVerify.getReader())
@@ -148,7 +147,7 @@ export async function importDatabase(
 ): Promise<void> {
   const stream = data instanceof globalThis.File ? data.stream() : data
   // is `OPFSCoopSyncVFS`
-  if ('releaser' in vfs) {
+  if (isOpfsVFS(vfs)) {
     await importDatabaseToOpfs(path, stream)
   } else {
     await importDatabaseToIdb(vfs, path, stream)
