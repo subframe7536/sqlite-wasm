@@ -8,44 +8,36 @@ import {
 } from '../constant'
 import { check, defaultIsOpfsVFS, getHandleFromPath, ignoredDataView } from './common'
 
-export function dumpReadableStream(vfs: FacadeVFS, path: string): ReadableStream {
-  const source = getExistDataSource(vfs, path)
-  source.isDone.finally(() => {
-    vfs.close()
-  })
-
-  return new ReadableStream(source)
-}
-
-function getExistDataSource(
+export function dumpVFS(
   vfs: FacadeVFS,
   path: string,
-): UnderlyingDefaultSource & { isDone: Promise<void> } {
-  let onDone: (() => Promisable<any>)[] = []
+  onDone?: (vfs: FacadeVFS, path: string) => any,
+): ReadableStream {
+  let _onDone: (() => Promisable<any>)[] = []
   let resolve!: () => void
   let reject!: (reason?: any) => void
-  let isDone: Promise<void> = new Promise<void>((res, rej) => {
+  new Promise<void>((res, rej) => {
     resolve = res
     reject = rej
   }).finally(async () => {
-    while (onDone.length) {
-      await onDone.pop()!()
+    while (_onDone.length) {
+      await _onDone.pop()!()
     }
+    onDone?.(vfs, path)
   })
   let fileId = Math.floor(Math.random() * 0x100000000)
   let iOffset = 0
   let bytesRemaining = 0
 
-  return {
-    isDone,
+  return new ReadableStream({
     async start(controller: ReadableStreamDefaultController): Promise<void> {
       try {
         const flags = SQLITE_OPEN_MAIN_DB | SQLITE_OPEN_READONLY
         await check(vfs.jOpen(path, fileId, flags, ignoredDataView()))
-        onDone.push(() => vfs.jClose(fileId))
+        _onDone.push(() => vfs.jClose(fileId))
 
         await check(vfs.jLock(fileId, SQLITE_LOCK_SHARED))
-        onDone.push(() => vfs.jUnlock(fileId, SQLITE_LOCK_NONE))
+        _onDone.push(() => vfs.jUnlock(fileId, SQLITE_LOCK_NONE))
 
         const fileSize = new DataView(new ArrayBuffer(8))
         await check(vfs.jFileSize(fileId, fileSize))
@@ -77,7 +69,7 @@ function getExistDataSource(
     cancel(reason: string): void {
       reject(new Error(reason))
     },
-  }
+  })
 }
 
 export async function streamToUint8Array(stream: ReadableStream): Promise<Uint8Array> {
@@ -121,5 +113,5 @@ export async function exportDatabase(
       .then(handle => handle.getFile())
       .then(file => file.arrayBuffer())
       .then(buf => new Uint8Array(buf))
-    : await streamToUint8Array(dumpReadableStream(vfs, path))
+    : await streamToUint8Array(dumpVFS(vfs, path))
 }
