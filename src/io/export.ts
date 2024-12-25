@@ -13,31 +13,32 @@ export function dumpVFS(
   path: string,
   onDone?: (vfs: FacadeVFS, path: string) => any,
 ): ReadableStream {
-  let _onDone: (() => Promisable<any>)[] = []
-  let resolve!: () => void
-  let reject!: (reason?: any) => void
+  const cleanupTasks: (() => Promisable<any>)[] = []
+  let resolve: () => void
+  let reject: (reason?: any) => void
   new Promise<void>((res, rej) => {
     resolve = res
     reject = rej
   }).finally(async () => {
-    while (_onDone.length) {
-      await _onDone.pop()!()
+    while (cleanupTasks.length) {
+      await cleanupTasks.pop()!()
     }
     onDone?.(vfs, path)
   })
-  let fileId = Math.floor(Math.random() * 0x100000000)
+
+  const fileId = Math.floor(Math.random() * 0x100000000)
   let iOffset = 0
   let bytesRemaining = 0
 
   return new ReadableStream({
-    async start(controller: ReadableStreamDefaultController): Promise<void> {
+    async start(controller): Promise<void> {
       try {
         const flags = SQLITE_OPEN_MAIN_DB | SQLITE_OPEN_READONLY
         await check(vfs.jOpen(path, fileId, flags, ignoredDataView()))
-        _onDone.push(() => vfs.jClose(fileId))
+        cleanupTasks.push(() => vfs.jClose(fileId))
 
         await check(vfs.jLock(fileId, SQLITE_LOCK_SHARED))
-        _onDone.push(() => vfs.jUnlock(fileId, SQLITE_LOCK_NONE))
+        cleanupTasks.push(() => vfs.jUnlock(fileId, SQLITE_LOCK_NONE))
 
         const fileSize = new DataView(new ArrayBuffer(8))
         await check(vfs.jFileSize(fileId, fileSize))
@@ -48,14 +49,21 @@ export function dumpVFS(
       }
     },
 
-    async pull(controller: ReadableStreamDefaultController): Promise<void> {
+    async pull(controller): Promise<void> {
+      if (bytesRemaining === 0) {
+        controller.close()
+        resolve()
+        return
+      }
+
       try {
-        const buffer = new Uint8Array(Math.min(bytesRemaining, 65536))
+        const chunkSize = Math.min(bytesRemaining, 65536)
+        const buffer = new Uint8Array(chunkSize)
         await check(vfs.jRead(fileId, buffer, iOffset))
         controller.enqueue(buffer)
 
-        iOffset += buffer.byteLength
-        bytesRemaining -= buffer.byteLength
+        iOffset += chunkSize
+        bytesRemaining -= chunkSize
         if (bytesRemaining === 0) {
           controller.close()
           resolve()
@@ -66,7 +74,7 @@ export function dumpVFS(
       }
     },
 
-    cancel(reason: string): void {
+    cancel(reason): void {
       reject(new Error(reason))
     },
   })
@@ -75,20 +83,25 @@ export function dumpVFS(
 export async function streamToUint8Array(stream: ReadableStream): Promise<Uint8Array> {
   const chunks: Uint8Array[] = []
   const reader = stream.getReader()
+  let totalLength = 0
 
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) {
-      break
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) {
+        break
+      }
+
+      chunks.push(value)
+      totalLength += value.length
     }
-    chunks.push(value)
+  } finally {
+    reader.releaseLock()
   }
 
-  // Combine all chunks into a single Uint8Array
-  const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0)
   const result = new Uint8Array(totalLength)
-  let position = 0
 
+  let position = 0
   for (const chunk of chunks) {
     result.set(chunk, position)
     position += chunk.length

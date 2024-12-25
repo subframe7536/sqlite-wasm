@@ -1,6 +1,6 @@
 # sqlite-wasm
 
-Typesafe [custom wa-sqlite](https://github.com/subframe7536/sqwab/releases/tag/v1729389754) wrapper, run in memory or persist data to IndexedDB or [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system), support FTS5 and update / delete limit
+Typesafe [custom wa-sqlite](https://github.com/subframe7536/sqwab) wrapper, run in memory or persist data to IndexedDB or [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system), support FTS5 and update / delete limit
 
 Low-level layer for [kysely-wasqlite-worker-dialect](https://github.com/subframe7536/kysely-sqlite-tools/tree/master/packages/dialect-wasqlite-worker)
 

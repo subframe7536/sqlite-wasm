@@ -122,10 +122,10 @@ export async function importDatabaseToIdb(
 
 async function importDatabaseToOpfs(
   path: string,
-  source: ReadableStream<Uint8Array>,
+  stream: ReadableStream<Uint8Array>,
 ): Promise<void> {
   const handle = await getHandleFromPath(path, true)
-  const [verifyStream, dataStream] = source.tee()
+  const [verifyStream, dataStream] = stream.tee()
 
   const verifyReader = verifyStream.getReader()
   try {
