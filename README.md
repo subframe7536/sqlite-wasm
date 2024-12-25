@@ -15,7 +15,7 @@ import { initSQLite, isOpfsSupported, useMemoryStorage } from '@subframe7536/sql
 
 // optional url
 const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/wa-sqlite.wasm'
-const url1 = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite.wasm'
+const url1 = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@v0.5.0/wa-sqlite-fts5/wa-sqlite.wasm'
 
 const { run, changes, lastInsertRowId, close } = await initSQLite(
   useMemoryStorage({ url })
@@ -34,7 +34,7 @@ import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 
 // optional url
 const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/wa-sqlite-async.wasm'
-const url1 = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite-async.wasm'
+const url1 = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@v0.5.0/wa-sqlite-fts5/wa-sqlite-async.wasm'
 
 const { run, changes, lastInsertRowId, close } = await initSQLite(
   useIdbStorage('test.db', { url })
