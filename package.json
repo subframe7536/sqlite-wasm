@@ -34,7 +34,8 @@
       "require": "./dist/constant.cjs"
     },
     "./wasm": "./dist/wa-sqlite.wasm",
-    "./wasm-async": "./dist/wa-sqlite-async.wasm"
+    "./wasm-async": "./dist/wa-sqlite-async.wasm",
+    "./dist/*": "./dist/*"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
