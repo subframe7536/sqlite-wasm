@@ -39,15 +39,15 @@ document.querySelector('.import')?.addEventListener('click', async () => {
     file = await selectFile('.db,.sqlite,.sqlite3')
   } catch (error) {
     // eslint-disable-next-line no-alert
-    prompt(`${error}`)
+    alert(`${error}`)
     return
   }
   db = await initSQLite(
-    useIdbMemoryStorage('test.db', withExistDB(file, { url })),
-    // useIdbMemoryStorage('test.db', { url }),
+    // useIdbMemoryStorage('test.db', withExistDB(file, { url })),
+    useIdbMemoryStorage('test.db', { url }),
     // useIdbStorage('test.db', { url }),
   )
-  // await importDatabase(db.vfs, db.path, file)
+  await db.sync(file)
   console.log(
     await db.run(`SELECT "type", "tbl_name" AS "table", CASE WHEN "sql" LIKE '%PRIMARY KEY AUTOINCREMENT%' THEN 1 ELSE "name" END AS "name" FROM "sqlite_master"`),
   )

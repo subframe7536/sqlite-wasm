@@ -125,13 +125,19 @@ async function importDatabaseToOpfs(
   source: ReadableStream<Uint8Array>,
 ): Promise<void> {
   const handle = await getHandleFromPath(path, true)
-  const [streamForVerify, streamData] = source.tee()
+  const [verifyStream, dataStream] = source.tee()
 
-  await parseHeaderAndVerify(streamForVerify.getReader())
+  const verifyReader = verifyStream.getReader()
+  try {
+    // throw error if fail to verify
+    await parseHeaderAndVerify(verifyReader)
+  } finally {
+    verifyReader.releaseLock()
+  }
 
   const writable = await handle.createWritable()
   // `pipeTo()` will auto close `writable`
-  await streamData.pipeTo(writable)
+  await dataStream.pipeTo(writable)
 }
 
 /**
@@ -148,7 +154,6 @@ export async function importDatabase(
   isOpfsVFS = defaultIsOpfsVFS,
 ): Promise<void> {
   const stream = data instanceof globalThis.File ? data.stream() : data
-  // is `OPFSCoopSyncVFS`
   if (isOpfsVFS(vfs)) {
     await importDatabaseToOpfs(path, stream)
   } else {
