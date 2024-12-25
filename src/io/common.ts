@@ -16,6 +16,6 @@ export async function getHandleFromPath(path: string, create?: boolean): Promise
   return await root.getFileHandle(path, { create })
 }
 
-export function isOpfsVFS(vfs: FacadeVFS): boolean {
+export function defaultIsOpfsVFS(vfs: FacadeVFS): boolean {
   return 'releaser' in vfs
 }

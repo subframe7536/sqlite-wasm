@@ -14,7 +14,7 @@ import {
   SQLITE_OPEN_READWRITE,
   SQLITE_SYNC_NORMAL,
 } from '../constant'
-import { check, getHandleFromPath, ignoredDataView, isOpfsVFS } from './common'
+import { check, defaultIsOpfsVFS, getHandleFromPath, ignoredDataView } from './common'
 
 const SQLITE_BINARY_HEADER = new Uint8Array([
   0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, // SQLite f
@@ -139,11 +139,13 @@ async function importDatabaseToOpfs(
  * @param vfs SQLite VFS
  * @param path db path
  * @param data existing database
+ * @param isOpfsVFS check if vfs is on OPFS, {@link defaultIsOpfsVFS} by default
  */
 export async function importDatabase(
   vfs: FacadeVFS,
   path: string,
   data: File | ReadableStream<Uint8Array>,
+  isOpfsVFS = defaultIsOpfsVFS,
 ): Promise<void> {
   const stream = data instanceof globalThis.File ? data.stream() : data
   // is `OPFSCoopSyncVFS`
