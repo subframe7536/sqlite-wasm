@@ -124,7 +124,7 @@ async function importDatabaseToOpfs(
   path: string,
   source: ReadableStream<Uint8Array>,
 ): Promise<void> {
-  const handle = await getHandleFromPath(path)
+  const handle = await getHandleFromPath(path, true)
   const [streamForVerify, streamData] = source.tee()
 
   await parseHeaderAndVerify(streamForVerify.getReader())

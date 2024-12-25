@@ -10,10 +10,10 @@ export async function check(code: Promisable<number>): Promise<void> {
 export function ignoredDataView(): DataView {
   return new DataView(new ArrayBuffer(4))
 }
-export async function getHandleFromPath(path: string): Promise<FileSystemFileHandle> {
+
+export async function getHandleFromPath(path: string, create?: boolean): Promise<FileSystemFileHandle> {
   const root = await navigator.storage.getDirectory()
-  const handle = await root.getFileHandle(path, { create: true })
-  return handle
+  return await root.getFileHandle(path, { create })
 }
 
 export function isOpfsVFS(vfs: FacadeVFS): boolean {
