@@ -4,19 +4,20 @@ import { IDBMirrorVFS } from './class/IDBMirrorVFS'
 
 export { IDBMirrorVFS } from './class/IDBMirrorVFS'
 /**
- * Store data in memory and sync to IndexedDB,
- * Use `IDBMirrorVFS` with `wa-sqlite-async.wasm` (larger than sync version), better performance compare to `IDBBatchAtomicVFS`
+ * Store data in memory and sync to `IndexedDB`,
+ * use `IDBMirrorVFS` with `wa-sqlite-async.wasm` (larger than sync version),
+ * better performance compare to `useIdbStorage`.
  * @param fileName db file name
  * @param options options
  * @example
  * ```ts
- * import { useIdbMemoryStorage } from '@subframe7536/sqlite-wasm/idb'
  * import { initSQLite } from '@subframe7536/sqlite-wasm'
+ * import { useIdbMemoryStorage } from '@subframe7536/sqlite-wasm/idb-memory'
  *
  * // optional url
- * const url = "https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite-async.wasm"
+ * const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/dist/wa-sqlite-async.wasm'
  *
- * const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
+ * const { run, changes, lastInsertRowId, close } = await initSQLite(
  *   useIdbMemoryStorage('test.db', { url })
  * )
  * ```

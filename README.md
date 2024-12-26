@@ -8,7 +8,7 @@ Low-level layer for [kysely-wasqlite-worker-dialect](https://github.com/subframe
 
 ### Memory
 
-Use `MemoryVFS` with `wa-sqlite.wasm`, no data persistence
+Store data in memory, use `MemoryVFS` with `wa-sqlite.wasm`, no data persistence
 
 ```ts
 import { initSQLite, isOpfsSupported, useMemoryStorage } from '@subframe7536/sqlite-wasm'
@@ -24,7 +24,7 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
 
 ### IndexedDB
 
-use `IDBBatchAtomicVFS` with `wa-sqlite-async.wasm`, larger than sync version, better compatibility
+Store data in `IndexedDB`, use `IDBBatchAtomicVFS` with `wa-sqlite-async.wasm`, larger than sync version, better compatibility
 
 [minimal IndexedDB backend browser version](https://caniuse.com/mdn-api_lockmanager)
 
@@ -43,7 +43,7 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
 
 #### IdbMemory
 
-Use `IDBMirrorVFS` with `wa-sqlite-async.wasm` (larger than sync version), better performance compare to `useIdbStorage`, store data in memory and sync to IndexedDB.
+Store data in memory and sync to `IndexedDB`, use `IDBMirrorVFS` with `wa-sqlite-async.wasm` (larger than sync version), better performance compare to `useIdbStorage`.
 
 ```ts
 import { initSQLite } from '@subframe7536/sqlite-wasm'
@@ -61,7 +61,7 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
 
 ### OPFS
 
-use `OPFSCoopSyncVFS` with `wa-sqlite.wasm`, smaller than async version
+Store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) through [FileSystemSyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle), use `OPFSCoopSyncVFS` with `wa-sqlite.wasm`, smaller and faster all other persist storages
 
 [minimal OPFS backend browser version](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
 
@@ -83,6 +83,31 @@ onmessage = async () => {
   )
 }
 ```
+
+#### File System Access API
+
+Store data through `FileSystemFileHandle`, use modified `OPFSAnyContextVFS` with `wa-sqlite-async.wasm`, allow to persist to device's local file or OPFS in main or worker thread, but a little slower than [`useOpfsStorage`](#opfs)
+
+[minimal File System Access backend browser version](https://caniuse.com/mdn-api_filesystemhandle)
+
+```ts
+import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
+import { useFsHandleStorage } from '@subframe7536/sqlite-wasm/fs-handle'
+
+// optional url
+const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/dist/wa-sqlite.wasm'
+
+// device's local file
+const root = await window.showDirectoryPicker()
+// OPFS
+const root1 = await navigator.storage.getDirectory()
+
+const { run, changes, lastInsertRowId, close } = await initSQLite(
+  useFsHandleStorage('test.db', root, url)
+)
+```
+
+Notice: if the sqlite db file exists on the file path, it will directly use the exist data
 
 ### Import from existing database
 

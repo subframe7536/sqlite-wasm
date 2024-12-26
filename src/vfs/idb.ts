@@ -7,19 +7,21 @@ export { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
 export type IDBVFSOptions = IDBBatchAtomicVFSOptions
 
 /**
- * Store data in IndexedDB,
- * Use `IDBBatchAtomicVFS` with `wa-sqlite-async.wasm` (larger than sync version), better compatibility
+ * Store data in `IndexedDB`,
+ * use `IDBBatchAtomicVFS` with `wa-sqlite-async.wasm`,
+ * larger than sync version, better compatibility
  * @param fileName db file name
  * @param options options
  * @example
  * ```ts
- * import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
  * import { initSQLite } from '@subframe7536/sqlite-wasm'
+ * import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
  *
  * // optional url
- * const url = "https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite-async.wasm"
+ * const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/wa-sqlite-async.wasm'
+ * const url1 = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@v0.5.0/wa-sqlite-fts5/wa-sqlite-async.wasm'
  *
- * const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
+ * const { run, changes, lastInsertRowId, close } = await initSQLite(
  *   useIdbStorage('test.db', { url })
  * )
  * ```

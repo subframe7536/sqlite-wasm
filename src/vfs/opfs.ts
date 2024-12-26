@@ -5,28 +5,29 @@ import SQLiteESMFactory from '../../wa-sqlite-fts5/wa-sqlite.mjs'
 export { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
 
 /**
- * store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system),
- * use OPFSCoopSyncVFS with `wa-sqlite.wasm` (smaller than async version), [compatibility](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
+ * Store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) through [FileSystemSyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle),
+ * use `OPFSCoopSyncVFS` with `wa-sqlite.wasm`, smaller and faster than all other persist storages
  *
  * **MUST RUN IN WEB WORKER**
  * @param path db file directory path
  * @param options wasm file url
  * @example
- * // only effect in worker
+ * ```ts
  * import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
  * import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
  *
  * // optional url
- * const url = "https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@main/wa-sqlite-fts5/wa-sqlite.wasm"
+ * const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/dist/wa-sqlite.wasm'
  *
  * onmessage = async () => {
- *   if (!isOpfsSupported()) {
+ *   if (!await isOpfsSupported()) { // this can be called in main thread
  *     return
  *   }
- *   const { run, changes, lastInsertRowId, close, sqlite, db } = await initSQLite(
- *     useOpfsStorage('test.db', { url })
+ *   const { run, changes, lastInsertRowId, close } = await initSQLite(
+ *     useOpfsStorage('test.db', url)
  *   )
  * }
+ * ```
  */
 export async function useOpfsStorage(
   path: string,
