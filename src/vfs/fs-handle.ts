@@ -19,7 +19,7 @@ export { OPFSAnyContextVFS } from './class/OPFSAnyContextVFS'
  * import { useFsHandleStorage } from '@subframe7536/sqlite-wasm/fs-handle'
  *
  * // optional url
- * const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/dist/wa-sqlite.wasm'
+ * const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/dist/wa-sqlite-async.wasm'
  *
  * // device's local file
  * const root = await window.showDirectoryPicker()

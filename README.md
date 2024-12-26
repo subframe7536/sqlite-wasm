@@ -61,11 +61,9 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
 
 ### OPFS
 
-Store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) through [FileSystemSyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle), use `OPFSCoopSyncVFS` with `wa-sqlite.wasm`, smaller and faster all other persist storages
+Store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) through [FileSystemSyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle), use `OPFSCoopSyncVFS` with `wa-sqlite.wasm`, smaller and faster all other persist storages. **MUST RUN IN WEB WORKER!**
 
 [minimal OPFS backend browser version](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
-
-**MUST RUN IN WEB WORKER**
 
 ```ts
 import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
@@ -95,7 +93,7 @@ import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
 import { useFsHandleStorage } from '@subframe7536/sqlite-wasm/fs-handle'
 
 // optional url
-const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/dist/wa-sqlite.wasm'
+const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/dist/wa-sqlite-async.wasm'
 
 // device's local file
 const root = await window.showDirectoryPicker()
