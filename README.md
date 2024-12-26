@@ -206,13 +206,25 @@ console.log(await run('select uuidv7() as a'))
 ### Fine-Grain Functions
 
 ```ts
-import { close, customFunctionCore, initSQLiteCore, run } from '@subframe7536/sqlite-wasm'
+import {
+  close,
+  customFunctionCore,
+  exportDatabase,
+  importDatabase,
+  initSQLiteCore,
+  run,
+} from '@subframe7536/sqlite-wasm'
 
-const core = initSQLiteCore(/* options */)
+const core = await initSQLiteCore(/* options */)
+
+await importDatabase(core.vfs, core.path, stream)
 
 customFunctionCore(core, 'test', num => num)
-run(core, 'select test(?)', [1])
-close(core)
+await run(core, 'select test(?)', [1])
+
+const buf = await exportDatabase(core.vfs, core.path)
+
+await close(core)
 ```
 
 ## License
