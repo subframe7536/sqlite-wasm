@@ -6,7 +6,7 @@ import {
   SQLITE_OPEN_MAIN_DB,
   SQLITE_OPEN_READONLY,
 } from '../constant'
-import { check, defaultIsOpfsVFS, getHandleFromPath, ignoredDataView } from './common'
+import { check, getHandle, ignoredDataView, isFsHandleVFS } from './common'
 
 export function dumpVFS(
   vfs: FacadeVFS,
@@ -80,7 +80,8 @@ export function dumpVFS(
   })
 }
 
-export async function streamToUint8Array(stream: ReadableStream): Promise<Uint8Array> {
+export async function exportDatabaseFromIDB(vfs: FacadeVFS, path: string): Promise<Uint8Array> {
+  const stream = dumpVFS(vfs, path)
   const chunks: Uint8Array[] = []
   const reader = stream.getReader()
   let totalLength = 0
@@ -110,21 +111,23 @@ export async function streamToUint8Array(stream: ReadableStream): Promise<Uint8A
   return result
 }
 
+export async function exportDatabaseFromFsHandle(vfs: FacadeVFS, path: string): Promise<Uint8Array> {
+  return await getHandle(vfs, path)
+    .then(handle => handle.getFile())
+    .then(file => file.arrayBuffer())
+    .then(buf => new Uint8Array(buf))
+}
+
 /**
  * Export database to `Uint8Array`
  * @param vfs SQLite VFS
  * @param path database path
- * @param isOpfsVFS check if vfs is on OPFS, {@link defaultIsOpfsVFS} by default
  */
 export async function exportDatabase(
   vfs: FacadeVFS,
   path: string,
-  isOpfsVFS = defaultIsOpfsVFS,
 ): Promise<Uint8Array> {
-  return isOpfsVFS(vfs)
-    ? await getHandleFromPath(path)
-      .then(handle => handle.getFile())
-      .then(file => file.arrayBuffer())
-      .then(buf => new Uint8Array(buf))
-    : await streamToUint8Array(dumpVFS(vfs, path))
+  return isFsHandleVFS(vfs)
+    ? await exportDatabaseFromFsHandle(vfs, path)
+    : await exportDatabaseFromIDB(vfs, path)
 }

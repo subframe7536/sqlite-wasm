@@ -29,6 +29,10 @@
       "import": "./dist/opfs.js",
       "require": "./dist/opfs.cjs"
     },
+    "./fs-handle": {
+      "import": "./dist/fs-handle.js",
+      "require": "./dist/fs-handle.cjs"
+    },
     "./constant": {
       "import": "./dist/constant.js",
       "require": "./dist/constant.cjs"
@@ -49,6 +53,9 @@
       ],
       "opfs": [
         "./dist/opfs.d.ts"
+      ],
+      "fs-handle": [
+        "./dist/fs-handle.d.ts"
       ],
       "constant": [
         "./dist/constant.d.ts"

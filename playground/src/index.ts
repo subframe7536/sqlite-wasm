@@ -11,6 +11,7 @@ import {
   useMemoryStorage,
   withExistDB,
 } from '../../src/index'
+import { useFsHandleStorage } from '../../src/vfs/fs-handle'
 import { useIdbMemoryStorage } from '../../src/vfs/idb-memory'
 // import { useIdbStorage } from '../../src/vfs/idb'
 import { runSQL } from './runSQL'
@@ -26,7 +27,10 @@ console.log('support IDBBatchAtomicVFS:', supportIDB)
 console.log('support OPFSCoopSyncVFS:', supportOPFS)
 document.querySelector('.main')?.addEventListener('click', async () => {
   if (!db) {
-    db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
+    // @ts-expect-error no types
+    const root = await window.showDirectoryPicker()
+    // db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
+    db = await initSQLite(useFsHandleStorage('test.db', root, { url }))
     // db = await initSQLite(useIdbStorage('test.db', { url }))
   }
   await runSQL(db.run)

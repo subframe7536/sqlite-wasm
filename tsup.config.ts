@@ -8,6 +8,7 @@ const commonOptions: Options = {
     'idb': 'src/vfs/idb.ts',
     'idb-memory': 'src/vfs/idb-memory.ts',
     'opfs': 'src/vfs/opfs.ts',
+    'fs-handle': 'src/vfs/fs-handle.ts',
     'constant': 'src/constant.ts',
   },
   format: ['esm', 'cjs'],
