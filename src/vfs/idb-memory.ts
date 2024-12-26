@@ -1,8 +1,8 @@
 import type { BaseOptions, Options } from '../types'
-import { IDBMirrorVFS } from 'wa-sqlite/src/examples/IDBMirrorVFS.js'
 import SQLiteAsyncESMFactory from '../../wa-sqlite-fts5/wa-sqlite-async.mjs'
+import { IDBMirrorVFS } from './class/IDBMirrorVFS'
 
-export { IDBMirrorVFS } from 'wa-sqlite/src/examples/IDBMirrorVFS.js'
+export { IDBMirrorVFS } from './class/IDBMirrorVFS'
 /**
  * Store data in memory and sync to IndexedDB,
  * Use `IDBMirrorVFS` with `wa-sqlite-async.wasm` (larger than sync version), better performance compare to `IDBBatchAtomicVFS`
@@ -33,7 +33,7 @@ export async function useIdbMemoryStorage(
   return {
     path: fileName.endsWith('.db') ? fileName : `${fileName}.db`,
     sqliteModule,
-    vfsFn: IDBMirrorVFS.create,
+    vfsFn: IDBMirrorVFS.create as any,
     ...rest,
   }
 }
