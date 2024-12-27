@@ -61,7 +61,10 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
 
 ### OPFS
 
-Store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) through [FileSystemSyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle), use `OPFSCoopSyncVFS` with `wa-sqlite.wasm`, smaller and faster all other persist storages. **MUST RUN IN WEB WORKER!**
+Store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) through [FileSystemSyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle), use `OPFSCoopSyncVFS` with `wa-sqlite.wasm`, smaller and faster all other persist storages.
+
+> [!important]
+> **MUST RUN IN WEB WORKER!**
 
 [minimal OPFS backend browser version](https://caniuse.com/mdn-api_filesystemsyncaccesshandle)
 
@@ -88,6 +91,9 @@ Store data through `FileSystemFileHandle`, use modified `OPFSAnyContextVFS` with
 
 [minimal File System Access backend browser version](https://caniuse.com/mdn-api_filesystemhandle)
 
+> [!warning]
+> maybe have perfarmance issue on Windows with device's local file, see in [#5](https://github.com/subframe7536/sqlite-wasm/pull/5)
+
 ```ts
 import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
 import { useFsHandleStorage } from '@subframe7536/sqlite-wasm/fs-handle'
@@ -105,7 +111,8 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
 )
 ```
 
-Notice: if the sqlite db file exists on the file path, it will directly use the exist data
+> [!note]
+> if the sqlite db file exists on the file path, it will directly use the exist data
 
 ### Import from existing database
 
