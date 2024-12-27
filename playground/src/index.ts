@@ -34,7 +34,8 @@ document.querySelector('.main')?.addEventListener('click', async () => {
     // db = await initSQLite(useIdbStorage('test.db', { url }))
   }
   await runSQL(db.run)
-  await runSQL((await initSQLite(useMemoryStorage({ url: syncUrl }))).run)
+  // await runSQL((await initSQLite(useMemoryStorage({ url: syncUrl }))).run)
+  await db.close()
 })
 document.querySelector('.import')?.addEventListener('click', async () => {
   await db?.close()

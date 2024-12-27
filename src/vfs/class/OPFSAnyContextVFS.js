@@ -159,10 +159,13 @@ export class OPFSAnyContextVFS extends WebLocksMixin(FacadeVFS) {
     try {
       const file = this.mapIdToFile.get(fileId)
 
+      console.time('[read]')
       if (file.writable) {
+        console.timeLog('[read]', 'start close writable')
         await file.writable.close()
         file.writable = null
         file.blob = null
+        console.timeLog('[read]', 'end close writable')
       }
       if (!file.blob) {
         file.blob = await file.fileHandle.getFile()
@@ -177,8 +180,10 @@ export class OPFSAnyContextVFS extends WebLocksMixin(FacadeVFS) {
 
       if (bytesRead < pData.byteLength) {
         pData.fill(0, bytesRead)
+        console.timeEnd('[read]')
         return VFS.SQLITE_IOERR_SHORT_READ
       }
+      console.timeEnd('[read]')
       return VFS.SQLITE_OK
     } catch (e) {
       this.lastError = e
@@ -196,13 +201,14 @@ export class OPFSAnyContextVFS extends WebLocksMixin(FacadeVFS) {
     try {
       const file = this.mapIdToFile.get(fileId)
 
+      console.time('[write]')
       if (!file.writable) {
         file.writable = await file.fileHandle.createWritable({ keepExistingData: true })
       }
       await file.writable.seek(iOffset)
       await file.writable.write(pData.subarray())
       file.blob = null
-
+      console.timeEnd('[write]')
       return VFS.SQLITE_OK
     } catch (e) {
       this.lastError = e
