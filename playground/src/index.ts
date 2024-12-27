@@ -29,6 +29,7 @@ document.querySelector('.main')?.addEventListener('click', async () => {
   if (!db) {
     // @ts-expect-error no types
     const root = await window.showDirectoryPicker()
+    // const root = await navigator.storage.getDirectory()
     // db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
     db = await initSQLite(useFsHandleStorage('test.db', root, { url }))
     // db = await initSQLite(useIdbStorage('test.db', { url }))
@@ -146,7 +147,7 @@ document.querySelector('.importW')?.addEventListener('click', async () => {
   }
 })
 document.querySelector('.clear')?.addEventListener('click', async () => {
-  await db?.close()
+  await db?.close().catch()
   const root = await navigator.storage.getDirectory()
   for await (const [name] of root.entries()) {
     await root.removeEntry(name, { recursive: true })
