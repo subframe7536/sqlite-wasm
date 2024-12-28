@@ -87,12 +87,13 @@ onmessage = async () => {
 
 #### File System Access API
 
-Store data through `FileSystemFileHandle`, use modified `OPFSAnyContextVFS` with `wa-sqlite-async.wasm`, allow to persist to device's local file or OPFS in main or worker thread, but a little slower than [`useOpfsStorage`](#opfs)
+Store data through `FileSystemFileHandle`, use modified `OPFSAnyContextVFS` with `wa-sqlite-async.wasm`, allow to directly read and write to device's local file or OPFS file entry in main or worker thread, but a little slower than [`useOpfsStorage`](#opfs)
 
 [minimal File System Access backend browser version](https://caniuse.com/mdn-api_filesystemhandle)
 
 > [!warning]
-> maybe have perfarmance issue on Windows with device's local file, see in [#5](https://github.com/subframe7536/sqlite-wasm/pull/5)
+> 1. maybe have perfarmance issue on Windows with device's local file, see in [#5](https://github.com/subframe7536/sqlite-wasm/pull/5)
+> 2. Safari is not supported, see in [caniuse](https://caniuse.com/mdn-api_filesystemwritablefilestream)
 
 ```ts
 import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
@@ -110,9 +111,6 @@ const { run, changes, lastInsertRowId, close } = await initSQLite(
   useFsHandleStorage('test.db', root, url)
 )
 ```
-
-> [!note]
-> if the sqlite db file exists on the file path, it will directly use the exist data
 
 ### Import from existing database
 
