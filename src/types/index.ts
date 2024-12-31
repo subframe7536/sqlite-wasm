@@ -46,7 +46,7 @@ export interface FacadeVFS extends Base {
   jDeviceCharacteristics: (pFile: number) => number | Promise<number>
 }
 
-export type IDBBatchAtomicVFSOptions = {
+export interface IDBBatchAtomicVFSOptions {
   /**
    * patched options for `navigator.locks.request()`
    * @default 'shared+hint'
@@ -59,7 +59,7 @@ export type IDBBatchAtomicVFSOptions = {
   lockTimeout?: number
 }
 
-export type Options = Omit<BaseOptions, 'url'> & {
+export interface InitSQLiteOptions extends Omit<BaseStorageOptions, 'url'> {
   path: string
   sqliteModule: any
   vfsFn: (name: string, module: any, options?: any) => Promisable<FacadeVFS>
@@ -143,7 +143,7 @@ export type SQLiteDB = SQLiteDBCore & {
   dump: () => Promise<Uint8Array>
 }
 
-export type BaseOptions = {
+export interface BaseStorageOptions {
   /**
    * Custom wasm url
    */

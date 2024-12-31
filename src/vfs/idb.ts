@@ -1,4 +1,4 @@
-import type { BaseOptions, IDBBatchAtomicVFSOptions, Options } from '../types'
+import type { BaseStorageOptions, IDBBatchAtomicVFSOptions, InitSQLiteOptions } from '../types'
 import { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
 import SQLiteAsyncESMFactory from '../../wa-sqlite-fts5/wa-sqlite-async.mjs'
 
@@ -28,8 +28,8 @@ export type IDBVFSOptions = IDBBatchAtomicVFSOptions
  */
 export async function useIdbStorage(
   fileName: string,
-  options: IDBVFSOptions & BaseOptions = {},
-): Promise<Options> {
+  options: IDBVFSOptions & BaseStorageOptions = {},
+): Promise<InitSQLiteOptions> {
   const {
     url,
     lockPolicy = 'shared+hint',

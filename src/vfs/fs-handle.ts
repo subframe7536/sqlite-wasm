@@ -1,4 +1,4 @@
-import type { BaseOptions, Options } from '../types'
+import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
 import SQLiteAsyncESMFactory from '../../wa-sqlite-fts5/wa-sqlite-async.mjs'
 import { OPFSAnyContextVFS } from './class/OPFSAnyContextVFS'
 
@@ -34,8 +34,8 @@ export { OPFSAnyContextVFS } from './class/OPFSAnyContextVFS'
 export async function useFsHandleStorage(
   path: string,
   rootDirHandle: FileSystemDirectoryHandle,
-  options: BaseOptions = {},
-): Promise<Options> {
+  options: BaseStorageOptions = {},
+): Promise<InitSQLiteOptions> {
   const { url, ...rest } = options
   const sqliteModule = await SQLiteAsyncESMFactory(
     options.url ? { locateFile: () => options.url } : undefined,

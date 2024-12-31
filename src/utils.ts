@@ -1,4 +1,4 @@
-import type { BaseOptions, SQLiteDBCore } from './types'
+import type { BaseStorageOptions, SQLiteDBCore } from './types'
 import { SQLITE_DETERMINISTIC, SQLITE_DIRECTONLY, SQLITE_UTF8 } from 'wa-sqlite'
 import { importDatabase } from './io'
 
@@ -168,7 +168,7 @@ export function customFunctionCore<N extends string, T extends SQLiteCompatibleT
  * )
  * ```
  */
-export function withExistDB<T extends BaseOptions>(
+export function withExistDB<T extends BaseStorageOptions>(
   data: File | ReadableStream,
   options?: Omit<T, 'beforeOpen'>,
 ): T {

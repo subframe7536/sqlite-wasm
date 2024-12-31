@@ -1,4 +1,4 @@
-import type { Options, Promisable, SQLiteDB, SQLiteDBCore } from './types'
+import type { InitSQLiteOptions, Promisable, SQLiteDB, SQLiteDBCore } from './types'
 import {
   Factory,
   SQLITE_OPEN_CREATE,
@@ -9,10 +9,15 @@ import {
 import { exportDatabase, importDatabase } from './io'
 
 /**
- * Load SQLite database, presets: `useMemoryStorage`, `useIdbStorage`, `useIdbMemoryStorage`, `useOpfsStorage`
- * @param options init options
+ * Load SQLite database, presets:
+ * - `useMemoryStorage`
+ * - `useIdbStorage`
+ * - `useIdbMemoryStorage`
+ * - `useOpfsStorage`
+ * - `useFsHandleStorage`
+ * @param options {@link InitSQLiteOptions}
  */
-export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB> {
+export async function initSQLite(options: Promisable<InitSQLiteOptions>): Promise<SQLiteDB> {
   const core = await initSQLiteCore(options)
   /// keep-sorted
   return {
@@ -23,7 +28,7 @@ export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB
     lastInsertRowId: () => lastInsertRowId(core),
     run: (...args) => run(core, ...args),
     stream: (...args) => stream(core, ...args),
-    sync: file => importDatabase(core.vfs, core.path, file),
+    sync: data => importDatabase(core.vfs, core.path, data),
   }
 }
 
@@ -31,10 +36,10 @@ export async function initSQLite(options: Promisable<Options>): Promise<SQLiteDB
  * Load SQLite database without utils
  *
  * Presets: `useMemoryStorage`, `useIdbStorage`, `useOpfsStorage`
- * @param options init options
+ * @param options {@link InitSQLiteOptions}
  */
 export async function initSQLiteCore(
-  options: Promisable<Options>,
+  options: Promisable<InitSQLiteOptions>,
 ): Promise<SQLiteDBCore> {
   const { path, sqliteModule, vfsFn, vfsOptions, readonly, beforeOpen } = await options
   const sqlite = Factory(sqliteModule)
@@ -60,6 +65,7 @@ export async function close(core: SQLiteDBCore): Promise<void> {
   await core.sqlite.close(core.pointer)
   await core.vfs.close()
 }
+
 export function changes(core: SQLiteDBCore): number | bigint {
   return core.sqliteModule._sqlite3_changes(core.pointer)
 }
