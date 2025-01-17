@@ -220,3 +220,21 @@ export async function run(
   await stream(core, data => results.push(data), sql, parameters)
   return results
 }
+
+export async function* iterator(
+  core: SQLiteDBCore,
+  sql: string,
+  parameters?: SQLiteCompatibleType[],
+): AsyncIterableIterator<Record<string, SQLiteCompatibleType>> {
+  const { sqlite, pointer } = core
+  for await (const stmt of sqlite.statements(pointer, sql)) {
+    if (parameters?.length) {
+      sqlite.bind_collection(stmt, parameters)
+    }
+    const cols = sqlite.column_names(stmt)
+    while (await sqlite.step(stmt) === SQLITE_ROW) {
+      const row = sqlite.row(stmt)
+      yield Object.fromEntries(cols.map((key, i) => [key, row[i]]))
+    }
+  }
+}

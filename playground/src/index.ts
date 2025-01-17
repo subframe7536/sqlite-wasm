@@ -119,7 +119,7 @@ document.querySelector('.worker')?.addEventListener('click', async () => {
   }
   worker.postMessage('')
   for await (const data of test()) {
-    console.log('iterator', data)
+    console.log('[stream]', data)
   }
 })
 document.querySelector('.importW')?.addEventListener('click', async () => {

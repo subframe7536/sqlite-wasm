@@ -217,12 +217,17 @@ import {
   exportDatabase,
   importDatabase,
   initSQLiteCore,
+  iterator,
   run,
 } from '@subframe7536/sqlite-wasm'
 
 const core = await initSQLiteCore(/* options */)
 
 await importDatabase(core.vfs, core.path, stream)
+
+for await (const row of iterator(core, 'select * from test')) {
+  console.log(row)
+}
 
 customFunctionCore(core, 'test', num => num)
 await run(core, 'select test(?)', [1])
