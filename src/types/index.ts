@@ -1,4 +1,5 @@
 import type { Base } from 'wa-sqlite/src/VFS.js'
+import type { SQLiteAPI } from './api'
 
 export type Promisable<T> = T | Promise<T>
 
