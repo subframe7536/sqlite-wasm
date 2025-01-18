@@ -12,8 +12,8 @@ import {
   withExistDB,
 } from '../../src/index'
 import { useFsHandleStorage } from '../../src/vfs/fs-handle'
+import { useIdbStorage } from '../../src/vfs/idb'
 import { useIdbMemoryStorage } from '../../src/vfs/idb-memory'
-// import { useIdbStorage } from '../../src/vfs/idb'
 import { runSQL } from './runSQL'
 import OpfsWorker from './worker?worker'
 
@@ -32,6 +32,7 @@ document.querySelector('.main')?.addEventListener('click', async () => {
     // db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
     db = await initSQLite(useFsHandleStorage('test.db', root, { url }))
     // db = await initSQLite(useIdbStorage('test.db', { url }))
+    // db = await initSQLite(useMemoryStorage('test.db', { url: syncUrl }))
   }
   await runSQL(db.run)
   await runSQL((await initSQLite(useMemoryStorage({ url: syncUrl }))).run)
