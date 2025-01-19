@@ -1,5 +1,5 @@
 import type { BaseStorageOptions, SQLiteDBCore } from './types'
-import { SQLITE_DETERMINISTIC, SQLITE_DIRECTONLY, SQLITE_UTF8 } from 'wa-sqlite'
+import { SQLITE_DETERMINISTIC, SQLITE_DIRECTONLY, SQLITE_OK, SQLITE_UTF8 } from 'wa-sqlite'
 import { SQLITE_ROW } from 'wa-sqlite/src/sqlite-constants.js'
 import { importDatabase } from './io'
 
@@ -225,16 +225,37 @@ export async function* iterator(
   core: SQLiteDBCore,
   sql: string,
   parameters?: SQLiteCompatibleType[],
-): AsyncIterableIterator<Record<string, SQLiteCompatibleType>> {
+  chunkSize = 1,
+): AsyncIterableIterator<Record<string, SQLiteCompatibleType>[]> {
   const { sqlite, pointer } = core
+  // eslint-disable-next-line unicorn/no-new-array
+  let cache = new Array(chunkSize)
   for await (const stmt of sqlite.statements(pointer, sql)) {
     if (parameters?.length) {
       sqlite.bind_collection(stmt, parameters)
     }
+    let idx = 0
     const cols = sqlite.column_names(stmt)
-    while (await sqlite.step(stmt) === SQLITE_ROW) {
-      const row = sqlite.row(stmt)
-      yield Object.fromEntries(cols.map((key, i) => [key, row[i]]))
+    while (1) {
+      const result = await sqlite.step(stmt)
+      if (result === SQLITE_ROW) {
+        const row = sqlite.row(stmt)
+        cache[idx] = Object.fromEntries(cols.map((key, i) => [key, row[i]]))
+        if (++idx === chunkSize) {
+          yield cache.slice(0, idx)
+          idx = 0
+        }
+      } else if (result === SQLITE_OK) {
+        if (++idx === chunkSize) {
+          yield []
+        }
+      } else {
+        if (idx > 0) {
+          yield cache.slice(0, idx)
+        }
+        break
+      }
     }
   }
+  cache = undefined!
 }
