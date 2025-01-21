@@ -1,12 +1,7 @@
 import type { InitSQLiteOptions, Promisable, SQLiteDB, SQLiteDBCore } from './types'
-import {
-  Factory,
-  SQLITE_OPEN_CREATE,
-  SQLITE_OPEN_READONLY,
-  SQLITE_OPEN_READWRITE,
-} from 'wa-sqlite'
+import { Factory } from 'wa-sqlite'
 import { exportDatabase, importDatabase } from './io'
-import { changes, close, lastInsertRowId, run, stream } from './utils'
+import { changes, close, lastInsertRowId, parseOpenV2Flag, run, stream } from './utils'
 
 /**
  * Load SQLite database, presets:
@@ -48,7 +43,7 @@ export async function initSQLiteCore(
   await beforeOpen?.(vfs, path)
   const pointer = await sqlite.open_v2(
     path,
-    readonly ? SQLITE_OPEN_READONLY : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
+    parseOpenV2Flag(readonly),
   )
   /// keep-sorted
   return {

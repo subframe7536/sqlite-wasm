@@ -98,7 +98,7 @@ export type SQLiteDBCore = {
 
 export type SQLiteDB = SQLiteDBCore & {
   /**
-   * Close db
+   * Close db. Throw error if fail to close
    */
   close: () => Promise<void>
   /**

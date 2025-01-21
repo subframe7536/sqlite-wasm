@@ -1,6 +1,6 @@
 import { uuidv7 } from 'uuidv7'
 import url from '../../dist/wa-sqlite.wasm?url'
-import { customFunction, initSQLite, isOpfsSupported, iterator, withExistDB } from '../../src'
+import { customFunction, initSQLite, isOpfsSupported, withExistDB } from '../../src'
 import { useOpfsStorage } from '../../src/vfs/opfs'
 import { runIterator, runSQLStream } from './runSQL'
 
@@ -22,8 +22,9 @@ onmessage = async ({ data }) => {
   //   await db.sync(data)
   // }
   await runSQLStream(db.run, db.stream, data => postMessage(data))
+  console.log(db.lastInsertRowId(), db.changes(), db.sqliteModule._sqlite3_changes64(db.pointer))
   await runIterator(db)
-  console.log(db.lastInsertRowId(), db.changes())
+  console.log(db.lastInsertRowId(), db.changes(), db.sqliteModule._sqlite3_changes64(db.pointer))
   customFunction(db.sqlite, db.pointer, 'uuidv7', () => uuidv7())
   console.log(
     'uuidv7():',

@@ -1,5 +1,13 @@
 import type { BaseStorageOptions, SQLiteDBCore } from './types'
-import { SQLITE_DETERMINISTIC, SQLITE_DIRECTONLY, SQLITE_OK, SQLITE_UTF8 } from 'wa-sqlite'
+import {
+  SQLITE_DETERMINISTIC,
+  SQLITE_DIRECTONLY,
+  SQLITE_OK,
+  SQLITE_OPEN_CREATE,
+  SQLITE_OPEN_READONLY,
+  SQLITE_OPEN_READWRITE,
+  SQLITE_UTF8,
+} from 'wa-sqlite'
 import { SQLITE_ROW } from 'wa-sqlite/src/sqlite-constants.js'
 import { importDatabase } from './io'
 
@@ -181,7 +189,6 @@ export function withExistDB<T extends BaseStorageOptions>(
 
 export async function close(core: SQLiteDBCore): Promise<void> {
   await core.sqlite.close(core.pointer)
-  await core.vfs.close()
 }
 
 export function changes(core: SQLiteDBCore): number | bigint {
@@ -258,4 +265,14 @@ export async function* iterator(
     }
   }
   cache = undefined!
+}
+
+export function parseOpenV2Flag(readonly?: boolean): number {
+  return readonly ? SQLITE_OPEN_READONLY : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
+}
+
+export async function reopen(core: SQLiteDBCore, readonly?: boolean): Promise<void> {
+  await close(core)
+  const newPointer = await core.sqlite.open_v2(core.path, parseOpenV2Flag(readonly))
+  core.pointer = newPointer
 }
