@@ -66,8 +66,8 @@ document.querySelector('.download')?.addEventListener('click', async () => {
 document.querySelector('.downloadW')?.addEventListener('click', async () => {
   const worker = new OpfsWorker()
   worker.postMessage('dl')
-  worker.onmessage = (buf: any) => {
-    download(buf)
+  worker.onmessage = (buf: MessageEvent) => {
+    download(buf.data)
     worker.terminate()
   }
 })
