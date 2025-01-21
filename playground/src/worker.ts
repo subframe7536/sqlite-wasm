@@ -17,7 +17,11 @@ onmessage = async ({ data }) => {
     postMessage(await db.dump())
     return
   }
-
+  console.table({
+    sqlite: db.sqlite.libversion(),
+    sqliteModule: db.sqliteModule._sqlite3_libversion_number(),
+    sql: (await db.run('select sqlite_version() as a'))[0].a,
+  })
   // if (data) {
   //   await db.sync(data)
   // }
