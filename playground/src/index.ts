@@ -12,8 +12,8 @@ import {
   withExistDB,
 } from '../../src/index'
 import { useFsHandleStorage } from '../../src/vfs/fs-handle'
+import { useIdbStorage } from '../../src/vfs/idb'
 import { useIdbMemoryStorage } from '../../src/vfs/idb-memory'
-// import { useIdbStorage } from '../../src/vfs/idb'
 import { runSQL } from './runSQL'
 import OpfsWorker from './worker?worker'
 
@@ -27,13 +27,17 @@ console.log('support IDBBatchAtomicVFS:', supportIDB)
 console.log('support OPFSCoopSyncVFS:', supportOPFS)
 document.querySelector('.main')?.addEventListener('click', async () => {
   if (!db) {
-    // @ts-expect-error no types
-    const root = await window.showDirectoryPicker()
+    // const root = await window.showDirectoryPicker()
     // db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
-    db = await initSQLite(useFsHandleStorage('test.db', root, { url }))
-    // db = await initSQLite(useIdbStorage('test.db', { url }))
+    // db = await initSQLite(useFsHandleStorage('test.db', root, { url }))
+    db = await initSQLite(useIdbStorage('test.db', { url }))
   }
   await runSQL(db.run)
+  console.table({
+    sqlite: db.sqlite.libversion(),
+    sqliteModule: db.sqliteModule._sqlite3_libversion_number(),
+    sql: (await db.run('select sqlite_version() as a'))[0].a,
+  })
   await runSQL((await initSQLite(useMemoryStorage({ url: syncUrl }))).run)
 })
 document.querySelector('.import')?.addEventListener('click', async () => {
