@@ -1,26 +1,3 @@
-# BUG
-
-The sqlite version string is wrong:
-
-Run with `node test.js`
-
-```
-./wa-sqlite-fts5/wa-sqlite.wasm:
-- "3.47" not found in the buffer.
-- Found "3.48" at position: 638740
-```
-
-Run with `pnpm run dev` and click `main` or `worker`
-
-```
-{
-    "sqlite": "3.47.0",
-    "sqliteModule": 3047000,
-    "sql": "3.47.0"
-}
-```
----
-
 # sqlite-wasm
 
 Typesafe [custom wa-sqlite](https://github.com/subframe7536/sqwab) wrapper, run in memory or persist data to IndexedDB or [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system), support FTS5 and update / delete limit
