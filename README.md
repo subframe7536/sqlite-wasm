@@ -237,6 +237,111 @@ const buf = await exportDatabase(core.vfs, core.path)
 await close(core)
 ```
 
+### Utils
+
+```ts
+function dumpVFS(vfs: FacadeVFS, path: string, onDone?: (vfs: FacadeVFS, path: string) => any): ReadableStream
+
+function exportDatabaseFromIDB(vfs: FacadeVFS, path: string): Promise<Uint8Array>
+
+function exportDatabaseFromFsHandle(vfs: FacadeVFS, path: string): Promise<Uint8Array>
+
+/**
+ * Export database to `Uint8Array`
+ * @param vfs SQLite VFS
+ * @param path database path
+ */
+function exportDatabase(vfs: FacadeVFS, path: string): Promise<Uint8Array>
+
+function importDatabaseToIdb(vfs: FacadeVFS, path: string, stream: ReadableStream<Uint8Array>): Promise<void>
+
+/**
+ * Import database from `File` or `ReadableStream`
+ * @param vfs SQLite VFS
+ * @param path db path
+ * @param data existing database
+ */
+function importDatabase(vfs: FacadeVFS, path: string, data: File | ReadableStream<Uint8Array>): Promise<void>
+
+/**
+ * check if IndexedDB and Web Locks API supported
+ */
+function isIdbSupported(): boolean
+
+/**
+ * check if [OPFS SyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle) supported
+ */
+function isOpfsSupported(): Promise<boolean>
+
+/**
+ * check `new Worker(url, { type: 'module' })` support
+ *
+ * {@link https://stackoverflow.com/questions/62954570/javascript-feature-detect-module-support-for-web-workers Reference}
+ */
+function isModuleWorkerSupport(): boolean
+
+/**
+ * Create custom function, run js script in SQLite
+ *
+ * @example
+ * ```ts
+ * import { customFunction, initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
+ * import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
+ * import { uuidv7 } from 'uuidv7'
+ *
+ * const { run, sqlite, db } = await initSQLite(
+ *   useOpfsStorage('test')
+ * )
+ * customFunction(sqlite, db, 'uuidv7', () => uuidv7())
+ * console.log(await run('select uuidv7() as a'))
+ * // [{ "a": "01932f1b-b663-7714-af4d-17a3d9efc7b3" }]
+ * ```
+ */
+function customFunction<N extends string, T extends SQLiteCompatibleType[]>(sqlite: SQLiteAPI, db: number, fnName: N, fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null, options?: {
+  deterministic?: boolean
+  directOnly?: boolean
+  varargs?: boolean
+}): void
+
+function customFunctionCore<N extends string, T extends SQLiteCompatibleType[]>(core: SQLiteDBCore, fnName: N, fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null, options?: {
+  deterministic?: boolean
+  directOnly?: boolean
+  varargs?: boolean
+}): void
+
+/**
+ * Parse options with existing database
+ * @param data database File or ReadableStream
+ * @param options extra options
+ * @example
+ * ```ts
+ * import { initSQLite, withExistDB } from '@subframe7536/sqlite-wasm'
+ * import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
+ *
+ * const db = initSQLite(
+ *   useIdbStorage('test.db', withExistDB(FileOrReadableStream, { url }))
+ * )
+ * ```
+ */
+function withExistDB<T extends BaseStorageOptions>(data: File | ReadableStream, options?: Omit<T, 'beforeOpen'>): T
+
+function close(core: SQLiteDBCore): Promise<void>
+
+function changes(core: SQLiteDBCore): number | bigint
+
+function lastInsertRowId(core: SQLiteDBCore): number | bigint
+
+function stream(core: SQLiteDBCore, onData: (data: Record<string, SQLiteCompatibleType>) => void, sql: string, parameters?: SQLiteCompatibleType[]): Promise<void>
+
+function run(core: SQLiteDBCore, sql: string, parameters?: SQLiteCompatibleType[]): Promise<Array<Record<string, SQLiteCompatibleType>>>
+
+function iterator(core: SQLiteDBCore, sql: string, parameters?: SQLiteCompatibleType[], chunkSize?: number): AsyncIterableIterator<Record<string, SQLiteCompatibleType>[]>
+
+function parseOpenV2Flag(readonly?: boolean): number
+
+function reopen(core: SQLiteDBCore, readonly?: boolean): Promise<void>
+```
+
 ## License
 
 MIT
