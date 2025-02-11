@@ -170,10 +170,6 @@ await db.sync(FileOrReadableStream)
 await importDatabase(db.vfs, db.path, FileOrReadableStream)
 ```
 
-#### NOTICE
-
-Currently import with `useIdbMemoryStorage` will emit error ([upstream](https://github.com/rhashimoto/wa-sqlite/discussions/232))
-
 ### Export current database
 
 From v0.5.0
