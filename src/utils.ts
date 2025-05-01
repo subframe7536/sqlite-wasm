@@ -1,4 +1,5 @@
 import type { BaseStorageOptions, SQLiteDBCore } from './types'
+
 import {
   SQLITE_DETERMINISTIC,
   SQLITE_DIRECTONLY,
@@ -9,6 +10,7 @@ import {
   SQLITE_UTF8,
 } from 'wa-sqlite'
 import { SQLITE_ROW } from 'wa-sqlite/src/sqlite-constants.js'
+
 import { importDatabase } from './io'
 
 /**

@@ -1,4 +1,5 @@
 import { uuidv7 } from 'uuidv7'
+
 import url from '../../dist/wa-sqlite.wasm?url'
 import { customFunction, initSQLite, isOpfsSupported, withExistDB } from '../../src'
 import { useOpfsStorage } from '../../src/vfs/opfs'

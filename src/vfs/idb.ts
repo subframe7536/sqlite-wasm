@@ -1,5 +1,7 @@
 import type { BaseStorageOptions, IDBBatchAtomicVFSOptions, InitSQLiteOptions } from '../types'
+
 import { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'
+
 import SQLiteAsyncESMFactory from '../../wa-sqlite-fts5/wa-sqlite-async.mjs'
 
 export { IDBBatchAtomicVFS } from 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js'

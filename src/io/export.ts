@@ -1,5 +1,6 @@
 // reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/service-worker.js
 import type { FacadeVFS, Promisable } from '../types'
+
 import {
   SQLITE_LOCK_NONE,
   SQLITE_LOCK_SHARED,

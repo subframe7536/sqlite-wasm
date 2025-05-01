@@ -1,5 +1,7 @@
 import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
+
 import { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
+
 import SQLiteESMFactory from '../../wa-sqlite-fts5/wa-sqlite.mjs'
 
 export { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'

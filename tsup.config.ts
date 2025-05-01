@@ -1,5 +1,7 @@
 import type { Options } from 'tsup'
+
 import { copyFile } from 'node:fs/promises'
+
 import { defineConfig } from 'tsup'
 
 const commonOptions: Options = {

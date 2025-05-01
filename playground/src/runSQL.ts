@@ -1,4 +1,6 @@
-import { iterator, type SQLiteDBCore } from '../../src'
+import type { SQLiteDBCore } from '../../src'
+
+import { iterator } from '../../src'
 
 export async function runSQL(run: (sql: string, parameters?: any[]) => Promise<any>): Promise<void> {
   await run('CREATE TABLE if not exists t1(a INTEGER, b INTEGER, c VARCHAR);')

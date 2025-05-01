@@ -1,6 +1,7 @@
 /* eslint-disable antfu/consistent-list-newline */
 // reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/index.js
 import type { FacadeVFS, Promisable } from '../types'
+
 import {
   SQLITE_FCNTL_BEGIN_ATOMIC_WRITE,
   SQLITE_FCNTL_COMMIT_ATOMIC_WRITE,
