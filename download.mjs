@@ -40,16 +40,16 @@ async function downloadAndExtractRelease(tag, outputDir) {
   if (!tag) {
     return
   }
-  if (existsSync(outputDir)) {
-    rmSync(outputDir, { recursive: true })
-  }
+  // if (existsSync(outputDir)) {
+  //   rmSync(outputDir, { recursive: true })
+  // }
   mkdirSync(outputDir, { recursive: true })
   const releaseUrl = `https://github.com/${REPO}/releases/${tag}`
   const downloadUrl = `https://${githubProxy}/${REPO}/releases/download/${tag}/wa-sqlite.dist.tgz`
   const target = `wasqlite-fts5-${tag}.tgz`
-  if (existsSync(target)) {
-    rmSync(target)
-  }
+  // if (existsSync(target)) {
+  //   rmSync(target)
+  // }
   if (!existsSync(target)) {
     console.log(`Downloading from ${downloadUrl}`)
     const resp = await fetch(downloadUrl, {

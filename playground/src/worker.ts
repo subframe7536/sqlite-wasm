@@ -1,8 +1,8 @@
 import { uuidv7 } from 'uuidv7'
 
-import url from '../../dist/wa-sqlite.wasm?url'
 import { customFunction, initSQLite, isOpfsSupported, withExistDB } from '../../src'
 import { useOpfsStorage } from '../../src/vfs/opfs'
+import url from '../../wa-sqlite-fts5/wa-sqlite.wasm?url'
 import { runIterator, runSQLStream } from './runSQL'
 
 onmessage = async ({ data }) => {

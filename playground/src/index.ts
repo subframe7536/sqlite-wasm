@@ -2,8 +2,6 @@ import type { SQLiteDB } from '../../src/index'
 
 import { mitt } from 'zen-mitt'
 
-import url from '../../dist/wa-sqlite-async.wasm?url'
-import syncUrl from '../../dist/wa-sqlite.wasm?url'
 import {
   initSQLite,
   isIdbSupported,
@@ -13,6 +11,8 @@ import {
 } from '../../src/index'
 import { useIdbStorage } from '../../src/vfs/idb'
 import { useIdbMemoryStorage } from '../../src/vfs/idb-memory'
+import url from '../../wa-sqlite-fts5/wa-sqlite-async.wasm?url'
+import syncUrl from '../../wa-sqlite-fts5/wa-sqlite.wasm?url'
 import { runSQL } from './runSQL'
 import OpfsWorker from './worker?worker'
 
