@@ -2,4 +2,4 @@
 
 Download from https://github.com/subframe7536/sqwab
 
-Tag [`v1746064574`](https://github.com/subframe7536/sqwab/releases/v1746064574)
+Tag [`v1748593730`](https://github.com/subframe7536/sqwab/releases/v1748593730)
