@@ -41,7 +41,7 @@ export async function useFsHandleStorage(
   const sqliteModule = await SQLiteAsyncESMFactory(
     options.url ? { locateFile: () => options.url } : undefined,
   )
-  /// keep-sorted
+
   return {
     path,
     sqliteModule,

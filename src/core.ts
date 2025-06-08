@@ -16,7 +16,6 @@ import { changes, close, lastInsertRowId, parseOpenV2Flag, run, stream } from '.
  */
 export async function initSQLite(options: Promisable<InitSQLiteOptions>): Promise<SQLiteDB> {
   const core = await initSQLiteCore(options)
-  /// keep-sorted
   return {
     ...core,
     changes: () => changes(core),
@@ -47,7 +46,7 @@ export async function initSQLiteCore(
     path,
     parseOpenV2Flag(readonly),
   )
-  /// keep-sorted
+
   return {
     db: pointer,
     path,

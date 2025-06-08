@@ -39,7 +39,7 @@ export async function useOpfsStorage(
   const sqliteModule = await SQLiteESMFactory(
     options.url ? { locateFile: () => options.url } : undefined,
   )
-  /// keep-sorted
+
   return {
     path,
     sqliteModule,

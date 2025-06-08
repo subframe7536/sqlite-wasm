@@ -43,7 +43,7 @@ export async function useIdbStorage(
   )
   const idbName = fileName.endsWith('.db') ? fileName : `${fileName}.db`
   const vfsOptions = { idbName, lockPolicy, lockTimeout }
-  /// keep-sorted
+
   return {
     path: idbName,
     sqliteModule,

@@ -31,7 +31,7 @@ export async function useMemoryStorage(
   const sqliteModule = await SQLiteESMFactory(
     url ? { locateFile: () => url } : undefined,
   )
-  /// keep-sorted
+
   return {
     path: ':memory:',
     sqliteModule,

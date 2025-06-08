@@ -31,7 +31,7 @@ export async function useIdbMemoryStorage(
   const sqliteModule = await SQLiteAsyncESMFactory(
     url ? { locateFile: () => url } : undefined,
   )
-  /// keep-sorted
+
   return {
     path: fileName.endsWith('.db') ? fileName : `${fileName}.db`,
     sqliteModule,
