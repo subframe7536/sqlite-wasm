@@ -24,7 +24,7 @@ const supportOPFS = await isOpfsSupported()
 console.log('support module worker:', supportModuleWorker)
 console.log('support IDBBatchAtomicVFS:', supportIDB)
 console.log('support OPFSCoopSyncVFS:', supportOPFS)
-document.querySelector('.main')?.addEventListener('click', async () => {
+document.querySelector('.main-idb')?.addEventListener('click', async () => {
   if (!db) {
     // const root = await window.showDirectoryPicker()
     // db = await initSQLite(useIdbMemoryStorage('test.db', { url }))
@@ -37,6 +37,9 @@ document.querySelector('.main')?.addEventListener('click', async () => {
     sqliteModule: db.sqliteModule._sqlite3_libversion_number(),
     sql: (await db.run('select sqlite_version() as a'))[0].a,
   })
+  await db.close()
+})
+document.querySelector('.main-memory')?.addEventListener('click', async () => {
   await runSQL((await initSQLite(useMemoryStorage({ url: syncUrl }))).run)
 })
 document.querySelector('.import')?.addEventListener('click', async () => {
@@ -163,7 +166,7 @@ document.querySelector('.clear')?.addEventListener('click', async () => {
   console.log('clear all IndexedDB')
 })
 
-function download(buffer: Uint8Array): void {
+function download(buffer: Uint8Array<ArrayBuffer>): void {
   const blob = new Blob([buffer])
   const reader = new FileReader()
   reader.readAsDataURL(blob)

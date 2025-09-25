@@ -141,7 +141,7 @@ export type SQLiteDB = SQLiteDBCore & {
   /**
    * Export database to `Uint8Array`
    */
-  dump: () => Promise<Uint8Array>
+  dump: () => Promise<Uint8Array<ArrayBuffer>>
 }
 
 export interface BaseStorageOptions {

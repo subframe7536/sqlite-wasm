@@ -81,7 +81,10 @@ export function dumpVFS(
   })
 }
 
-export async function exportDatabaseFromIDB(vfs: FacadeVFS, path: string): Promise<Uint8Array> {
+export async function exportDatabaseFromIDB(
+  vfs: FacadeVFS,
+  path: string,
+): Promise<Uint8Array<ArrayBuffer>> {
   const stream = dumpVFS(vfs, path)
   const chunks: Uint8Array[] = []
   const reader = stream.getReader()
@@ -112,7 +115,10 @@ export async function exportDatabaseFromIDB(vfs: FacadeVFS, path: string): Promi
   return result
 }
 
-export async function exportDatabaseFromFsHandle(vfs: FacadeVFS, path: string): Promise<Uint8Array> {
+export async function exportDatabaseFromFsHandle(
+  vfs: FacadeVFS,
+  path: string,
+): Promise<Uint8Array<ArrayBuffer>> {
   return await getHandle(vfs, path)
     .then(handle => handle.getFile())
     .then(file => file.arrayBuffer())
@@ -127,7 +133,7 @@ export async function exportDatabaseFromFsHandle(vfs: FacadeVFS, path: string): 
 export async function exportDatabase(
   vfs: FacadeVFS,
   path: string,
-): Promise<Uint8Array> {
+): Promise<Uint8Array<ArrayBuffer>> {
   return isFsHandleVFS(vfs)
     ? await exportDatabaseFromFsHandle(vfs, path)
     : await exportDatabaseFromIDB(vfs, path)
