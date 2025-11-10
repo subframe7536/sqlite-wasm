@@ -72,7 +72,7 @@
     "dev": "vite serve playground",
     "build": "tsup",
     "update": "node download.mjs",
-    "release": "pnpm lint && pnpm run build && bumpp --all && npm publish"
+    "release": "pnpm lint && pnpm run build && bumpp --all"
   },
   "publishConfig": {
     "access": "public",
