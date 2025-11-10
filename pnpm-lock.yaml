@@ -42,8 +42,8 @@ importers:
         specifier: ^7.1.7
         version: 7.1.7(@types/node@22.18.6)(jiti@2.6.0)(yaml@2.8.1)
       wa-sqlite:
-        specifier: github:rhashimoto/wa-sqlite#v1.0.9
-        version: git+https://git@github.com:rhashimoto/wa-sqlite.git#a3b1324ed5a57928141b02eb3204421e1164ed53
+        specifier: git+https://github.com/rhashimoto/wa-sqlite#v1.0.9
+        version: https://codeload.github.com/rhashimoto/wa-sqlite/tar.gz/a3b1324ed5a57928141b02eb3204421e1164ed53
       zen-mitt:
         specifier: ^3.1.0
         version: 3.1.0
@@ -1817,8 +1817,8 @@ packages:
       yaml:
         optional: true
 
-  wa-sqlite@git+https://git@github.com:rhashimoto/wa-sqlite.git#a3b1324ed5a57928141b02eb3204421e1164ed53:
-    resolution: {commit: a3b1324ed5a57928141b02eb3204421e1164ed53, repo: git@github.com:rhashimoto/wa-sqlite.git, type: git}
+  wa-sqlite@https://codeload.github.com/rhashimoto/wa-sqlite/tar.gz/a3b1324ed5a57928141b02eb3204421e1164ed53:
+    resolution: {tarball: https://codeload.github.com/rhashimoto/wa-sqlite/tar.gz/a3b1324ed5a57928141b02eb3204421e1164ed53}
     version: 1.0.9
 
   webidl-conversions@4.0.2:
@@ -3721,7 +3721,7 @@ snapshots:
       jiti: 2.6.0
       yaml: 2.8.1
 
-  wa-sqlite@git+https://git@github.com:rhashimoto/wa-sqlite.git#a3b1324ed5a57928141b02eb3204421e1164ed53: {}
+  wa-sqlite@https://codeload.github.com/rhashimoto/wa-sqlite/tar.gz/a3b1324ed5a57928141b02eb3204421e1164ed53: {}
 
   webidl-conversions@4.0.2: {}
 

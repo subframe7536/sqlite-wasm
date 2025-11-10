@@ -90,7 +90,7 @@
     "typescript": "^5.9.2",
     "uuidv7": "^1.0.2",
     "vite": "^7.1.7",
-    "wa-sqlite": "github:rhashimoto/wa-sqlite#v1.0.9",
+    "wa-sqlite": "git+https://github.com/rhashimoto/wa-sqlite#v1.0.9",
     "zen-mitt": "^3.1.0"
   },
   "pnpm": {
