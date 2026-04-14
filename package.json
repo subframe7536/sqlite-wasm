@@ -1,17 +1,20 @@
 {
   "name": "@subframe7536/sqlite-wasm",
-  "type": "module",
   "version": "0.5.8",
   "description": "Typesafe wa-sqlite wrapper, persist data to IndexedDB or OPFS",
-  "author": "subframe7536",
-  "license": "MIT",
-  "repository": "https://github.com/subframe7536/sqlite-wasm",
   "keywords": [
-    "typescript",
+    "IndexedDB",
     "sqlite",
-    "wasm",
-    "IndexedDB"
+    "typescript",
+    "wasm"
   ],
+  "license": "MIT",
+  "author": "subframe7536",
+  "repository": "https://github.com/subframe7536/sqlite-wasm",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
   "exports": {
     ".": "./dist/index.js",
     "./idb": "./dist/idb.js",
@@ -24,40 +27,18 @@
     "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.js",
-  "typesVersions": {
-    "*": {
-      "idb": [
-        "./dist/idb.d.ts"
-      ],
-      "idb-memory": [
-        "./dist/idb-memory.d.ts"
-      ],
-      "opfs": [
-        "./dist/opfs.d.ts"
-      ],
-      "fs-handle": [
-        "./dist/fs-handle.d.ts"
-      ],
-      "constant": [
-        "./dist/constant.d.ts"
-      ]
-    }
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "lint": "tsc --noEmit && oxlint --fix ./src",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --fix ./src",
     "format": "oxfmt",
     "dev": "vite serve playground",
     "build": "tsdown",
     "update": "bun run download.ts",
-    "release": "bun run lint && bun run build && bumpp --all"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "release": "bun run typecheck && bun run lint && bun run build && bumpp --all"
   },
   "devDependencies": {
     "@subf/config": "^0.2.1",

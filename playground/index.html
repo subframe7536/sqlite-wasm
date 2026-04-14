@@ -1,20 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="icon" href="data:,">
-</head>
-<body>
-  <button class="main-memory">main-memory</button>
-  <button class="main-idb">main-idb</button>
-  <button class="worker">worker</button>
-  <button class="import">import</button>
-  <button class="importW">import worker</button>
-  <button class="download">download</button>
-  <button class="downloadW">download worker</button>
-  <button class="clear">clear</button>
-</body>
-<script type="module" src="/src/index.ts"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sqlite-wasm playground</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: Canvas;
+        color: CanvasText;
+      }
+      main {
+        width: min(920px, 92vw);
+        display: grid;
+        gap: 16px;
+        padding: 20px;
+        border: 1px solid color-mix(in srgb, CanvasText 25%, transparent);
+        border-radius: 14px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+      }
+      button {
+        appearance: none;
+        padding: 10px 12px;
+        border: 1px solid color-mix(in srgb, CanvasText 24%, transparent);
+        border-radius: 10px;
+        background: color-mix(in srgb, Canvas 86%, CanvasText 14%);
+        color: inherit;
+        cursor: pointer;
+      }
+      button:hover {
+        background: color-mix(in srgb, Canvas 76%, CanvasText 24%);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>sqlite-wasm playground</h1>
+      <div class="grid">
+        <button class="main-memory">Run (memory)</button>
+        <button class="main-idb">Run (indexeddb)</button>
+        <button class="worker">Run (worker)</button>
+        <button class="import">Import</button>
+        <button class="importW">Import (worker)</button>
+        <button class="download">Download</button>
+        <button class="downloadW">Download (worker)</button>
+        <button class="clear">Clear storage</button>
+      </div>
+    </main>
+  </body>
+  <script type="module" src="/src/index.ts"></script>
 </html>
