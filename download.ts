@@ -1,6 +1,6 @@
 import { access, mkdir, writeFile } from 'node:fs/promises'
 
-import { fetch } from 'ofetch'
+import { ofetch } from 'ofetch'
 import { x } from 'tar'
 
 const githubProxy = process.env.GITHUB || 'github.com'
@@ -20,12 +20,7 @@ async function getLatestTag(): Promise<string | null> {
   }
   const apiURL = `https://api.github.com/repos/${REPO}/tags`
   try {
-    const response = await fetch(apiURL)
-    if (!response.ok) {
-      throw new Error(`Failed to fetch tags: ${response.statusText}`)
-    }
-
-    const tags = (await response.json()) as GitHubTag[]
+    const tags = await ofetch<GitHubTag[]>(apiURL)
     if (tags.length === 0) {
       throw new Error('No tags found in the repository.')
     }
@@ -60,19 +55,15 @@ async function downloadAndExtractRelease(tag: string | null, outputDir: string):
 
   if (!await exists(target)) {
     console.log(`Downloading from ${downloadUrl}`)
-    const resp = await fetch(downloadUrl, {
+    const file = await ofetch<ArrayBuffer>(downloadUrl, {
       method: 'GET',
+      responseType: 'arrayBuffer',
       headers: {
         'Accept': 'application/gzip',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
       },
     })
-
-    if (!resp.ok) {
-      throw new Error(`Download fail: ${resp.statusText}`)
-    }
-
-    await writeFile(target, new Uint8Array(await resp.arrayBuffer()))
+    await writeFile(target, new Uint8Array(file))
   }
 
   console.log('Extracting...')
