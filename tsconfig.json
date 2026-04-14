@@ -6,7 +6,7 @@
     "strict": false,
     "noUncheckedIndexedAccess": false,
     "paths": {
-      "wa-sqlite": ["./wa-sqlite"],
+      "wa-sqlite": ["./wa-sqlite/src/sqlite-api.js"],
       "wa-sqlite/src": ["./wa-sqlite/src"],
       "wa-sqlite/src/*": ["./wa-sqlite/src/*"],
       "wa-sqlite/*": ["./wa-sqlite/*"]
