@@ -1,12 +1,17 @@
 {
-  "extends": "@subframe7536/type-utils/tsconfig.json",
+  "extends": "@subf/config/tsconfig-lib",
   "compilerOptions": {
-    "types": [
-      "wa-sqlite/src/types",
-      "@types/node"
-    ]
+    "baseUrl": ".",
+    "lib": ["ESNext", "DOM", "DOM.Iterable", "WebWorker"],
+    "strict": false,
+    "noUncheckedIndexedAccess": false,
+    "paths": {
+      "wa-sqlite": ["./wa-sqlite/src/sqlite-api.js"],
+      "wa-sqlite/src": ["./wa-sqlite/src"],
+      "wa-sqlite/src/*": ["./wa-sqlite/src/*"],
+      "wa-sqlite/*": ["./wa-sqlite/*"]
+    },
+    "types": ["@types/node"]
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src", "wa-sqlite/src/types/**/*.d.ts"]
 }

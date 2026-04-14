@@ -1,101 +1,57 @@
 {
   "name": "@subframe7536/sqlite-wasm",
-  "type": "module",
   "version": "0.5.8",
   "description": "Typesafe wa-sqlite wrapper, persist data to IndexedDB or OPFS",
-  "author": "subframe7536",
-  "license": "MIT",
-  "repository": "https://github.com/subframe7536/sqlite-wasm",
   "keywords": [
-    "typescript",
+    "IndexedDB",
     "sqlite",
-    "wasm",
-    "IndexedDB"
+    "typescript",
+    "wasm"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./idb": {
-      "import": "./dist/idb.js",
-      "require": "./dist/idb.cjs"
-    },
-    "./idb-memory": {
-      "import": "./dist/idb-memory.js",
-      "require": "./dist/idb-memory.cjs"
-    },
-    "./opfs": {
-      "import": "./dist/opfs.js",
-      "require": "./dist/opfs.cjs"
-    },
-    "./fs-handle": {
-      "import": "./dist/fs-handle.js",
-      "require": "./dist/fs-handle.cjs"
-    },
-    "./constant": {
-      "import": "./dist/constant.js",
-      "require": "./dist/constant.cjs"
-    },
-    "./wasm": "./dist/wa-sqlite.wasm",
-    "./wasm-async": "./dist/wa-sqlite-async.wasm",
-    "./dist/*": "./dist/*",
-    "./package.json": "./package.json"
-  },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "typesVersions": {
-    "*": {
-      "idb": [
-        "./dist/idb.d.ts"
-      ],
-      "idb-memory": [
-        "./dist/idb-memory.d.ts"
-      ],
-      "opfs": [
-        "./dist/opfs.d.ts"
-      ],
-      "fs-handle": [
-        "./dist/fs-handle.d.ts"
-      ],
-      "constant": [
-        "./dist/constant.d.ts"
-      ]
-    }
-  },
+  "license": "MIT",
+  "author": "subframe7536",
+  "repository": "https://github.com/subframe7536/sqlite-wasm",
   "files": [
     "dist"
   ],
-  "scripts": {
-    "lint": "tsc --noEmit && eslint ./src --max-warnings 0 --fix",
-    "format": "eslint . --fix",
-    "dev": "vite serve playground",
-    "build": "tsup",
-    "update": "node download.mjs",
-    "release": "pnpm lint && pnpm run build && bumpp --all"
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./constant": "./dist/constant.js",
+    "./fs-handle": "./dist/fs-handle.js",
+    "./idb": "./dist/idb.js",
+    "./idb-memory": "./dist/idb-memory.js",
+    "./opfs": "./dist/opfs.js",
+    "./package.json": "./package.json",
+    "./wasm": "./dist/wa-sqlite.wasm",
+    "./wasm-async": "./dist/wa-sqlite-async.wasm",
+    "./dist/*": "./dist/*"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --fix ./src",
+    "format": "oxfmt",
+    "dev": "vite serve playground",
+    "build": "tsdown",
+    "update": "bun run download.ts",
+    "release": "bun run typecheck && bun run lint && bun run build && bumpp --all"
+  },
   "devDependencies": {
-    "@subframe7536/eslint-config": "^1.3.2",
-    "@subframe7536/type-utils": "^0.2.0",
+    "@subf/config": "^0.2.1",
     "@types/node": "^22.18.6",
     "bumpp": "^10.2.3",
-    "eslint": "^9.36.0",
-    "ofetch": "^1.4.1",
+    "oxfmt": "^0.44.0",
+    "oxlint": "^1.59.0",
     "tar": "^7.5.1",
-    "tsup": "^8.5.0",
+    "tsdown": "^0.21.8",
     "typescript": "^5.9.2",
     "uuidv7": "^1.0.2",
-    "vite": "^7.1.7",
-    "wa-sqlite": "git+https://github.com/rhashimoto/wa-sqlite#v1.0.9",
+    "vite": "^8.0.0",
     "zen-mitt": "^3.1.0"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
-  }
+  "packageManager": "bun@1.2.13"
 }

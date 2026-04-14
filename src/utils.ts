@@ -39,7 +39,6 @@ export async function isOpfsSupported(): Promise<boolean> {
         }
 
         root.getFileHandle('_CHECK', { create: true })
-          // @ts-expect-error no type
           .then(handle => handle.createSyncAccessHandle())
           .then(access => (access.close(), root.removeEntry('_CHECK')))
           .then(() => resolve(true))

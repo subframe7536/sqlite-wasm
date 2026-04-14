@@ -1,13 +1,16 @@
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { access, mkdir, writeFile } from 'node:fs/promises'
 
-import { fetch } from 'ofetch'
 import { x } from 'tar'
 
-// Read GitHub proxy from environment variable
 const githubProxy = process.env.GITHUB || 'github.com'
 const REPO = 'subframe7536/sqwab'
 const cliTag = process.argv[2]
-async function getLatestTag() {
+
+type GitHubTag = {
+  name: string
+}
+
+async function getLatestTag(): Promise<string | null> {
   if (cliTag) {
     if (!cliTag.startsWith('v')) {
       return `v${cliTag}`
@@ -18,15 +21,13 @@ async function getLatestTag() {
   try {
     const response = await fetch(apiURL)
     if (!response.ok) {
-      throw new Error(`Failed to fetch tags: ${response.statusText}`)
+      throw new Error(`Failed to fetch tags: ${response.status} ${response.statusText}`)
     }
-
-    const tags = await response.json()
+    const tags = (await response.json()) as GitHubTag[]
     if (tags.length === 0) {
       throw new Error('No tags found in the repository.')
     }
 
-    // The tags are returned in chronological order, so the first one is the latest
     const latestTag = tags[0].name
     console.log(JSON.stringify(tags[0]))
     return latestTag
@@ -36,35 +37,41 @@ async function getLatestTag() {
   }
 }
 
-async function downloadAndExtractRelease(tag, outputDir) {
+async function exists(path: string): Promise<boolean> {
+  try {
+    await access(path)
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function downloadAndExtractRelease(tag: string | null, outputDir: string): Promise<void> {
   if (!tag) {
     return
   }
-  // if (existsSync(outputDir)) {
-  //   rmSync(outputDir, { recursive: true })
-  // }
-  mkdirSync(outputDir, { recursive: true })
+
+  await mkdir(outputDir, { recursive: true })
   const releaseUrl = `https://github.com/${REPO}/releases/${tag}`
   const downloadUrl = `https://${githubProxy}/${REPO}/releases/download/${tag}/wa-sqlite.dist.tgz`
   const target = `wasqlite-fts5-${tag}.tgz`
-  // if (existsSync(target)) {
-  //   rmSync(target)
-  // }
-  if (!existsSync(target)) {
+
+  if (!(await exists(target))) {
     console.log(`Downloading from ${downloadUrl}`)
-    const resp = await fetch(downloadUrl, {
-      method: 'GET',
+    const response = await fetch(downloadUrl, {
       headers: {
-        'Accept': 'application/gzip',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        Accept: 'application/gzip',
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
       },
     })
-
-    if (!resp.ok) {
-      throw new Error(`Download fail: ${resp.statusText}`)
+    if (!response.ok) {
+      throw new Error(
+        `Failed to download release tarball: ${response.status} ${response.statusText}`,
+      )
     }
-
-    writeFileSync(target, new Uint8Array(await resp.arrayBuffer()))
+    const file = await response.arrayBuffer()
+    await writeFile(target, new Uint8Array(file))
   }
 
   console.log('Extracting...')
@@ -75,7 +82,7 @@ async function downloadAndExtractRelease(tag, outputDir) {
 
   console.log('Updating README.md')
 
-  writeFileSync(
+  await writeFile(
     `${outputDir}/README.md`,
     `# wa-sqlite fts5\n\nDownload from https://github.com/${REPO}\n\nTag [\`${tag}\`](${releaseUrl})\n`,
     'utf-8',
@@ -83,6 +90,6 @@ async function downloadAndExtractRelease(tag, outputDir) {
 }
 
 getLatestTag()
-  .then(tag => downloadAndExtractRelease(tag, 'wa-sqlite-fts5'))
+  .then((tag) => downloadAndExtractRelease(tag, 'wa-sqlite-fts5'))
   .then(() => console.log('Done!'))
-  .catch(error => console.error('Error:', error))
+  .catch((error) => console.error('Error:', error))
