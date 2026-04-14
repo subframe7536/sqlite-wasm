@@ -17,15 +17,15 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
+    "./constant": "./dist/constant.js",
+    "./fs-handle": "./dist/fs-handle.js",
     "./idb": "./dist/idb.js",
     "./idb-memory": "./dist/idb-memory.js",
     "./opfs": "./dist/opfs.js",
-    "./fs-handle": "./dist/fs-handle.js",
-    "./constant": "./dist/constant.js",
+    "./package.json": "./package.json",
     "./wasm": "./dist/wa-sqlite.wasm",
     "./wasm-async": "./dist/wa-sqlite-async.wasm",
-    "./dist/*": "./dist/*",
-    "./package.json": "./package.json"
+    "./dist/*": "./dist/*"
   },
   "publishConfig": {
     "access": "public",

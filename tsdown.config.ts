@@ -24,5 +24,11 @@ export default defineConfig({
     'wa-sqlite/src/': 'wa-sqlite/src/',
   },
   copy: ['wa-sqlite-fts5/wa-sqlite.wasm', 'wa-sqlite-fts5/wa-sqlite-async.wasm'],
-  tsconfig: './tsconfig.json',
+  exports: {
+    customExports: {
+      './wasm': './dist/wa-sqlite.wasm',
+      './wasm-async': './dist/wa-sqlite-async.wasm',
+      './dist/*': './dist/*',
+    },
+  },
 })
