@@ -1,9 +1,9 @@
 import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
 
 import SQLiteAsyncESMFactory from '../../wa-sqlite-fts5/wa-sqlite-async.mjs'
-import { IDBMirrorVFS } from './class/IDBMirrorVFS'
+import { IDBMirrorVFS } from 'wa-sqlite/src/examples/IDBMirrorVFS.js'
 
-export { IDBMirrorVFS } from './class/IDBMirrorVFS'
+export { IDBMirrorVFS } from 'wa-sqlite/src/examples/IDBMirrorVFS.js'
 /**
  * Store data in memory and sync to `IndexedDB`,
  * use `IDBMirrorVFS` with `wa-sqlite-async.wasm` (larger than sync version),

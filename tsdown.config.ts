@@ -14,7 +14,7 @@ export default defineConfig({
     oxc: true,
   },
   platform: 'neutral',
-  format: 'esm',
+  format: ['esm', 'cjs'],
   deps: {
     alwaysBundle: ['wa-sqlite'],
   },
