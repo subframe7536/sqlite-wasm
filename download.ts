@@ -1,6 +1,5 @@
 import { access, mkdir, writeFile } from 'node:fs/promises'
 
-import { ofetch } from 'ofetch'
 import { x } from 'tar'
 
 const githubProxy = process.env.GITHUB || 'github.com'
@@ -20,7 +19,11 @@ async function getLatestTag(): Promise<string | null> {
   }
   const apiURL = `https://api.github.com/repos/${REPO}/tags`
   try {
-    const tags = await ofetch<GitHubTag[]>(apiURL)
+    const response = await fetch(apiURL)
+    if (!response.ok) {
+      throw new Error(`Failed to fetch tags: ${response.status} ${response.statusText}`)
+    }
+    const tags = (await response.json()) as GitHubTag[]
     if (tags.length === 0) {
       throw new Error('No tags found in the repository.')
     }
@@ -53,16 +56,21 @@ async function downloadAndExtractRelease(tag: string | null, outputDir: string):
   const downloadUrl = `https://${githubProxy}/${REPO}/releases/download/${tag}/wa-sqlite.dist.tgz`
   const target = `wasqlite-fts5-${tag}.tgz`
 
-  if (!await exists(target)) {
+  if (!(await exists(target))) {
     console.log(`Downloading from ${downloadUrl}`)
-    const file = await ofetch<ArrayBuffer>(downloadUrl, {
-      method: 'GET',
-      responseType: 'arrayBuffer',
+    const response = await fetch(downloadUrl, {
       headers: {
-        'Accept': 'application/gzip',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        Accept: 'application/gzip',
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
       },
     })
+    if (!response.ok) {
+      throw new Error(
+        `Failed to download release tarball: ${response.status} ${response.statusText}`,
+      )
+    }
+    const file = await response.arrayBuffer()
     await writeFile(target, new Uint8Array(file))
   }
 
@@ -82,6 +90,6 @@ async function downloadAndExtractRelease(tag: string | null, outputDir: string):
 }
 
 getLatestTag()
-  .then(tag => downloadAndExtractRelease(tag, 'wa-sqlite-fts5'))
+  .then((tag) => downloadAndExtractRelease(tag, 'wa-sqlite-fts5'))
   .then(() => console.log('Done!'))
-  .catch(error => console.error('Error:', error))
+  .catch((error) => console.error('Error:', error))

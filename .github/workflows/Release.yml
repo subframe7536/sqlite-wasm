@@ -22,10 +22,6 @@ jobs:
         with:
           bun-version: latest
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-
       - name: Update npm
         run: npm install -g npm@latest
 
