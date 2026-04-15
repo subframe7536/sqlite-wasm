@@ -1,7 +1,7 @@
-import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
-
-import SQLiteAsyncESMFactory from '../../wa-sqlite-fts5/wa-sqlite-async.mjs'
+import SQLiteAsyncESMFactory from 'wa-sqlite-fts5/wa-sqlite-async.mjs'
 import { IDBMirrorVFS } from 'wa-sqlite/src/examples/IDBMirrorVFS.js'
+
+import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
 
 export { IDBMirrorVFS } from 'wa-sqlite/src/examples/IDBMirrorVFS.js'
 /**
@@ -28,9 +28,7 @@ export async function useIdbMemoryStorage(
   options: BaseStorageOptions = {},
 ): Promise<InitSQLiteOptions> {
   const { url, ...rest } = options
-  const sqliteModule = await SQLiteAsyncESMFactory(
-    url ? { locateFile: () => url } : undefined,
-  )
+  const sqliteModule = await SQLiteAsyncESMFactory(url ? { locateFile: () => url } : undefined)
 
   return {
     path: fileName.endsWith('.db') ? fileName : `${fileName}.db`,

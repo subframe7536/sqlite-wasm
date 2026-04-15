@@ -1,9 +1,7 @@
 {
   "extends": "@subf/config/tsconfig-lib",
   "compilerOptions": {
-    "baseUrl": ".",
     "lib": ["ESNext", "DOM", "DOM.Iterable", "WebWorker"],
-    "strict": false,
     "noUncheckedIndexedAccess": false,
     "paths": {
       "wa-sqlite": ["./wa-sqlite/src/sqlite-api.js"],
@@ -11,7 +9,7 @@
       "wa-sqlite/src/*": ["./wa-sqlite/src/*"],
       "wa-sqlite/*": ["./wa-sqlite/*"]
     },
-    "types": ["@types/node"]
+    "types": ["@types/node", "vite/client"]
   },
-  "include": ["src", "wa-sqlite/src/types/**/*.d.ts"]
+  "include": ["src", "wa-sqlite/**/*.d.ts", "tsdown.config.ts"]
 }

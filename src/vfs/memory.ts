@@ -1,8 +1,7 @@
-import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
-
+import SQLiteESMFactory from 'wa-sqlite-fts5/wa-sqlite.mjs'
 import { MemoryVFS } from 'wa-sqlite/src/examples/MemoryVFS.js'
 
-import SQLiteESMFactory from '../../wa-sqlite-fts5/wa-sqlite.mjs'
+import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
 
 export { MemoryVFS } from 'wa-sqlite/src/examples/MemoryVFS.js'
 
@@ -28,9 +27,7 @@ export async function useMemoryStorage(
   options: BaseStorageOptions = {},
 ): Promise<InitSQLiteOptions> {
   const { url, ...rest } = options
-  const sqliteModule = await SQLiteESMFactory(
-    url ? { locateFile: () => url } : undefined,
-  )
+  const sqliteModule = await SQLiteESMFactory(url ? { locateFile: () => url } : undefined)
 
   return {
     path: ':memory:',

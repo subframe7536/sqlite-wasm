@@ -1,6 +1,9 @@
-import { defineConfig } from 'tsdown'
+import { fileURLToPath } from 'node:url'
 
-export default defineConfig({
+import { defineConfig } from 'tsdown'
+import type { UserConfig } from 'tsdown'
+
+const shared: UserConfig = {
   entry: {
     index: 'src/index.ts',
     idb: 'src/vfs/idb.ts',
@@ -9,26 +12,37 @@ export default defineConfig({
     'fs-handle': 'src/vfs/fs-handle.ts',
     constant: 'src/constant.ts',
   },
-  clean: true,
-  dts: {
-    oxc: true,
-  },
-  platform: 'neutral',
-  format: ['esm', 'cjs'],
+  platform: 'browser',
+  format: 'esm',
   deps: {
     alwaysBundle: ['wa-sqlite'],
   },
-  alias: {
-    'wa-sqlite': 'wa-sqlite/src/sqlite-api.js',
-    'wa-sqlite/src': 'wa-sqlite/src',
-    'wa-sqlite/src/': 'wa-sqlite/src/',
-  },
-  copy: ['wa-sqlite-fts5/wa-sqlite.wasm', 'wa-sqlite-fts5/wa-sqlite-async.wasm'],
-  exports: {
-    customExports: {
-      './wasm': './dist/wa-sqlite.wasm',
-      './wasm-async': './dist/wa-sqlite-async.wasm',
-      './dist/*': './dist/*',
+  alias: Object.fromEntries(
+    ['wa-sqlite', 'wa-sqlite/src', 'wa-sqlite/src/', 'wa-sqlite-fts5'].map((name) => [
+      name,
+      fileURLToPath(new URL(name, import.meta.url)),
+    ]),
+  ),
+}
+
+export default defineConfig([
+  {
+    ...shared,
+    dts: { oxc: true },
+    copy: ['wa-sqlite-fts5/wa-sqlite.wasm', 'wa-sqlite-fts5/wa-sqlite-async.wasm'],
+    exports: {
+      customExports: {
+        './wasm': './dist/wa-sqlite.wasm',
+        './wasm-async': './dist/wa-sqlite-async.wasm',
+        './dist/*': './dist/*',
+      },
     },
   },
-})
+  {
+    ...shared,
+    minify: true,
+    outExtensions() {
+      return { js: '.min.js' }
+    },
+  },
+])

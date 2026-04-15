@@ -16,30 +16,12 @@
   ],
   "type": "module",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./constant": {
-      "import": "./dist/constant.js",
-      "require": "./dist/constant.cjs"
-    },
-    "./fs-handle": {
-      "import": "./dist/fs-handle.js",
-      "require": "./dist/fs-handle.cjs"
-    },
-    "./idb": {
-      "import": "./dist/idb.js",
-      "require": "./dist/idb.cjs"
-    },
-    "./idb-memory": {
-      "import": "./dist/idb-memory.js",
-      "require": "./dist/idb-memory.cjs"
-    },
-    "./opfs": {
-      "import": "./dist/opfs.js",
-      "require": "./dist/opfs.cjs"
-    },
+    ".": "./dist/index.js",
+    "./constant": "./dist/constant.js",
+    "./fs-handle": "./dist/fs-handle.js",
+    "./idb": "./dist/idb.js",
+    "./idb-memory": "./dist/idb-memory.js",
+    "./opfs": "./dist/opfs.js",
     "./package.json": "./package.json",
     "./wasm": "./dist/wa-sqlite.wasm",
     "./wasm-async": "./dist/wa-sqlite-async.wasm",
@@ -56,7 +38,7 @@
     "dev": "vite serve playground",
     "build": "tsdown",
     "update": "bun run download.ts",
-    "release": "bun run typecheck && bun run lint && bun run build && bumpp --all"
+    "release": "bun run typecheck && bun run lint && bun run format && bun run build && bumpp --all"
   },
   "devDependencies": {
     "@subf/config": "^0.2.1",
@@ -71,8 +53,5 @@
     "vite": "^8.0.0",
     "zen-mitt": "^3.1.0"
   },
-  "packageManager": "bun@1.2.13",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.cts"
+  "packageManager": "bun@1.2.13"
 }

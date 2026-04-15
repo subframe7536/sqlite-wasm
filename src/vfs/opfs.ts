@@ -1,8 +1,7 @@
-import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
-
+import SQLiteESMFactory from 'wa-sqlite-fts5/wa-sqlite.mjs'
 import { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
 
-import SQLiteESMFactory from '../../wa-sqlite-fts5/wa-sqlite.mjs'
+import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
 
 export { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
 
@@ -36,9 +35,7 @@ export async function useOpfsStorage(
   options: BaseStorageOptions = {},
 ): Promise<InitSQLiteOptions> {
   const { url, ...rest } = options
-  const sqliteModule = await SQLiteESMFactory(
-    options.url ? { locateFile: () => options.url } : undefined,
-  )
+  const sqliteModule = await SQLiteESMFactory(url ? { locateFile: () => url } : undefined)
 
   return {
     path,
