@@ -1,8 +1,7 @@
-import type { InitSQLiteOptions, Promisable, SQLiteDB, SQLiteDBCore } from './types'
-
 import { Factory } from 'wa-sqlite'
 
 import { exportDatabase, importDatabase } from './io'
+import type { InitSQLiteOptions, Promisable, SQLiteDB, SQLiteDBCore } from './types'
 import { changes, close, lastInsertRowId, parseOpenV2Flag, run, stream } from './utils'
 
 /**
@@ -24,7 +23,7 @@ export async function initSQLite(options: Promisable<InitSQLiteOptions>): Promis
     lastInsertRowId: () => lastInsertRowId(core),
     run: (...args) => run(core, ...args),
     stream: (...args) => stream(core, ...args),
-    sync: data => importDatabase(core.vfs, core.path, data),
+    sync: (data) => importDatabase(core.vfs, core.path, data),
   }
 }
 
@@ -42,10 +41,7 @@ export async function initSQLiteCore(
   const vfs = await vfsFn(path, sqliteModule, vfsOptions)
   sqlite.vfs_register(vfs as unknown as SQLiteVFS, true)
   await beforeOpen?.(vfs, path)
-  const pointer = await sqlite.open_v2(
-    path,
-    parseOpenV2Flag(readonly),
-  )
+  const pointer = await sqlite.open_v2(path, parseOpenV2Flag(readonly))
 
   return {
     db: pointer,

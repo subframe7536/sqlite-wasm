@@ -1,7 +1,3 @@
-/* eslint-disable antfu/consistent-list-newline */
-// reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/index.js
-import type { FacadeVFS, Promisable } from '../types'
-
 import {
   SQLITE_FCNTL_BEGIN_ATOMIC_WRITE,
   SQLITE_FCNTL_COMMIT_ATOMIC_WRITE,
@@ -15,11 +11,29 @@ import {
   SQLITE_OPEN_READWRITE,
   SQLITE_SYNC_NORMAL,
 } from '../constant'
+/* eslint-disable antfu/consistent-list-newline */
+// reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/index.js
+import type { FacadeVFS, Promisable } from '../types'
+
 import { check, getHandle, ignoredDataView, isFsHandleVFS } from './common'
 
 const SQLITE_BINARY_HEADER = new Uint8Array([
-  0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, // SQLite f
-  0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x33, 0x00, // ormat 3\0
+  0x53,
+  0x51,
+  0x4c,
+  0x69,
+  0x74,
+  0x65,
+  0x20,
+  0x66, // SQLite f
+  0x6f,
+  0x72,
+  0x6d,
+  0x61,
+  0x74,
+  0x20,
+  0x33,
+  0x00, // ormat 3\0
 ])
 
 async function parseHeaderAndVerify(

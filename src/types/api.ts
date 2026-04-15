@@ -40,8 +40,8 @@ export interface SQLiteAPI {
    */
   bind_collection(
     stmt: number,
-    bindings: { [index: string]: SQLiteCompatibleType | null } | Array<SQLiteCompatibleType | null>
-  ): number;
+    bindings: { [index: string]: SQLiteCompatibleType | null } | Array<SQLiteCompatibleType | null>,
+  ): number
 
   /**
    * Bind value to prepared statement
@@ -53,7 +53,7 @@ export interface SQLiteAPI {
    * @param value
    * @returns `SQLITE_OK` (throws exception on error)
    */
-  bind(stmt: number, i: number, value: SQLiteCompatibleType | null): number;
+  bind(stmt: number, i: number, value: SQLiteCompatibleType | null): number
 
   /**
    * Bind blob to prepared statement parameter
@@ -65,7 +65,7 @@ export interface SQLiteAPI {
    * @param value
    * @returns `SQLITE_OK` (throws exception on error)
    */
-  bind_blob(stmt: number, i: number, value: Uint8Array | Array<number>): number;
+  bind_blob(stmt: number, i: number, value: Uint8Array | Array<number>): number
 
   /**
    * Bind number to prepared statement parameter
@@ -77,42 +77,42 @@ export interface SQLiteAPI {
    * @param value
    * @returns `SQLITE_OK` (throws exception on error)
    */
-  bind_double(stmt: number, i: number, value: number): number;
+  bind_double(stmt: number, i: number, value: number): number
 
   /**
-  * Bind number to prepared statement parameter
-  *
-  * Note that binding indices begin with 1.
-  * @see https://www.sqlite.org/c3ref/bind_blob.html
-  * @param stmt prepared statement pointer
-  * @param i binding index
-  * @param value
-  * @returns `SQLITE_OK` (throws exception on error)
-  */
-  bind_int(stmt: number, i: number, value: number): number;
+   * Bind number to prepared statement parameter
+   *
+   * Note that binding indices begin with 1.
+   * @see https://www.sqlite.org/c3ref/bind_blob.html
+   * @param stmt prepared statement pointer
+   * @param i binding index
+   * @param value
+   * @returns `SQLITE_OK` (throws exception on error)
+   */
+  bind_int(stmt: number, i: number, value: number): number
 
   /**
-  * Bind number to prepared statement parameter
-  *
-  * Note that binding indices begin with 1.
-  * @see https://www.sqlite.org/c3ref/bind_blob.html
-  * @param stmt prepared statement pointer
-  * @param i binding index
-  * @param value
-  * @returns `SQLITE_OK` (throws exception on error)
-  */
-  bind_int64(stmt: number, i: number, value: bigint): number;
+   * Bind number to prepared statement parameter
+   *
+   * Note that binding indices begin with 1.
+   * @see https://www.sqlite.org/c3ref/bind_blob.html
+   * @param stmt prepared statement pointer
+   * @param i binding index
+   * @param value
+   * @returns `SQLITE_OK` (throws exception on error)
+   */
+  bind_int64(stmt: number, i: number, value: bigint): number
 
   /**
- * Bind null to prepared statement
- *
- * Note that binding indices begin with 1.
- * @see https://www.sqlite.org/c3ref/bind_blob.html
- * @param stmt prepared statement pointer
- * @param i binding index
- * @returns `SQLITE_OK` (throws exception on error)
- */
-  bind_null(stmt: number, i: number): number;
+   * Bind null to prepared statement
+   *
+   * Note that binding indices begin with 1.
+   * @see https://www.sqlite.org/c3ref/bind_blob.html
+   * @param stmt prepared statement pointer
+   * @param i binding index
+   * @returns `SQLITE_OK` (throws exception on error)
+   */
+  bind_null(stmt: number, i: number): number
 
   /**
    * Get number of bound parameters
@@ -120,7 +120,7 @@ export interface SQLiteAPI {
    * @param stmt prepared statement pointer
    * @returns number of statement binding locations
    */
-  bind_parameter_count(stmt: number): number;
+  bind_parameter_count(stmt: number): number
 
   /**
    * Get name of bound parameter
@@ -131,19 +131,19 @@ export interface SQLiteAPI {
    * @param i binding index
    * @returns binding name
    */
-  bind_parameter_name(stmt: number, i: number): string;
+  bind_parameter_name(stmt: number, i: number): string
 
   /**
-  * Bind string to prepared statement
-  *
-  * Note that binding indices begin with 1.
-  * @see https://www.sqlite.org/c3ref/bind_blob.html
-  * @param stmt prepared statement pointer
-  * @param i binding index
-  * @param value
-  * @returns `SQLITE_OK` (throws exception on error)
-  */
-  bind_text(stmt: number, i: number, value: string): number;
+   * Bind string to prepared statement
+   *
+   * Note that binding indices begin with 1.
+   * @see https://www.sqlite.org/c3ref/bind_blob.html
+   * @param stmt prepared statement pointer
+   * @param i binding index
+   * @param value
+   * @returns `SQLITE_OK` (throws exception on error)
+   */
+  bind_text(stmt: number, i: number, value: string): number
 
   /**
    * Get count of rows modified by last insert/update
@@ -151,7 +151,7 @@ export interface SQLiteAPI {
    * @param db database pointer
    * @returns number of rows modified
    */
-  changes(db: number): number;
+  changes(db: number): number
 
   /**
    * Reset all bindings on a prepared statement.
@@ -159,7 +159,7 @@ export interface SQLiteAPI {
    * @param stmt prepared statement pointer
    * @returns `SQLITE_OK` (throws exception on error)
    */
-  clear_bindings(stmt: number): number;
+  clear_bindings(stmt: number): number
 
   /**
    * Close database connection
@@ -167,7 +167,7 @@ export interface SQLiteAPI {
    * @param db database pointer
    * @returns `SQLITE_OK` (throws exception on error)
    */
-  close(db: number): Promise<number>;
+  close(db: number): Promise<number>
 
   /**
    * Call the appropriate `column_*` function based on the column type
@@ -183,7 +183,7 @@ export interface SQLiteAPI {
    * @param i column index
    * @returns column value
    */
-  column(stmt: number, i: number): SQLiteCompatibleType;
+  column(stmt: number, i: number): SQLiteCompatibleType
 
   /**
    * Extract a column value from a row after a prepared statment {@link step}
@@ -196,7 +196,7 @@ export interface SQLiteAPI {
    * @param i column index
    * @returns column value
    */
-  column_blob(stmt: number, i: number): Uint8Array;
+  column_blob(stmt: number, i: number): Uint8Array
 
   /**
    * Get storage size for column text or blob
@@ -205,7 +205,7 @@ export interface SQLiteAPI {
    * @param i column index
    * @returns number of bytes in column text or blob
    */
-  column_bytes(stmt: number, i: number): number;
+  column_bytes(stmt: number, i: number): number
 
   /**
    * Get number of columns for a prepared statement
@@ -213,7 +213,7 @@ export interface SQLiteAPI {
    * @param stmt prepared statement pointer
    * @returns number of columns
    */
-  column_count(stmt: number): number;
+  column_count(stmt: number): number
 
   /**
    * Extract a column value from a row after a prepared statment {@link step}
@@ -222,7 +222,7 @@ export interface SQLiteAPI {
    * @param i column index
    * @returns column value
    */
-  column_double(stmt: number, i: number): number;
+  column_double(stmt: number, i: number): number
 
   /**
    * Extract a column value from a row after a prepared statment {@link step}
@@ -231,7 +231,7 @@ export interface SQLiteAPI {
    * @param i column index
    * @returns column value
    */
-  column_int(stmt: number, i: number): number;
+  column_int(stmt: number, i: number): number
 
   /**
    * Extract a column value from a row after a prepared statment {@link step}
@@ -240,16 +240,16 @@ export interface SQLiteAPI {
    * @param i column index
    * @returns column value
    */
-  column_int64(stmt: number, i: number): bigint;
+  column_int64(stmt: number, i: number): bigint
 
   /**
-  * Get a column name for a prepared statement
-  * @see https://www.sqlite.org/c3ref/column_blob.html
-  * @param stmt prepared statement pointer
-  * @param i column index
-  * @returns column name
-  */
-  column_name(stmt: number, i: number): string;
+   * Get a column name for a prepared statement
+   * @see https://www.sqlite.org/c3ref/column_blob.html
+   * @param stmt prepared statement pointer
+   * @param i column index
+   * @returns column name
+   */
+  column_name(stmt: number, i: number): string
 
   /**
    * Get names for all columns of a prepared statement
@@ -259,7 +259,7 @@ export interface SQLiteAPI {
    * @param stmt
    * @returns array of column names
    */
-  column_names(stmt: number): Array<string>;
+  column_names(stmt: number): Array<string>
 
   /**
    * Extract a column value from a row after a prepared statment {@link step}
@@ -268,7 +268,7 @@ export interface SQLiteAPI {
    * @param i column index
    * @returns column value
    */
-  column_text(stmt: number, i: number): string;
+  column_text(stmt: number, i: number): string
 
   /**
    * Get column type for a prepared statement
@@ -279,7 +279,7 @@ export interface SQLiteAPI {
    * @param i column index
    * @returns enumeration value for type
    */
-  column_type(stmt: number, i: number): number;
+  column_type(stmt: number, i: number): number
 
   /**
    * Register a commit hook
@@ -290,9 +290,7 @@ export interface SQLiteAPI {
    * @param callback If a non-zero value is returned, commit is converted into
    * a rollback; disables callback when null
    */
-  commit_hook(
-    db: number,
-    callback: (() => number) | null): void;
+  commit_hook(db: number, callback: (() => number) | null): void
 
   /**
    * Create or redefine SQL functions
@@ -320,7 +318,8 @@ export interface SQLiteAPI {
     pApp: number,
     xFunc?: (context: number, values: Uint32Array) => void | Promise<void>,
     xStep?: (context: number, values: Uint32Array) => void | Promise<void>,
-    xFinal?: (context: number) => void | Promise<void>): number;
+    xFinal?: (context: number) => void | Promise<void>,
+  ): number
 
   /**
    * Get number of columns in current row of a prepared statement
@@ -328,7 +327,7 @@ export interface SQLiteAPI {
    * @param stmt prepared statement pointer
    * @returns number of columns
    */
-  data_count(stmt: number): number;
+  data_count(stmt: number): number
 
   /**
    * One-step query execution interface
@@ -345,8 +344,8 @@ export interface SQLiteAPI {
   exec(
     db: number,
     zSQL: string,
-    callback?: (row: Array<SQLiteCompatibleType | null>, columns: string[]) => void
-  ): Promise<number>;
+    callback?: (row: Array<SQLiteCompatibleType | null>, columns: string[]) => void,
+  ): Promise<number>
 
   /**
    * Destroy a prepared statement object compiled by {@link statements}
@@ -357,7 +356,7 @@ export interface SQLiteAPI {
    * @param stmt prepared statement pointer
    * @returns Promise resolving to `SQLITE_OK` or error status
    */
-  finalize(stmt: number): Promise<number>;
+  finalize(stmt: number): Promise<number>
 
   /**
    * Test for autocommit mode
@@ -365,14 +364,14 @@ export interface SQLiteAPI {
    * @param db database pointer
    * @returns Non-zero if autocommit mode is on, zero otherwise
    */
-  get_autocommit(db: number): number;
+  get_autocommit(db: number): number
 
   /**
    * Get SQLite library version
    * @see https://www.sqlite.org/c3ref/libversion.html
    * @returns version string, e.g. '3.35.5'
    */
-  libversion(): string;
+  libversion(): string
 
   /**
    * Get SQLite library version
@@ -389,10 +388,7 @@ export interface SQLiteAPI {
    * @param newVal
    * @returns previous setting
    */
-  limit(
-    db: number,
-    id: number,
-    newVal: number): number;
+  limit(db: number, id: number, newVal: number): number
 
   /**
    * Opening a new database connection.
@@ -406,11 +402,7 @@ export interface SQLiteAPI {
    * @param zVfs VFS name
    * @returns Promise-wrapped database pointer.
    */
-  open_v2(
-    zFilename: string,
-    iFlags?: number,
-    zVfs?: string
-  ): Promise<number>;
+  open_v2(zFilename: string, iFlags?: number, zVfs?: string): Promise<number>
 
   /**
    * Specify callback to be invoked between long-running queries
@@ -424,7 +416,12 @@ export interface SQLiteAPI {
    * @param handler
    * @param userData
    */
-  progress_handler<T extends number | Promise<number>>(db: number, nProgressOps: number, handler: (userData: any) => T, userData: unknown): T;
+  progress_handler<T extends number | Promise<number>>(
+    db: number,
+    nProgressOps: number,
+    handler: (userData: any) => T,
+    userData: unknown,
+  ): T
 
   /**
    * Reset a prepared statement object
@@ -432,14 +429,14 @@ export interface SQLiteAPI {
    * @param stmt prepared statement pointer
    * @returns Promise-wrapped `SQLITE_OK` (rejects on error)
    */
-  reset(stmt: number): Promise<number>;
+  reset(stmt: number): Promise<number>
 
   /**
    * Convenience function to call `result_*` based of the type of `value`
    * @param context context pointer
    * @param value
    */
-  result(context: number, value: (SQLiteCompatibleType | number[]) | null): void;
+  result(context: number, value: (SQLiteCompatibleType | number[]) | null): void
 
   /**
    * Set the result of a function or vtable column
@@ -447,7 +444,7 @@ export interface SQLiteAPI {
    * @param context context pointer
    * @param value
    */
-  result_blob(context: number, value: Uint8Array | number[]): void;
+  result_blob(context: number, value: Uint8Array | number[]): void
 
   /**
    * Set the result of a function or vtable column
@@ -455,7 +452,7 @@ export interface SQLiteAPI {
    * @param context context pointer
    * @param value
    */
-  result_double(context: number, value: number): void;
+  result_double(context: number, value: number): void
 
   /**
    * Set the result of a function or vtable column
@@ -463,7 +460,7 @@ export interface SQLiteAPI {
    * @param context context pointer
    * @param value
    */
-  result_int(context: number, value: number): void;
+  result_int(context: number, value: number): void
 
   /**
    * Set the result of a function or vtable column
@@ -471,14 +468,14 @@ export interface SQLiteAPI {
    * @param context context pointer
    * @param value
    */
-  result_int64(context: number, value: bigint): void;
+  result_int64(context: number, value: bigint): void
 
   /**
    * Set the result of a function or vtable column
    * @see https://sqlite.org/c3ref/result_blob.html
    * @param context context pointer
    */
-  result_null(context: number): void;
+  result_null(context: number): void
 
   /**
    * Set the result of a function or vtable column
@@ -486,7 +483,7 @@ export interface SQLiteAPI {
    * @param context context pointer
    * @param value
    */
-  result_text(context: number, value: string): void;
+  result_text(context: number, value: string): void
 
   /**
    * Get all column data for a row from a prepared statement step
@@ -498,7 +495,7 @@ export interface SQLiteAPI {
    * @param stmt prepared statement pointer
    * @returns row data
    */
-  row(stmt: number): Array<SQLiteCompatibleType | null>;
+  row(stmt: number): Array<SQLiteCompatibleType | null>
 
   /**
    * Register a callback function that is invoked to authorize certain SQL statement actions.
@@ -509,8 +506,16 @@ export interface SQLiteAPI {
    */
   set_authorizer(
     db: number,
-    authFunction: (userData: any, iActionCode: number, param3: string | null, param4: string | null, param5: string | null, param6: string | null) => number | Promise<number>,
-    userData: any): number;
+    authFunction: (
+      userData: any,
+      iActionCode: number,
+      param3: string | null,
+      param4: string | null,
+      param5: string | null,
+      param6: string | null,
+    ) => number | Promise<number>,
+    userData: any,
+  ): number
 
   /**
    * Get statement SQL
@@ -518,7 +523,7 @@ export interface SQLiteAPI {
    * @param stmt prepared statement pointer
    * @returns SQL
    */
-  sql(stmt: number): string;
+  sql(stmt: number): string
 
   /**
    * SQL statement iterator
@@ -558,7 +563,7 @@ export interface SQLiteAPI {
    * @param sql
    * @param options
    */
-  statements(db: number, sql: string, options?: SQLitePrepareOptions): AsyncIterable<number>;
+  statements(db: number, sql: string, options?: SQLitePrepareOptions): AsyncIterable<number>
 
   /**
    * Evaluate an SQL statement
@@ -567,27 +572,33 @@ export interface SQLiteAPI {
    * @returns Promise resolving to `SQLITE_ROW` or `SQLITE_DONE`
    * (rejects on error)
    */
-  step(stmt: number): Promise<number>;
+  step(stmt: number): Promise<number>
 
   /**
-  * Register an update hook
-  *
-  * The callback is invoked whenever a row is updated, inserted, or deleted
-  * in a rowid table on this connection.
-  * @see https://www.sqlite.org/c3ref/update_hook.html
-  *
-  * updateType is one of:
-  * - SQLITE_DELETE: 9
-  * - SQLITE_INSERT: 18
-  * - SQLITE_UPDATE: 23
-  * @see https://www.sqlite.org/c3ref/c_alter_table.html
-  *
-  * @param db database pointer
-  * @param callback
-  */
+   * Register an update hook
+   *
+   * The callback is invoked whenever a row is updated, inserted, or deleted
+   * in a rowid table on this connection.
+   * @see https://www.sqlite.org/c3ref/update_hook.html
+   *
+   * updateType is one of:
+   * - SQLITE_DELETE: 9
+   * - SQLITE_INSERT: 18
+   * - SQLITE_UPDATE: 23
+   * @see https://www.sqlite.org/c3ref/c_alter_table.html
+   *
+   * @param db database pointer
+   * @param callback
+   */
   update_hook(
     db: number,
-    callback: (updateType: number, dbName: string | null, tblName: string | null, rowid: bigint) => void): void;
+    callback: (
+      updateType: number,
+      dbName: string | null,
+      tblName: string | null,
+      rowid: bigint,
+    ) => void,
+  ): void
 
   /**
    * Extract a value from `sqlite3_value`
@@ -601,7 +612,7 @@ export interface SQLiteAPI {
    * @param pValue `sqlite3_value` pointer
    * @returns value
    */
-  value(pValue: number): SQLiteCompatibleType;
+  value(pValue: number): SQLiteCompatibleType
 
   /**
    * Extract a value from `sqlite3_value`
@@ -613,7 +624,7 @@ export interface SQLiteAPI {
    * @param pValue `sqlite3_value` pointer
    * @returns value
    */
-  value_blob(pValue: number): Uint8Array;
+  value_blob(pValue: number): Uint8Array
 
   /**
    * Get blob or text size for value
@@ -621,7 +632,7 @@ export interface SQLiteAPI {
    * @param pValue `sqlite3_value` pointer
    * @returns size
    */
-  value_bytes(pValue: number): number;
+  value_bytes(pValue: number): number
 
   /**
    * Extract a value from `sqlite3_value`
@@ -629,7 +640,7 @@ export interface SQLiteAPI {
    * @param pValue `sqlite3_value` pointer
    * @returns value
    */
-  value_double(pValue: number): number;
+  value_double(pValue: number): number
 
   /**
    * Extract a value from `sqlite3_value`
@@ -637,7 +648,7 @@ export interface SQLiteAPI {
    * @param pValue `sqlite3_value` pointer
    * @returns value
    */
-  value_int(pValue: number): number;
+  value_int(pValue: number): number
 
   /**
    * Extract a value from `sqlite3_value`
@@ -645,7 +656,7 @@ export interface SQLiteAPI {
    * @param pValue `sqlite3_value` pointer
    * @returns value
    */
-  value_int64(pValue: number): bigint;
+  value_int64(pValue: number): bigint
 
   /**
    * Extract a value from `sqlite3_value`
@@ -653,7 +664,7 @@ export interface SQLiteAPI {
    * @param pValue `sqlite3_value` pointer
    * @returns value
    */
-  value_text(pValue: number): string;
+  value_text(pValue: number): string
 
   /**
    * Get type of `sqlite3_value`
@@ -661,7 +672,7 @@ export interface SQLiteAPI {
    * @param pValue `sqlite3_value` pointer
    * @returns enumeration value for type
    */
-  value_type(pValue: number): number;
+  value_type(pValue: number): number
 
   /**
    * Register a new Virtual File System.
@@ -671,5 +682,5 @@ export interface SQLiteAPI {
    * @param makeDefault
    * @returns `SQLITE_OK` (throws exception on error)
    */
-  vfs_register(vfs: SQLiteVFS, makeDefault?: boolean): number;
+  vfs_register(vfs: SQLiteVFS, makeDefault?: boolean): number
 }

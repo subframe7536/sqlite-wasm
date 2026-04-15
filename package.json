@@ -38,7 +38,8 @@
     "dev": "vite serve playground",
     "build": "tsdown",
     "update": "bun run download.ts",
-    "release": "bun run typecheck && bun run lint && bun run format && bun run build && bumpp --all"
+    "qa": "bun run typecheck && bun run lint && bun run format",
+    "release": "bun run qa && bun run build && bumpp --all"
   },
   "devDependencies": {
     "@subf/config": "^0.2.1",

@@ -23,14 +23,10 @@ jobs:
           bun-version: latest
 
       - name: Update npm
-        run: npm install -g npm@latest
-
-      - run: bun install
-
+        run: bun i -g npm@latest
+      - run: bun ci
       - run: bun run build
-
       - run: npm publish
-
       - run: bunx changelogithub
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

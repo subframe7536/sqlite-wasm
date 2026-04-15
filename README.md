@@ -15,11 +15,10 @@ import { initSQLite, isOpfsSupported, useMemoryStorage } from '@subframe7536/sql
 
 // optional url
 const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/wa-sqlite.wasm'
-const url1 = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@v0.5.0/wa-sqlite-fts5/wa-sqlite.wasm'
+const url1 =
+  'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@v0.5.0/wa-sqlite-fts5/wa-sqlite.wasm'
 
-const { run, changes, lastInsertRowId, close } = await initSQLite(
-  useMemoryStorage({ url })
-)
+const { run, changes, lastInsertRowId, close } = await initSQLite(useMemoryStorage({ url }))
 ```
 
 ### IndexedDB
@@ -34,11 +33,10 @@ import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 
 // optional url
 const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/wa-sqlite-async.wasm'
-const url1 = 'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@v0.5.0/wa-sqlite-fts5/wa-sqlite-async.wasm'
+const url1 =
+  'https://cdn.jsdelivr.net/gh/subframe7536/sqlite-wasm@v0.5.0/wa-sqlite-fts5/wa-sqlite-async.wasm'
 
-const { run, changes, lastInsertRowId, close } = await initSQLite(
-  useIdbStorage('test.db', { url })
-)
+const { run, changes, lastInsertRowId, close } = await initSQLite(useIdbStorage('test.db', { url }))
 ```
 
 #### IdbMemory
@@ -55,7 +53,7 @@ import { useIdbMemoryStorage } from '@subframe7536/sqlite-wasm/idb-memory'
 const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/dist/wa-sqlite-async.wasm'
 
 const { run, changes, lastInsertRowId, close } = await initSQLite(
-  useIdbMemoryStorage('test.db', { url })
+  useIdbMemoryStorage('test.db', { url }),
 )
 ```
 
@@ -76,12 +74,11 @@ import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
 const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm@0.5.0/dist/wa-sqlite.wasm'
 
 onmessage = async () => {
-  if (!await isOpfsSupported()) { // this can be called in main thread
+  if (!(await isOpfsSupported())) {
+    // this can be called in main thread
     return
   }
-  const { run, changes, lastInsertRowId, close } = await initSQLite(
-    useOpfsStorage('test.db', url)
-  )
+  const { run, changes, lastInsertRowId, close } = await initSQLite(useOpfsStorage('test.db', url))
 }
 ```
 
@@ -92,6 +89,7 @@ Store data through `FileSystemFileHandle`, use modified `OPFSAnyContextVFS` with
 [minimal File System Access backend browser version](https://caniuse.com/mdn-api_filesystemhandle)
 
 > [!warning]
+>
 > 1. maybe have perfarmance issue on Windows with device's local file, see in [#5](https://github.com/subframe7536/sqlite-wasm/pull/5)
 > 2. Safari is not supported, see in [caniuse](https://caniuse.com/mdn-api_filesystemwritablefilestream)
 
@@ -108,7 +106,7 @@ const root = await window.showDirectoryPicker()
 const root1 = await navigator.storage.getDirectory()
 
 const { run, changes, lastInsertRowId, close } = await initSQLite(
-  useFsHandleStorage('test.db', root, url)
+  useFsHandleStorage('test.db', root, url),
 )
 ```
 
@@ -141,9 +139,7 @@ async function selectFile(): Promise<File> {
     input.click()
   })
 }
-const FileOrReadableStream = remote
-  ? (await fetch(remoteSqliteURL)).body!
-  : await selectFile()
+const FileOrReadableStream = remote ? (await fetch(remoteSqliteURL)).body! : await selectFile()
 ```
 
 Import while initiaizing
@@ -152,9 +148,7 @@ Import while initiaizing
 import { initSQLite, withExistDB } from '@subframe7536/sqlite-wasm'
 import { useIdbStorage } from '@subframe7536/sqlite-wasm/idb'
 
-const db = initSQLite(
-  useIdbStorage('test.db', withExistDB(FileOrReadableStream, { url }))
-)
+const db = initSQLite(useIdbStorage('test.db', withExistDB(FileOrReadableStream, { url })))
 ```
 
 or load it later
@@ -196,9 +190,7 @@ import { customFunction, initSQLite, isOpfsSupported } from '@subframe7536/sqlit
 import { useOpfsStorage } from '@subframe7536/sqlite-wasm/opfs'
 import { uuidv7 } from 'uuidv7'
 
-const { run, sqlite, db } = await initSQLite(
-  useOpfsStorage('test')
-)
+const { run, sqlite, db } = await initSQLite(useOpfsStorage('test'))
 customFunction(sqlite, db, 'uuidv7', () => uuidv7())
 console.log(await run('select uuidv7() as a'))
 // [{ "a": "01932f1b-b663-7714-af4d-17a3d9efc7b3" }]
@@ -225,7 +217,7 @@ for await (const row of iterator(core, 'select * from test')) {
   console.log(row)
 }
 
-customFunctionCore(core, 'test', num => num)
+customFunctionCore(core, 'test', (num) => num)
 await run(core, 'select test(?)', [1])
 
 const buf = await exportDatabase(core.vfs, core.path)
@@ -235,8 +227,12 @@ await close(core)
 
 ### Utils
 
-```ts
-function dumpVFS(vfs: FacadeVFS, path: string, onDone?: (vfs: FacadeVFS, path: string) => any): ReadableStream
+````ts
+function dumpVFS(
+  vfs: FacadeVFS,
+  path: string,
+  onDone?: (vfs: FacadeVFS, path: string) => any,
+): ReadableStream
 
 function exportDatabaseFromIDB(vfs: FacadeVFS, path: string): Promise<Uint8Array>
 
@@ -249,7 +245,11 @@ function exportDatabaseFromFsHandle(vfs: FacadeVFS, path: string): Promise<Uint8
  */
 function exportDatabase(vfs: FacadeVFS, path: string): Promise<Uint8Array>
 
-function importDatabaseToIdb(vfs: FacadeVFS, path: string, stream: ReadableStream<Uint8Array>): Promise<void>
+function importDatabaseToIdb(
+  vfs: FacadeVFS,
+  path: string,
+  stream: ReadableStream<Uint8Array>,
+): Promise<void>
 
 /**
  * Import database from `File` or `ReadableStream`
@@ -257,7 +257,11 @@ function importDatabaseToIdb(vfs: FacadeVFS, path: string, stream: ReadableStrea
  * @param path db path
  * @param data existing database
  */
-function importDatabase(vfs: FacadeVFS, path: string, data: File | ReadableStream<Uint8Array>): Promise<void>
+function importDatabase(
+  vfs: FacadeVFS,
+  path: string,
+  data: File | ReadableStream<Uint8Array>,
+): Promise<void>
 
 /**
  * check if IndexedDB and Web Locks API supported
@@ -293,17 +297,28 @@ function isModuleWorkerSupport(): boolean
  * // [{ "a": "01932f1b-b663-7714-af4d-17a3d9efc7b3" }]
  * ```
  */
-function customFunction<N extends string, T extends SQLiteCompatibleType[]>(sqlite: SQLiteAPI, db: number, fnName: N, fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null, options?: {
-  deterministic?: boolean
-  directOnly?: boolean
-  varargs?: boolean
-}): void
+function customFunction<N extends string, T extends SQLiteCompatibleType[]>(
+  sqlite: SQLiteAPI,
+  db: number,
+  fnName: N,
+  fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null,
+  options?: {
+    deterministic?: boolean
+    directOnly?: boolean
+    varargs?: boolean
+  },
+): void
 
-function customFunctionCore<N extends string, T extends SQLiteCompatibleType[]>(core: SQLiteDBCore, fnName: N, fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null, options?: {
-  deterministic?: boolean
-  directOnly?: boolean
-  varargs?: boolean
-}): void
+function customFunctionCore<N extends string, T extends SQLiteCompatibleType[]>(
+  core: SQLiteDBCore,
+  fnName: N,
+  fn: N extends '' ? never : (...args: T) => (SQLiteCompatibleType | number[]) | null,
+  options?: {
+    deterministic?: boolean
+    directOnly?: boolean
+    varargs?: boolean
+  },
+): void
 
 /**
  * Parse options with existing database
@@ -319,7 +334,10 @@ function customFunctionCore<N extends string, T extends SQLiteCompatibleType[]>(
  * )
  * ```
  */
-function withExistDB<T extends BaseStorageOptions>(data: File | ReadableStream, options?: Omit<T, 'beforeOpen'>): T
+function withExistDB<T extends BaseStorageOptions>(
+  data: File | ReadableStream,
+  options?: Omit<T, 'beforeOpen'>,
+): T
 
 function close(core: SQLiteDBCore): Promise<void>
 
@@ -327,16 +345,30 @@ function changes(core: SQLiteDBCore): number | bigint
 
 function lastInsertRowId(core: SQLiteDBCore): number | bigint
 
-function stream(core: SQLiteDBCore, onData: (data: Record<string, SQLiteCompatibleType>) => void, sql: string, parameters?: SQLiteCompatibleType[]): Promise<void>
+function stream(
+  core: SQLiteDBCore,
+  onData: (data: Record<string, SQLiteCompatibleType>) => void,
+  sql: string,
+  parameters?: SQLiteCompatibleType[],
+): Promise<void>
 
-function run(core: SQLiteDBCore, sql: string, parameters?: SQLiteCompatibleType[]): Promise<Array<Record<string, SQLiteCompatibleType>>>
+function run(
+  core: SQLiteDBCore,
+  sql: string,
+  parameters?: SQLiteCompatibleType[],
+): Promise<Array<Record<string, SQLiteCompatibleType>>>
 
-function iterator(core: SQLiteDBCore, sql: string, parameters?: SQLiteCompatibleType[], chunkSize?: number): AsyncIterableIterator<Record<string, SQLiteCompatibleType>[]>
+function iterator(
+  core: SQLiteDBCore,
+  sql: string,
+  parameters?: SQLiteCompatibleType[],
+  chunkSize?: number,
+): AsyncIterableIterator<Record<string, SQLiteCompatibleType>[]>
 
 function parseOpenV2Flag(readonly?: boolean): number
 
 function reopen(core: SQLiteDBCore, readonly?: boolean): Promise<void>
-```
+````
 
 ## License
 

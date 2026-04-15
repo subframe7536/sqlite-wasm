@@ -6,8 +6,5 @@ export class OPFSAnyContextVFS {
     rootDirectoryHandle: FileSystemDirectoryHandle,
   ): Promise<OPFSAnyContextVFS>
 
-  getPathComponents(
-    path: string,
-    create?: boolean,
-  ): Promise<[FileSystemDirectoryHandle, string]>
+  getPathComponents(path: string, create?: boolean): Promise<[FileSystemDirectoryHandle, string]>
 }

@@ -1,7 +1,6 @@
-import type { SQLiteDB } from '../../src/index'
-
 import { mitt } from 'zen-mitt'
 
+import type { SQLiteDB } from '../../src/index'
 import {
   initSQLite,
   isIdbSupported,
@@ -13,6 +12,7 @@ import { useIdbStorage } from '../../src/vfs/idb'
 import { useIdbMemoryStorage } from '../../src/vfs/idb-memory'
 import url from '../../wa-sqlite-fts5/wa-sqlite-async.wasm?url'
 import syncUrl from '../../wa-sqlite-fts5/wa-sqlite.wasm?url'
+
 import { runSQL } from './runSQL'
 import OpfsWorker from './worker?worker'
 
@@ -59,7 +59,9 @@ document.querySelector('.import')?.addEventListener('click', async () => {
   )
   await db.sync(file)
   console.log(
-    await db.run(`SELECT "type", "tbl_name" AS "table", CASE WHEN "sql" LIKE '%PRIMARY KEY AUTOINCREMENT%' THEN 1 ELSE "name" END AS "name" FROM "sqlite_master"`),
+    await db.run(
+      `SELECT "type", "tbl_name" AS "table", CASE WHEN "sql" LIKE '%PRIMARY KEY AUTOINCREMENT%' THEN 1 ELSE "name" END AS "name" FROM "sqlite_master"`,
+    ),
   )
 })
 
@@ -203,14 +205,18 @@ async function selectFile(accept?: string): Promise<File> {
       input.remove()
     }
 
-    window.addEventListener('focus', () => {
-      setTimeout(() => {
-        if (!input.files?.length) {
-          reject(new Error('File selection cancelled'))
-          input.remove()
-        }
-      }, 300)
-    }, { once: true })
+    window.addEventListener(
+      'focus',
+      () => {
+        setTimeout(() => {
+          if (!input.files?.length) {
+            reject(new Error('File selection cancelled'))
+            input.remove()
+          }
+        }, 300)
+      },
+      { once: true },
+    )
 
     input.click()
   })

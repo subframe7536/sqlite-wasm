@@ -1,5 +1,3 @@
-import type { BaseStorageOptions, SQLiteDBCore } from './types'
-
 import {
   SQLITE_DETERMINISTIC,
   SQLITE_DIRECTONLY,
@@ -12,6 +10,7 @@ import {
 import { SQLITE_ROW } from 'wa-sqlite/src/sqlite-constants.js'
 
 import { importDatabase } from './io'
+import type { BaseStorageOptions, SQLiteDBCore } from './types'
 
 /**
  * check if IndexedDB and Web Locks API supported
@@ -25,30 +24,35 @@ export function isIdbSupported(): boolean {
  */
 export async function isOpfsSupported(): Promise<boolean> {
   // must write file to test, see https://stackoverflow.com/questions/76113945/file-system-access-api-on-safari-ios-createsyncaccesshandle-unknownerror-i
-  const inner = (): Promise<boolean> => new Promise((resolve) => {
-    if (typeof navigator?.storage?.getDirectory !== 'function') {
-      resolve(false)
-      return
-    }
+  const inner = (): Promise<boolean> =>
+    new Promise((resolve) => {
+      if (typeof navigator?.storage?.getDirectory !== 'function') {
+        resolve(false)
+        return
+      }
 
-    navigator.storage.getDirectory()
-      .then((root) => {
-        if (!root) {
-          resolve(false)
-          return
-        }
+      navigator.storage
+        .getDirectory()
+        .then((root) => {
+          if (!root) {
+            resolve(false)
+            return
+          }
 
-        root.getFileHandle('_CHECK', { create: true })
-          .then(handle => handle.createSyncAccessHandle())
-          .then(access => (access.close(), root.removeEntry('_CHECK')))
-          .then(() => resolve(true))
-          .catch(() => root.removeEntry('_CHECK')
-            .then(() => resolve(false))
-            .catch(() => resolve(false)),
-          )
-      })
-      .catch(() => resolve(false))
-  })
+          root
+            .getFileHandle('_CHECK', { create: true })
+            .then((handle) => handle.createSyncAccessHandle())
+            .then((access) => (access.close(), root.removeEntry('_CHECK')))
+            .then(() => resolve(true))
+            .catch(() =>
+              root
+                .removeEntry('_CHECK')
+                .then(() => resolve(false))
+                .catch(() => resolve(false)),
+            )
+        })
+        .catch(() => resolve(false))
+    })
 
   if ('importScripts' in globalThis) {
     return await inner()
@@ -59,16 +63,13 @@ export async function isOpfsSupported(): Promise<boolean> {
     }
 
     const url = URL.createObjectURL(
-      new Blob(
-        [`(${inner})().then(postMessage)`],
-        { type: 'text/javascript' },
-      ),
+      new Blob([`(${inner})().then(postMessage)`], { type: 'text/javascript' }),
     )
     const worker = new Worker(url)
 
     const result = await new Promise<boolean>((resolve, reject) => {
       worker.onmessage = ({ data }) => resolve(data)
-      worker.onerror = err => (err.preventDefault(), reject(false))
+      worker.onerror = (err) => (err.preventDefault(), reject(false))
     })
 
     worker.terminate()
@@ -138,7 +139,7 @@ export function customFunction<N extends string, T extends SQLiteCompatibleType[
   sqlite.create_function(
     db,
     fnName,
-    (options.varargs || fn.length === 0) ? -1 : fn.length,
+    options.varargs || fn.length === 0 ? -1 : fn.length,
     flags,
     0,
     (ctx, value) => {
@@ -212,7 +213,7 @@ export async function stream(
       sqlite.bind_collection(stmt, parameters)
     }
     const cols = sqlite.column_names(stmt)
-    while (await sqlite.step(stmt) === SQLITE_ROW) {
+    while ((await sqlite.step(stmt)) === SQLITE_ROW) {
       const row = sqlite.row(stmt)
       onData(Object.fromEntries(cols.map((key, i) => [key, row[i]])))
     }
@@ -225,7 +226,7 @@ export async function run(
   parameters?: SQLiteCompatibleType[],
 ): Promise<Array<Record<string, SQLiteCompatibleType>>> {
   const results: any[] = []
-  await stream(core, data => results.push(data), sql, parameters)
+  await stream(core, (data) => results.push(data), sql, parameters)
   return results
 }
 

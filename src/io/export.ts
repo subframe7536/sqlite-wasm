@@ -1,12 +1,12 @@
-// reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/service-worker.js
-import type { FacadeVFS, Promisable } from '../types'
-
 import {
   SQLITE_LOCK_NONE,
   SQLITE_LOCK_SHARED,
   SQLITE_OPEN_MAIN_DB,
   SQLITE_OPEN_READONLY,
 } from '../constant'
+// reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/service-worker.js
+import type { FacadeVFS, Promisable } from '../types'
+
 import { check, getHandle, ignoredDataView, isFsHandleVFS } from './common'
 
 export function dumpVFS(
@@ -120,9 +120,9 @@ export async function exportDatabaseFromFsHandle(
   path: string,
 ): Promise<Uint8Array<ArrayBuffer>> {
   return await getHandle(vfs, path)
-    .then(handle => handle.getFile())
-    .then(file => file.arrayBuffer())
-    .then(buf => new Uint8Array(buf))
+    .then((handle) => handle.getFile())
+    .then((file) => file.arrayBuffer())
+    .then((buf) => new Uint8Array(buf))
 }
 
 /**

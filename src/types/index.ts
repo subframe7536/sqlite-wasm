@@ -1,5 +1,6 @@
-import type { SQLiteAPI } from './api'
 import type { Base } from 'wa-sqlite/src/VFS.js'
+
+import type { SQLiteAPI } from './api'
 
 export type Promisable<T> = T | Promise<T>
 
@@ -12,7 +13,12 @@ export interface FacadeVFS extends Base {
 
   getFilename: (pFile: number) => string
 
-  jOpen: (filename: string, pFile: number, flags: number, pOutFlags: DataView) => number | Promise<number>
+  jOpen: (
+    filename: string,
+    pFile: number,
+    flags: number,
+    pOutFlags: DataView,
+  ) => number | Promise<number>
 
   jDelete: (filename: string, syncDir: number) => number | Promise<number>
 
@@ -120,7 +126,7 @@ export type SQLiteDB = SQLiteDBCore & {
   stream: (
     onData: (data: Record<string, SQLiteCompatibleType>) => void,
     sql: string,
-    parameters?: SQLiteCompatibleType[]
+    parameters?: SQLiteCompatibleType[],
   ) => Promise<void>
   /**
    * Run sql and return result list
@@ -131,7 +137,7 @@ export type SQLiteDB = SQLiteDBCore & {
    */
   run: (
     sql: string,
-    parameters?: SQLiteCompatibleType[]
+    parameters?: SQLiteCompatibleType[],
   ) => Promise<Array<Record<string, SQLiteCompatibleType>>>
   /**
    * Import database from `File` or `ReadableStream`
