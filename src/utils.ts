@@ -82,6 +82,36 @@ export async function isOpfsSupported(): Promise<boolean> {
 }
 
 /**
+ * check if OPFS [`readwrite-unsafe`](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle/createSyncAccessHandle#mode) locking mode is supported,
+ * required by {@link useOpfsWriteAheadStorage}
+ *
+ * **MUST RUN IN WEB WORKER**
+ *
+ * [minimal browser version](https://caniuse.com/mdn-api_filesystemsyncaccesshandle_mode_readwrite-unsafe)
+ */
+export async function isOpfsReadWriteUnsafeSupported(): Promise<boolean> {
+  if (typeof navigator?.storage?.getDirectory !== 'function') {
+    return false
+  }
+  try {
+    const root = await navigator.storage.getDirectory()
+    const handle = await root.getFileHandle('_CHECK_RWU', { create: true })
+    const access = await (handle as any).createSyncAccessHandle({ mode: 'readwrite-unsafe' })
+    access.close()
+    await root.removeEntry('_CHECK_RWU')
+    return true
+  } catch {
+    try {
+      const root = await navigator.storage.getDirectory()
+      await root.removeEntry('_CHECK_RWU')
+    } catch {
+      // ignore cleanup errors
+    }
+    return false
+  }
+}
+
+/**
  * check `new Worker(url, { type: 'module' })` support
  *
  * {@link https://stackoverflow.com/questions/62954570/javascript-feature-detect-module-support-for-web-workers Reference}

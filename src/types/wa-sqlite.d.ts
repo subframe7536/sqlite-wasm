@@ -16,6 +16,12 @@ declare module 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js' {
   }
 }
 
+declare module 'wa-sqlite/src/examples/OPFSWriteAheadVFS.js' {
+  export class OPFSWriteAheadVFS {
+    static create(name: string, module: any, options?: any): Promise<any>
+  }
+}
+
 declare module 'wa-sqlite/src/examples/MemoryVFS.js' {
   export class MemoryVFS {
     static create(name: string, module: any): Promise<any>

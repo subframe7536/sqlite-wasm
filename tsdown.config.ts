@@ -10,6 +10,7 @@ const shared: UserConfig = {
     'idb-memory': 'src/vfs/idb-memory.ts',
     opfs: 'src/vfs/opfs.ts',
     'fs-handle': 'src/vfs/fs-handle.ts',
+    'opfs-wa': 'src/vfs/opfs-write-ahead.ts',
     constant: 'src/constant.ts',
   },
   platform: 'browser',
