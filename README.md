@@ -4,6 +4,8 @@ Typesafe [custom wa-sqlite](https://github.com/subframe7536/sqwab) wrapper, run 
 
 Low-level layer for [kysely-wasqlite-worker-dialect](https://github.com/subframe7536/kysely-sqlite-tools/tree/master/packages/dialect-wasqlite-worker)
 
+From v1.0.0, this package is ESM only.
+
 ## Usage
 
 ### Memory

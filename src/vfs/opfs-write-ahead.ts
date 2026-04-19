@@ -43,9 +43,15 @@ export async function useOpfsWriteAheadStorage(
   const { url, nTmpFiles, autoCheckpoint, backstopInterval, ...rest } = options
   const sqliteModule = await SQLiteESMFactory(url ? { locateFile: () => url } : undefined)
   const vfsOptions: OPFSWriteAheadVFSOptions = {}
-  if (nTmpFiles !== undefined) {vfsOptions.nTmpFiles = nTmpFiles}
-  if (autoCheckpoint !== undefined) {vfsOptions.autoCheckpoint = autoCheckpoint}
-  if (backstopInterval !== undefined) {vfsOptions.backstopInterval = backstopInterval}
+  if (nTmpFiles !== undefined) {
+    vfsOptions.nTmpFiles = nTmpFiles
+  }
+  if (autoCheckpoint !== undefined) {
+    vfsOptions.autoCheckpoint = autoCheckpoint
+  }
+  if (backstopInterval !== undefined) {
+    vfsOptions.backstopInterval = backstopInterval
+  }
 
   return {
     path,
