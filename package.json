@@ -22,6 +22,7 @@
     "./idb": "./dist/idb.js",
     "./idb-memory": "./dist/idb-memory.js",
     "./opfs": "./dist/opfs.js",
+    "./opfs-wa": "./dist/opfs-wa.js",
     "./package.json": "./package.json",
     "./wasm": "./dist/wa-sqlite.wasm",
     "./wasm-async": "./dist/wa-sqlite-async.wasm",

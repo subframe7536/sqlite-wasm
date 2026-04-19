@@ -53,6 +53,21 @@ export interface FacadeVFS extends Base {
   jDeviceCharacteristics: (pFile: number) => number | Promise<number>
 }
 
+export interface OPFSWriteAheadVFSOptions {
+  /**
+   * Number of temporary files to preallocate
+   */
+  nTmpFiles?: number
+  /**
+   * Automatic checkpoint threshold in pages
+   */
+  autoCheckpoint?: number
+  /**
+   * Interval in milliseconds for backstop checkpointing
+   */
+  backstopInterval?: number
+}
+
 export interface IDBBatchAtomicVFSOptions {
   /**
    * patched options for `navigator.locks.request()`
