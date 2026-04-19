@@ -22,16 +22,14 @@ export type OPFSWriteAheadStorageOptions = OPFSWriteAheadVFSOptions
  * @param options options
  * @example
  * ```ts
- * import { initSQLite, isOpfsSupported } from '@subframe7536/sqlite-wasm'
+ * import { initSQLite, isOpfsReadWriteUnsafeSupported } from '@subframe7536/sqlite-wasm'
  * import { useOpfsWriteAheadStorage } from '@subframe7536/sqlite-wasm/opfs-wa'
  *
  * // optional url
  * const url = 'https://cdn.jsdelivr.net/npm/@subframe7536/sqlite-wasm/dist/wa-sqlite.wasm'
  *
- * onmessage = async () => {
- *   if (!await isOpfsSupported()) { // this can be called in main thread
- *     return
- *   }
+ * // must run in web worker
+ * if (await isOpfsReadWriteUnsafeSupported()) {
  *   const { run, changes, lastInsertRowId, close } = await initSQLite(
  *     useOpfsWriteAheadStorage('test.db', { url })
  *   )
