@@ -33,26 +33,23 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "lint": "oxlint --fix ./src",
-    "format": "oxfmt",
     "dev": "vite serve playground",
     "build": "tsdown",
     "update": "bun run download.ts",
-    "qa": "bun run typecheck && bun run lint && bun run format",
+    "qa": "oxlint --fix ./src && oxfmt --write ./src && tsc --noEmit",
     "release": "bun run qa && bun run build && bumpp --all"
   },
   "devDependencies": {
     "@subf/config": "^0.2.1",
-    "@types/node": "^22.18.6",
-    "bumpp": "^10.2.3",
-    "oxfmt": "^0.44.0",
-    "oxlint": "^1.59.0",
-    "tar": "^7.5.1",
-    "tsdown": "^0.21.8",
-    "typescript": "^5.9.2",
+    "@types/node": "^22.20.0",
+    "bumpp": "^11.1.0",
+    "oxfmt": "^0.56.0",
+    "oxlint": "^1.71.0",
+    "tar": "^7.5.17",
+    "tsdown": "^0.22.3",
+    "typescript": "^6.0.3",
     "uuidv7": "^1.0.2",
-    "vite": "^8.0.0",
+    "vite": "^8.1.0",
     "zen-mitt": "^3.1.0"
   },
   "packageManager": "bun@1.2.13"
