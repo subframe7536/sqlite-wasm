@@ -118,14 +118,16 @@ export async function isOpfsReadWriteUnsafeSupported(): Promise<boolean> {
  */
 export function isModuleWorkerSupport(): boolean {
   let supports = false
+  const url = URL.createObjectURL(new Blob([''], { type: 'text/javascript' }))
   try {
-    new Worker('data:,', {
+    new Worker(url, {
       // @ts-expect-error check assign
       get type() {
         supports = true
       },
     }).terminate()
   } finally {
+    URL.revokeObjectURL(url)
     // eslint-disable-next-line no-unsafe-finally
     return supports
   }
