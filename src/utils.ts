@@ -1,7 +1,7 @@
 import {
   SQLITE_DETERMINISTIC,
   SQLITE_DIRECTONLY,
-  SQLITE_OK,
+  SQLITE_DONE,
   SQLITE_OPEN_CREATE,
   SQLITE_OPEN_READONLY,
   SQLITE_OPEN_READWRITE,
@@ -262,43 +262,88 @@ export async function run(
   return results
 }
 
+function createRowMapper(sqlite: SQLiteDBCore['sqlite'], stmt: number) {
+  const cols = sqlite.column_names(stmt)
+  return (row: any[]) => Object.fromEntries(cols.map((key, i) => [key, row[i]]))
+}
+
+export async function query(
+  core: SQLiteDBCore,
+  sql: string,
+  parameters?: SQLiteCompatibleType[],
+): Promise<Record<string, SQLiteCompatibleType>[]> {
+  const iterator = core.sqlite.statements(core.pointer, sql)[Symbol.asyncIterator]()
+  const { value: stmt } = await iterator.next()
+
+  try {
+    if (parameters?.length) {
+      core.sqlite.bind_collection(stmt, parameters)
+    }
+
+    const size = core.sqlite.column_count(stmt)
+    if (size === 0) {
+      await core.sqlite.step(stmt)
+      return []
+    }
+
+    const mapRow = createRowMapper(core.sqlite, stmt)
+    const result = []
+    let idx = 0
+    while ((await core.sqlite.step(stmt)) === SQLITE_ROW) {
+      result[idx++] = mapRow(core.sqlite.row(stmt))
+    }
+    return result
+  } finally {
+    await iterator.return?.()
+  }
+}
+
 export async function* iterator(
   core: SQLiteDBCore,
   sql: string,
   parameters?: SQLiteCompatibleType[],
   chunkSize = 1,
-): AsyncIterableIterator<Record<string, SQLiteCompatibleType>[]> {
+): AsyncIterableIterator<Record<string, SQLiteCompatibleType>> {
   const { sqlite, pointer } = core
-  // eslint-disable-next-line unicorn/no-new-array
-  let cache = new Array(chunkSize)
+  const cache = new Array(chunkSize)
   for await (const stmt of sqlite.statements(pointer, sql)) {
     if (parameters?.length) {
       sqlite.bind_collection(stmt, parameters)
     }
     let idx = 0
-    const cols = sqlite.column_names(stmt)
+    const mapRow = createRowMapper(core.sqlite, stmt)
+
     while (1) {
-      const result = await sqlite.step(stmt)
-      if (result === SQLITE_ROW) {
-        const row = sqlite.row(stmt)
-        cache[idx] = Object.fromEntries(cols.map((key, i) => [key, row[i]]))
-        if (++idx === chunkSize) {
-          yield cache.slice(0, idx)
-          idx = 0
+      try {
+        const result = await sqlite.step(stmt)
+
+        if (result === SQLITE_ROW) {
+          cache[idx] = mapRow(core.sqlite.row(stmt))
+
+          if (++idx === chunkSize) {
+            for (let i = 0; i < idx; i++) {
+              yield cache[i]
+            }
+            idx = 0
+          }
+        } else if (result === SQLITE_DONE) {
+          if (idx > 0) {
+            for (let i = 0; i < idx; i++) {
+              yield cache[i]
+            }
+            idx = 0
+          }
+          break
         }
-      } else if (result === SQLITE_OK) {
-        if (++idx === chunkSize) {
-          yield []
-        }
-      } else {
+      } finally {
         if (idx > 0) {
-          yield cache.slice(0, idx)
+          for (let i = 0; i < idx; i++) {
+            yield cache[i]
+          }
         }
-        break
       }
     }
   }
-  cache = undefined!
 }
 
 export function parseOpenV2Flag(readonly?: boolean): number {
