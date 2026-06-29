@@ -5,5 +5,6 @@ export default subfLint({
   rules: {
     'no-constant-condition': 'off',
     'no-unused-vars': 'off',
+    'unicorn/number-literal-case': 'off',
   },
 })

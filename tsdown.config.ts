@@ -1,7 +1,13 @@
+import { cpSync, rmSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 import { defineConfig } from 'tsdown'
 import type { UserConfig } from 'tsdown'
+
+cpSync('./wa-sqlite/src/sqlite-constants.js', './sqlite-constants.ts', {
+  recursive: true,
+  force: true,
+})
 
 const shared: UserConfig = {
   entry: {
@@ -11,7 +17,7 @@ const shared: UserConfig = {
     opfs: 'src/vfs/opfs.ts',
     'fs-handle': 'src/vfs/fs-handle.ts',
     'opfs-wa': 'src/vfs/opfs-write-ahead.ts',
-    constant: 'src/constant.ts',
+    constant: './sqlite-constants.ts',
   },
   platform: 'browser',
   format: 'esm',
@@ -45,5 +51,13 @@ export default defineConfig([
     outExtensions() {
       return { js: '.min.js' }
     },
+    plugins: [
+      {
+        name: 'cleanup',
+        buildEnd() {
+          rmSync('./sqlite-constants.ts', { force: true })
+        },
+      },
+    ],
   },
 ])
