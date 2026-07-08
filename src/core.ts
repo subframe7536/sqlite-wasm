@@ -1,7 +1,7 @@
 import { Factory } from 'wa-sqlite'
 
 import { exportDatabase, importDatabase } from './io'
-import type { InitSQLiteOptions, Promisable, SQLiteDB, SQLiteDBCore } from './types'
+import type { InitSQLiteOptions, Promisable, SQLiteDB, SQLiteDBCore, SQLiteVFS } from './type'
 import { changes, close, lastInsertRowId, parseOpenV2Flag, run, stream } from './utils'
 
 /**

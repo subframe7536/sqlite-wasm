@@ -10,7 +10,7 @@ import {
 import { SQLITE_ROW } from 'wa-sqlite/src/sqlite-constants.js'
 
 import { importDatabase } from './io'
-import type { BaseStorageOptions, SQLiteDBCore } from './types'
+import type { BaseStorageOptions, SQLiteAPI, SQLiteCompatibleType, SQLiteDBCore } from './type'
 
 /**
  * check if IndexedDB and Web Locks API supported

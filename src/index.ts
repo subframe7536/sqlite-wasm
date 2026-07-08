@@ -1,5 +1,6 @@
 export * from './core'
 export * from './io'
-export * from './types'
+export type * from './sqlite-types'
+export type * from './type'
 export * from './utils'
 export * from './vfs/memory'

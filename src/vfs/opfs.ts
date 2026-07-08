@@ -1,9 +1,13 @@
 import SQLiteESMFactory from 'wa-sqlite-fts5/wa-sqlite.mjs'
-import { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
+import { OPFSCoopSyncVFS as OPFSCoopSyncVFSImpl } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
 
-import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
+import type { BaseStorageOptions, InitSQLiteOptions } from '../type'
 
-export { OPFSCoopSyncVFS } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
+export interface OPFSCoopSyncVFSConstructor {
+  create: (name: string, module: any) => Promise<any>
+}
+
+export const OPFSCoopSyncVFS: OPFSCoopSyncVFSConstructor = OPFSCoopSyncVFSImpl
 
 /**
  * Store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) through [FileSystemSyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle),

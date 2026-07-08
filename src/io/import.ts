@@ -13,7 +13,7 @@ import {
 } from '../constant'
 /* eslint-disable antfu/consistent-list-newline */
 // reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/index.js
-import type { FacadeVFS, Promisable } from '../types'
+import type { FacadeVFS, Promisable } from '../type'
 
 import { check, getHandle, ignoredDataView, isFsHandleVFS } from './common'
 

@@ -1,5 +1,103 @@
-// Copy from wa-sqlite@1.0.5/src/types/index.d.ts, fix some errors
+// Generated from ./wa-sqlite/src/types/index.d.ts and ./wa-sqlite/src/FacadeVFS.js. Do not edit manually.
 /* eslint-disable */
+
+export type SQLiteCompatibleType = number | string | Uint8Array | Array<number> | bigint | null
+
+export interface SQLiteVFS {
+  /** Maximum length of a file path in UTF-8 bytes (default 64) */
+  mxPathname?: number
+
+  name: string
+
+  close(): void | Promise<void>
+  isReady(): boolean | Promise<boolean>
+  hasAsyncMethod(methodName: string): boolean
+
+  /** @see https://sqlite.org/c3ref/vfs.html */
+  xOpen(
+    pVfs: number,
+    zName: number,
+    pFile: number,
+    flags: number,
+    pOutFlags: number,
+  ): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/vfs.html */
+  xDelete(pVfs: number, zName: number, syncDir: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/vfs.html */
+  xAccess(pVfs: number, zName: number, flags: number, pResOut: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/vfs.html */
+  xFullPathname(pVfs: number, zName: number, nOut: number, zOut: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/vfs.html */
+  xGetLastError(pVfs: number, nBuf: number, zBuf: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xClose(pFile: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xRead(
+    pFile: number,
+    pData: number,
+    iAmt: number,
+    iOffsetLo: number,
+    iOffsetHi: number,
+  ): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xWrite(
+    pFile: number,
+    pData: number,
+    iAmt: number,
+    iOffsetLo: number,
+    iOffsetHi: number,
+  ): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xTruncate(pFile: number, sizeLo: number, sizeHi: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xSync(pFile: number, flags: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xFileSize(pFile: number, pSize: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xLock(pFile: number, lockType: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xUnlock(pFile: number, lockType: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xCheckReservedLock(pFile: number, pResOut: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xFileControl(pFile: number, op: number, pArg: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xSectorSize(pFile: number): number | Promise<number>
+
+  /** @see https://sqlite.org/c3ref/io_methods.html */
+  xDeviceCharacteristics(pFile: number): number | Promise<number>
+}
+
+export interface SQLitePrepareOptions {
+  /**
+   * Statement handles prepared and yielded by {@link SQLiteAPI.statements}
+   * are normally valid only within the scope of an iteration.
+   * Set `unscoped` to `true` to give iterated statements an arbitrary
+   * lifetime.
+   */
+  unscoped?: boolean
+
+  /**
+   * SQLITE_PREPARE_* flags
+   * @see https://sqlite.org/c3ref/c_prepare_dont_log.html#sqlitepreparepersistent
+   */
+  flags?: number
+}
 
 export interface SQLiteAPI {
   /**
@@ -416,12 +514,12 @@ export interface SQLiteAPI {
    * @param handler
    * @param userData
    */
-  progress_handler<T extends number | Promise<number>>(
+  progress_handler(
     db: number,
     nProgressOps: number,
-    handler: (userData: any) => T,
-    userData: unknown,
-  ): T
+    handler: (userData: any) => number | Promise<number>,
+    userData: any,
+  ): void
 
   /**
    * Reset a prepared statement object
@@ -683,4 +781,47 @@ export interface SQLiteAPI {
    * @returns `SQLITE_OK` (throws exception on error)
    */
   vfs_register(vfs: SQLiteVFS, makeDefault?: boolean): number
+}
+
+export interface FacadeVFS extends SQLiteVFS {
+  getFilename(pFile: number): string
+
+  jOpen(
+    filename: string | null,
+    pFile: number,
+    flags: number,
+    pOutFlags: DataView,
+  ): number | Promise<number>
+
+  jDelete(filename: string, syncDir: number): number | Promise<number>
+
+  jAccess(filename: string, flags: number, pResOut: DataView): number | Promise<number>
+
+  jFullPathname(filename: string, zOut: Uint8Array): number | Promise<number>
+
+  jGetLastError(zBuf: Uint8Array): number | Promise<number>
+
+  jClose(pFile: number): number | Promise<number>
+
+  jRead(pFile: number, pData: Uint8Array, iOffset: number): number | Promise<number>
+
+  jWrite(pFile: number, pData: Uint8Array, iOffset: number): number | Promise<number>
+
+  jTruncate(pFile: number, size: number): number | Promise<number>
+
+  jSync(pFile: number, flags: number): number | Promise<number>
+
+  jFileSize(pFile: number, pSize: DataView): number | Promise<number>
+
+  jLock(pFile: number, lockType: number): number | Promise<number>
+
+  jUnlock(pFile: number, lockType: number): number | Promise<number>
+
+  jCheckReservedLock(pFile: number, pResOut: DataView): number | Promise<number>
+
+  jFileControl(pFile: number, op: number, pArg: DataView): number | Promise<number>
+
+  jSectorSize(pFile: number): number | Promise<number>
+
+  jDeviceCharacteristics(pFile: number): number | Promise<number>
 }

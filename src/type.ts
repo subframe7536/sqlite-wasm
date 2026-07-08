@@ -1,57 +1,14 @@
-import type { Base } from 'wa-sqlite/src/VFS.js'
+import type { FacadeVFS, SQLiteAPI, SQLiteCompatibleType } from './sqlite-types'
 
-import type { SQLiteAPI } from './api'
+export type {
+  FacadeVFS,
+  SQLiteAPI,
+  SQLiteCompatibleType,
+  SQLitePrepareOptions,
+  SQLiteVFS,
+} from './sqlite-types'
 
 export type Promisable<T> = T | Promise<T>
-
-export interface FacadeVFS extends Base {
-  close: () => void | Promise<void>
-
-  isReady: () => boolean | Promise<boolean>
-
-  hasAsyncMethod: (methodName: string) => boolean
-
-  getFilename: (pFile: number) => string
-
-  jOpen: (
-    filename: string,
-    pFile: number,
-    flags: number,
-    pOutFlags: DataView,
-  ) => number | Promise<number>
-
-  jDelete: (filename: string, syncDir: number) => number | Promise<number>
-
-  jAccess: (filename: string, flags: number, pResOut: DataView) => number | Promise<number>
-
-  jFullPathname: (filename: string, zOut: Uint8Array) => number | Promise<number>
-
-  jGetLastError: (zBuf: Uint8Array) => number | Promise<number>
-
-  jClose: (pFile: number) => number | Promise<number>
-
-  jRead: (pFile: number, pData: Uint8Array, iOffset: number) => number | Promise<number>
-
-  jWrite: (pFile: number, pData: Uint8Array, iOffset: number) => number | Promise<number>
-
-  jTruncate: (pFile: number, size: number) => number | Promise<number>
-
-  jSync: (pFile: number, flags: number) => number | Promise<number>
-
-  jFileSize: (pFile: number, pSize: DataView) => number | Promise<number>
-
-  jLock: (pFile: number, lockType: number) => number | Promise<number>
-
-  jUnlock: (pFile: number, lockType: number) => number | Promise<number>
-
-  jCheckReservedLock: (pFile: number, pResOut: DataView) => number | Promise<number>
-
-  jFileControl: (pFile: number, op: number, pArg: DataView) => number | Promise<number>
-
-  jSectorSize: (pFile: number) => number | Promise<number>
-
-  jDeviceCharacteristics: (pFile: number) => number | Promise<number>
-}
 
 export interface OPFSWriteAheadVFSOptions {
   /**
@@ -70,7 +27,7 @@ export interface OPFSWriteAheadVFSOptions {
 
 export interface IDBBatchAtomicVFSOptions {
   /**
-   * patched options for `navigator.locks.request()`
+   * patched options for navigator.locks.request()
    * @default 'shared+hint'
    */
   lockPolicy?: 'exclusive' | 'shared' | 'shared+hint'
@@ -91,7 +48,7 @@ export interface InitSQLiteOptions extends Omit<BaseStorageOptions, 'url'> {
 
 export type SQLiteDBCore = {
   /**
-   * File name (`IDBBatchAtomicVFS`) or directory path (`OPFSCoopSyncVFS`)
+   * File name (IDBBatchAtomicVFS) or directory path (OPFSCoopSyncVFS)
    */
   path: string
   /**
@@ -155,12 +112,12 @@ export type SQLiteDB = SQLiteDBCore & {
     parameters?: SQLiteCompatibleType[],
   ) => Promise<Array<Record<string, SQLiteCompatibleType>>>
   /**
-   * Import database from `File` or `ReadableStream`
+   * Import database from File or ReadableStream
    * @param data exising database
    */
   sync: (data: File | ReadableStream) => Promise<void>
   /**
-   * Export database to `Uint8Array`
+   * Export database to Uint8Array
    */
   dump: () => Promise<Uint8Array<ArrayBuffer>>
 }
@@ -171,13 +128,13 @@ export interface BaseStorageOptions {
    */
   url?: string
   /**
-   * Open SQLite file with `SQLITE_OPEN_READONLY`
+   * Open SQLite file with SQLITE_OPEN_READONLY
    *
-   * If absent, open with `SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE`
+   * If absent, open with SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
    */
   readonly?: boolean
   /**
-   * Callback before `sqlite.open_v2(path)`
+   * Callback before sqlite.open_v2(path)
    */
   beforeOpen?: (vfs: FacadeVFS, path: string) => Promisable<void>
 }

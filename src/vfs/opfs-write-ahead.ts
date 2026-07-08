@@ -1,9 +1,13 @@
 import SQLiteESMFactory from 'wa-sqlite-fts5/wa-sqlite.mjs'
-import { OPFSWriteAheadVFS } from 'wa-sqlite/src/examples/OPFSWriteAheadVFS.js'
+import { OPFSWriteAheadVFS as OPFSWriteAheadVFSImpl } from 'wa-sqlite/src/examples/OPFSWriteAheadVFS.js'
 
-import type { BaseStorageOptions, InitSQLiteOptions, OPFSWriteAheadVFSOptions } from '../types'
+import type { BaseStorageOptions, InitSQLiteOptions, OPFSWriteAheadVFSOptions } from '../type'
 
-export { OPFSWriteAheadVFS } from 'wa-sqlite/src/examples/OPFSWriteAheadVFS.js'
+export interface OPFSWriteAheadVFSConstructor {
+  create: (name: string, module: any, options?: any) => Promise<any>
+}
+
+export const OPFSWriteAheadVFS: OPFSWriteAheadVFSConstructor = OPFSWriteAheadVFSImpl
 
 export type OPFSWriteAheadStorageOptions = OPFSWriteAheadVFSOptions
 

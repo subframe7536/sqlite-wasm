@@ -1,6 +1,6 @@
 import SQLiteAsyncESMFactory from 'wa-sqlite-fts5/wa-sqlite-async.mjs'
 
-import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
+import type { BaseStorageOptions, InitSQLiteOptions } from '../type'
 
 import { OPFSAnyContextVFS } from './class/OPFSAnyContextVFS'
 

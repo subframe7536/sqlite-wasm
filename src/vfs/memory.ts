@@ -1,9 +1,13 @@
 import SQLiteESMFactory from 'wa-sqlite-fts5/wa-sqlite.mjs'
-import { MemoryVFS } from 'wa-sqlite/src/examples/MemoryVFS.js'
+import { MemoryVFS as MemoryVFSImpl } from 'wa-sqlite/src/examples/MemoryVFS.js'
 
-import type { BaseStorageOptions, InitSQLiteOptions } from '../types'
+import type { BaseStorageOptions, InitSQLiteOptions } from '../type'
 
-export { MemoryVFS } from 'wa-sqlite/src/examples/MemoryVFS.js'
+export interface MemoryVFSConstructor {
+  create: (name: string, module: any) => Promise<any>
+}
+
+export const MemoryVFS: MemoryVFSConstructor = MemoryVFSImpl
 
 /**
  * Store data in memory,
@@ -32,7 +36,7 @@ export async function useMemoryStorage(
   return {
     path: ':memory:',
     sqliteModule,
-    vfsFn: (MemoryVFS as any).create,
+    vfsFn: MemoryVFS.create,
     ...rest,
   }
 }

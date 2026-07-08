@@ -34,9 +34,9 @@
   },
   "scripts": {
     "dev": "vite serve playground",
-    "build": "tsdown",
+    "build": "bun run scripts/generate-sqlite-types.ts && oxfmt --write src/sqlite-types.d.ts src/wa-sqlite-modules.d.ts && tsdown",
     "update": "bun run download.ts",
-    "qa": "oxlint --fix ./src && oxfmt --write ./src && tsc --noEmit",
+    "qa": "bun run scripts/generate-sqlite-types.ts && oxlint --fix ./src && oxfmt --write ./src && tsc --noEmit",
     "release": "bun run qa && bun run build && bumpp --all"
   },
   "devDependencies": {

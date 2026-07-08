@@ -1,5 +1,5 @@
 import { SQLITE_OK } from '../constant'
-import type { FacadeVFS, Promisable } from '../types'
+import type { FacadeVFS, Promisable } from '../type'
 import type { OPFSAnyContextVFS } from '../vfs/fs-handle'
 
 export async function check(code: Promisable<number>): Promise<void> {

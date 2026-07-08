@@ -5,7 +5,7 @@ import {
   SQLITE_OPEN_READONLY,
 } from '../constant'
 // reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/service-worker.js
-import type { FacadeVFS, Promisable } from '../types'
+import type { FacadeVFS, Promisable } from '../type'
 
 import { check, getHandle, ignoredDataView, isFsHandleVFS } from './common'
 

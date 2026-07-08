@@ -1,3 +1,6 @@
+// Generated module declarations for vendored wa-sqlite entry points. Do not edit manually.
+/* eslint-disable */
+
 declare module 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js' {
   export class IDBBatchAtomicVFS {
     static create(name: string, module: any, options: any): Promise<any>
@@ -33,6 +36,7 @@ declare module 'wa-sqlite-fts5/wa-sqlite.mjs' {
 
   export default SQLiteESMFactory
 }
+
 declare module 'wa-sqlite-fts5/wa-sqlite-async.mjs' {
   const SQLiteAsyncESMFactory: (moduleArg?: {
     locateFile?: (path: string) => string
