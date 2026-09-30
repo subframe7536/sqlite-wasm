@@ -18,15 +18,19 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: 24
+          cache: pnpm
 
       - name: Update npm
-        run: bun i -g npm@latest
-      - run: bun ci
-      - run: bun run build
-      - run: npm publish
-      - run: bunx changelogithub
+        run: npm install -g npm@latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run qa
+      - run: pnpm run build
+      - run: pnpm publish --no-git-checks --provenance
+      - run: pnpm dlx changelogithub
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

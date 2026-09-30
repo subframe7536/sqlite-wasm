@@ -24,13 +24,13 @@ async function getLatestTag(): Promise<string | null> {
       throw new Error(`Failed to fetch tags: ${response.status} ${response.statusText}`)
     }
     const tags = (await response.json()) as GitHubTag[]
-    if (tags.length === 0) {
+    const latestTag = tags[0]
+    if (!latestTag) {
       throw new Error('No tags found in the repository.')
     }
 
-    const latestTag = tags[0].name
-    console.log(JSON.stringify(tags[0]))
-    return latestTag
+    console.log(JSON.stringify(latestTag))
+    return latestTag.name
   } catch (error) {
     console.error('Error fetching latest tag:', error)
     return null

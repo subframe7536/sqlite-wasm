@@ -177,7 +177,7 @@ export function customFunction<N extends string, T extends SQLiteCompatibleType[
     (ctx, value) => {
       const args = [] as unknown as T
       for (let i = 0; i < fn.length; i++) {
-        args.push(sqlite.value(value[i]))
+        args.push(sqlite.value(value[i]!))
       }
       return sqlite.result(ctx, fn(...args))
     },
@@ -247,7 +247,7 @@ export async function stream(
     const cols = sqlite.column_names(stmt)
     while ((await sqlite.step(stmt)) === SQLITE_ROW) {
       const row = sqlite.row(stmt)
-      onData(Object.fromEntries(cols.map((key, i) => [key, row[i]])))
+      onData(Object.fromEntries(cols.map((key, i) => [key, row[i]!])))
     }
   }
 }

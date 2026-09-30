@@ -159,7 +159,7 @@ function generateSQLiteTypes(): void {
   )
   writeFileSync(
     modulesOutputPath,
-    `// Generated module declarations for vendored wa-sqlite entry points. Do not edit manually.\n/* eslint-disable */\n\n${moduleDeclarations}\n`,
+    `// Generated module declarations for vendored wa-sqlite entry points. Do not edit manually.\n\n${moduleDeclarations}\n`,
   )
 }
 

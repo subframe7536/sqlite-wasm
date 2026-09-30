@@ -1,5 +1,4 @@
 // Generated module declarations for vendored wa-sqlite entry points. Do not edit manually.
-/* eslint-disable */
 
 declare module 'wa-sqlite/src/examples/IDBBatchAtomicVFS.js' {
   export class IDBBatchAtomicVFS {

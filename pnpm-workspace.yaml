@@ -1,0 +1,9 @@
+packages:
+  - .
+
+catalog:
+  vite: ^8.3.1
+  typescript: ^7.0.2
+
+publicHoistPattern:
+  - '*oxlint*'

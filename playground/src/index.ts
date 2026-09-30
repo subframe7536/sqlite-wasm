@@ -14,6 +14,7 @@ import url from '../../wa-sqlite-fts5/wa-sqlite-async.wasm?url'
 import syncUrl from '../../wa-sqlite-fts5/wa-sqlite.wasm?url'
 
 import { runSQL } from './runSQL'
+// eslint-disable-next-line import/default -- Vite supplies the worker constructor for ?worker imports.
 import OpfsWorker from './worker?worker'
 
 let db: SQLiteDB | undefined
@@ -35,7 +36,7 @@ document.querySelector('.main-idb')?.addEventListener('click', async () => {
   console.table({
     sqlite: db.sqlite.libversion(),
     sqliteModule: db.sqliteModule._sqlite3_libversion_number(),
-    sql: (await db.run('select sqlite_version() as a'))[0].a,
+    sql: (await db.run('select sqlite_version() as a'))[0]?.a,
   })
   await db.close()
 })

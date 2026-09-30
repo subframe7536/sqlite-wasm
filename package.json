@@ -34,23 +34,26 @@
   },
   "scripts": {
     "dev": "vite serve playground",
-    "build": "bun run scripts/generate-sqlite-types.ts && oxfmt --write src/sqlite-types.d.ts src/wa-sqlite-modules.d.ts && tsdown",
-    "update": "bun run download.ts",
-    "qa": "bun run scripts/generate-sqlite-types.ts && oxlint --fix ./src && oxfmt --write ./src && tsc --noEmit",
-    "release": "bun run qa && bun run build && bumpp --all"
+    "build": "node scripts/generate-sqlite-types.ts && oxfmt --write src/sqlite-types.d.ts src/wa-sqlite-modules.d.ts && tsdown",
+    "update": "node scripts/download.ts",
+    "types": "tsc --noEmit && tsc --noEmit -p playground/tsconfig.json",
+    "lint": "oxlint --fix --max-warnings 0 --report-unused-disable-directives",
+    "format": "oxfmt",
+    "qa": "node scripts/generate-sqlite-types.ts && pnpm run lint && pnpm run format && pnpm run types",
+    "release": "pnpm run qa && pnpm run build && bumpp --all"
   },
   "devDependencies": {
-    "@subf/config": "^0.2.1",
-    "@types/node": "^22.20.0",
+    "@subf/config": "^0.4.0",
+    "@types/node": "^24.12.4",
     "bumpp": "^11.1.0",
-    "oxfmt": "^0.56.0",
-    "oxlint": "^1.71.0",
+    "oxfmt": "^0.70.0",
+    "oxlint": "^1.85.0",
     "tar": "^7.5.17",
-    "tsdown": "^0.22.3",
-    "typescript": "^6.0.3",
+    "tsdown": "^0.23.0",
+    "typescript": "catalog:",
     "uuidv7": "^1.0.2",
-    "vite": "^8.1.0",
+    "vite": "catalog:",
     "zen-mitt": "^3.1.0"
   },
-  "packageManager": "bun@1.2.13"
+  "packageManager": "pnpm@12.6.0"
 }

@@ -11,7 +11,6 @@ import {
   SQLITE_OPEN_READWRITE,
   SQLITE_SYNC_NORMAL,
 } from '../constant'
-/* eslint-disable antfu/consistent-list-newline */
 // reference from https://github.com/rhashimoto/wa-sqlite/blob/master/demo/file/index.js
 import type { FacadeVFS, Promisable } from '../type'
 

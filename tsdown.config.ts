@@ -1,13 +1,7 @@
-import { cpSync, rmSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 import { defineConfig } from 'tsdown'
 import type { UserConfig } from 'tsdown'
-
-cpSync('./wa-sqlite/src/sqlite-constants.js', './sqlite-constants.ts', {
-  recursive: true,
-  force: true,
-})
 
 const shared: UserConfig = {
   entry: {
@@ -17,25 +11,28 @@ const shared: UserConfig = {
     opfs: 'src/vfs/opfs.ts',
     'fs-handle': 'src/vfs/fs-handle.ts',
     'opfs-wa': 'src/vfs/opfs-write-ahead.ts',
-    constant: './sqlite-constants.ts',
+    constant: 'wa-sqlite/src/sqlite-constants.js',
   },
   platform: 'browser',
   format: 'esm',
   deps: {
     alwaysBundle: ['wa-sqlite'],
   },
-  alias: Object.fromEntries(
-    ['wa-sqlite', 'wa-sqlite/src', 'wa-sqlite/src/', 'wa-sqlite-fts5'].map((name) => [
-      name,
-      fileURLToPath(new URL(name, import.meta.url)),
-    ]),
-  ),
+  alias: {
+    'wa-sqlite$': fileURLToPath(new URL('./wa-sqlite/src/sqlite-api.js', import.meta.url)),
+    'wa-sqlite': fileURLToPath(new URL('./wa-sqlite', import.meta.url)),
+    'wa-sqlite-fts5': fileURLToPath(new URL('./wa-sqlite-fts5', import.meta.url)),
+  },
 }
 
 export default defineConfig([
   {
     ...shared,
-    dts: { oxc: true },
+    dts: {
+      // Emit declarations directly from the JavaScript constants entry.
+      generator: 'oxc',
+      emitJs: true,
+    },
     copy: ['wa-sqlite-fts5/wa-sqlite.wasm', 'wa-sqlite-fts5/wa-sqlite-async.wasm'],
     exports: {
       customExports: {
@@ -47,17 +44,10 @@ export default defineConfig([
   },
   {
     ...shared,
+    dts: false,
     minify: true,
     outExtensions() {
       return { js: '.min.js' }
     },
-    plugins: [
-      {
-        name: 'cleanup',
-        buildEnd() {
-          rmSync('./sqlite-constants.ts', { force: true })
-        },
-      },
-    ],
   },
 ])

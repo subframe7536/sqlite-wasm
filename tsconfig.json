@@ -1,15 +1,30 @@
 {
-  "extends": "@subf/config/tsconfig-lib",
   "compilerOptions": {
-    "lib": ["ESNext", "DOM", "DOM.Iterable", "WebWorker"],
-    "noUncheckedIndexedAccess": false,
+    "target": "ES2023",
+    "module": "esnext",
+    "moduleResolution": "Bundler",
+    "moduleDetection": "force",
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noImplicitOverride": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "lib": ["ES2023", "DOM", "DOM.Iterable", "WebWorker"],
+    "noUncheckedIndexedAccess": true,
     "paths": {
       "wa-sqlite": ["./wa-sqlite/src/sqlite-api.js"],
       "wa-sqlite/src": ["./wa-sqlite/src"],
       "wa-sqlite/src/*": ["./wa-sqlite/src/*"],
       "wa-sqlite/*": ["./wa-sqlite/*"]
     },
-    "types": ["@types/node", "vite/client"]
+    "types": ["node", "vite/client"]
   },
-  "include": ["src", "wa-sqlite/**/*.d.ts", "tsdown.config.ts"]
+  "include": ["src", "scripts", "wa-sqlite/**/*.d.ts", "*.ts"],
+  "exclude": ["**/fixtures"]
 }

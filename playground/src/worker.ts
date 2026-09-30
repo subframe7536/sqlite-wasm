@@ -24,7 +24,7 @@ onmessage = async ({ data }) => {
   console.table({
     sqlite: db.sqlite.libversion(),
     sqliteModule: db.sqliteModule._sqlite3_libversion_number(),
-    sql: (await db.run('select sqlite_version() as a'))[0].a,
+    sql: (await db.run('select sqlite_version() as a'))[0]?.a,
   })
   // if (data) {
   //   await db.sync(data)
@@ -34,6 +34,6 @@ onmessage = async ({ data }) => {
   await runIterator(db)
   console.log(db.lastInsertRowId(), db.changes(), db.sqliteModule._sqlite3_changes64(db.pointer))
   customFunction(db.sqlite, db.pointer, 'uuidv7', () => uuidv7())
-  console.log('uuidv7():', (await db.run('select uuidv7() as a'))[0].a)
+  console.log('uuidv7():', (await db.run('select uuidv7() as a'))[0]?.a)
   postMessage('done')
 }
