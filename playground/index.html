@@ -33,6 +33,8 @@
         padding: 20px;
         border: 1px solid color-mix(in srgb, CanvasText 25%, transparent);
         border-radius: 14px;
+        box-sizing: border-box;
+        margin: 24px 0;
       }
       h1 {
         margin: 0;
@@ -53,15 +55,193 @@
         color: inherit;
         cursor: pointer;
       }
-      button:hover {
-        background: color-mix(in srgb, Canvas 76%, CanvasText 24%);
+      h2 {
+        margin: 0;
+        font-size: 18px;
+      }
+      p {
+        margin: 0;
+        line-height: 1.6;
+      }
+      .vec-showcase {
+        display: grid;
+        gap: 16px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid color-mix(in srgb, CanvasText 20%, transparent);
+      }
+      .muted {
+        color: color-mix(in srgb, CanvasText 70%, Canvas);
+        font-size: 14px;
+      }
+      fieldset {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        gap: 16px;
+        padding: 0;
+        border: 0;
+        margin: 0;
+        min-width: 0;
+      }
+      label {
+        display: grid;
+        gap: 8px;
+        font-size: 14px;
+      }
+      input,
+      select {
+        box-sizing: border-box;
+        height: 42px;
+        border: 1px solid color-mix(in srgb, CanvasText 24%, transparent);
+        border-radius: 8px;
+        background: Canvas;
+        color: inherit;
+      }
+      input[type='color'] {
+        width: 80px;
+        padding: 4px;
+        cursor: pointer;
+      }
+      select {
+        min-width: 100px;
+        padding: 0 12px;
+        font: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid Highlight;
+        outline-offset: 3px;
+      }
+      button:active:not(:disabled) {
+        transform: scale(0.97);
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+      #vec-vector {
+        font-family: ui-monospace, monospace;
+        font-size: 13px;
+        overflow-wrap: anywhere;
+      }
+      #vec-samples {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .palette-sample {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border-radius: 50%;
+      }
+      #vec-results {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+        gap: 10px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+      #vec-results li {
+        display: grid;
+        grid-template-columns: 36px 1fr auto;
+        align-items: center;
+        gap: 4px 12px;
+        padding: 12px;
+        border: 1px solid color-mix(in srgb, CanvasText 20%, transparent);
+        border-radius: 10px;
+      }
+      .swatch {
+        grid-row: span 2;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid color-mix(in srgb, CanvasText 15%, transparent);
+      }
+      #vec-results code {
+        grid-row: 2;
+        grid-column: 2;
+        font-size: 12px;
+      }
+      .distance {
+        grid-row: span 2;
+        font:
+          12px ui-monospace,
+          monospace;
+        font-variant-numeric: tabular-nums;
+      }
+      #vec-status {
+        min-height: 3.2em;
+      }
+      .error {
+        color: light-dark(#b42318, #ff9e95);
+      }
+      summary {
+        cursor: pointer;
+        font-size: 14px;
+      }
+      pre {
+        overflow-x: auto;
+        padding: 16px;
+        border-radius: 8px;
+        background: color-mix(in srgb, Canvas 94%, CanvasText 6%);
+        font-size: 12px;
+        line-height: 1.7;
+      }
+      @media (hover: hover) and (pointer: fine) {
+        button:not(.palette-sample):hover:not(:disabled) {
+          background: color-mix(in srgb, Canvas 76%, CanvasText 24%);
+        }
+        .palette-sample:hover {
+          outline: 2px solid CanvasText;
+          outline-offset: 2px;
+        }
       }
     </style>
   </head>
   <body>
     <main>
       <h1>sqlite-wasm playground</h1>
-      <p>See result in console</p>
+      <section class="vec-showcase" aria-labelledby="vec-heading">
+        <h2 id="vec-heading">Color neighbors · sqlite-vec</h2>
+        <p class="muted">
+          Vector search, entirely in your browser. Each color is a three-dimensional RGB vector
+          stored in a <code>vec0</code> table. Choose a color to find its nearest neighbors—no
+          extension download or server needed.
+        </p>
+        <form id="vec-search">
+          <fieldset>
+            <label for="vec-color"
+              >Query color
+              <input id="vec-color" type="color" value="#e86a47" />
+            </label>
+            <label for="vec-neighbors"
+              >Neighbors (k)
+              <select id="vec-neighbors">
+                <option value="1">1</option>
+                <option value="3" selected>3</option>
+                <option value="6">6</option>
+                <option value="12">All 12</option>
+              </select>
+            </label>
+            <button type="submit">Find nearest colors</button>
+          </fieldset>
+        </form>
+        <output id="vec-vector" for="vec-color"></output>
+        <div id="vec-samples" role="group" aria-label="Search a sample color"></div>
+        <p class="muted">
+          Smaller L2 distance means closer RGB values; 0 is an exact match. These are normalized RGB
+          features, not AI embeddings or a perceptual color model.
+        </p>
+        <ol id="vec-results" aria-label="Nearest colors"></ol>
+        <p id="vec-status" class="muted" role="status" aria-live="polite"></p>
+        <details>
+          <summary>How it works: vec0 + KNN SQL</summary>
+          <pre><code id="vec-sql"></code></pre>
+        </details>
+      </section>
+      <h2>Storage demos</h2>
+      <p class="muted">See storage demo results in the browser console.</p>
       <div class="grid">
         <button class="main-memory">Run (memory)</button>
         <button class="main-idb">Run (indexeddb)</button>

@@ -7,11 +7,15 @@ export default defineConfig({
     alias: [
       {
         find: /^wa-sqlite$/,
-        replacement: resolve(__dirname, '../wa-sqlite/src/sqlite-api.js'),
+        replacement: resolve(import.meta.dirname, '../wa-sqlite/src/sqlite-api.js'),
       },
       {
         find: /^wa-sqlite\/src\//,
-        replacement: `${resolve(__dirname, '../wa-sqlite/src')}/`,
+        replacement: `${resolve(import.meta.dirname, '../wa-sqlite/src')}/`,
+      },
+      {
+        find: /^wa-sqlite-fts5\//,
+        replacement: `${resolve(import.meta.dirname, '../wa-sqlite-fts5')}/`,
       },
     ],
   },

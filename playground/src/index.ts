@@ -1,3 +1,5 @@
+import './vecShowcase'
+
 import { mitt } from 'zen-mitt'
 
 import type { SQLiteDB } from '../../src/index'
