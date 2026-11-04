@@ -4,7 +4,7 @@ import { IDBMirrorVFS as IDBMirrorVFSImpl } from 'wa-sqlite/src/examples/IDBMirr
 import type { BaseStorageOptions, InitSQLiteOptions } from '../type'
 
 export interface IDBMirrorVFSConstructor {
-  create: (name: string, module: any) => Promise<any>
+  create: (name: string, module: any, options?: any) => Promise<any>
 }
 
 export const IDBMirrorVFS: IDBMirrorVFSConstructor = IDBMirrorVFSImpl

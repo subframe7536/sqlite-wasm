@@ -1,13 +1,15 @@
 import SQLiteESMFactory from 'wa-sqlite-fts5/wa-sqlite.mjs'
 import { OPFSCoopSyncVFS as OPFSCoopSyncVFSImpl } from 'wa-sqlite/src/examples/OPFSCoopSyncVFS.js'
 
-import type { BaseStorageOptions, InitSQLiteOptions } from '../type'
+import type { BaseStorageOptions, InitSQLiteOptions, OPFSVFSOptions } from '../type'
 
 export interface OPFSCoopSyncVFSConstructor {
-  create: (name: string, module: any) => Promise<any>
+  create: (name: string, module: any, options?: any) => Promise<any>
 }
 
 export const OPFSCoopSyncVFS: OPFSCoopSyncVFSConstructor = OPFSCoopSyncVFSImpl
+
+export type OPFSStorageOptions = OPFSVFSOptions
 
 /**
  * Store data in [OPFS](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) through [FileSystemSyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle),
@@ -36,15 +38,23 @@ export const OPFSCoopSyncVFS: OPFSCoopSyncVFSConstructor = OPFSCoopSyncVFSImpl
  */
 export async function useOpfsStorage(
   path: string,
-  options: BaseStorageOptions = {},
+  options: OPFSStorageOptions & BaseStorageOptions = {},
 ): Promise<InitSQLiteOptions> {
-  const { url, ...rest } = options
+  const { url, getRoot, prefix, ...rest } = options
   const sqliteModule = await SQLiteESMFactory(url ? { locateFile: () => url } : undefined)
+  const vfsOptions: OPFSVFSOptions = {}
+  if (getRoot !== undefined) {
+    vfsOptions.getRoot = getRoot
+  }
+  if (prefix !== undefined) {
+    vfsOptions.prefix = prefix
+  }
 
   return {
     path,
     sqliteModule,
     vfsFn: OPFSCoopSyncVFS.create,
+    vfsOptions,
     ...rest,
   }
 }

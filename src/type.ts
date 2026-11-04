@@ -10,7 +10,24 @@ export type {
 
 export type Promisable<T> = T | Promise<T>
 
-export interface OPFSWriteAheadVFSOptions {
+export interface OPFSVFSOptions {
+  /**
+   * Returns the directory the VFS keeps its files in, called each time the
+   * VFS needs the directory
+   * @default () => navigator.storage.getDirectory()
+   */
+  getRoot?: () => Promise<FileSystemDirectoryHandle>
+  /**
+   * Prefix for the Web Locks and BroadcastChannels the VFS derives from its
+   * file names. Set it when a file of the same name can exist under another
+   * root of this origin, and use the same prefix for every VFS instance on
+   * one root
+   * @default ''
+   */
+  prefix?: string
+}
+
+export interface OPFSWriteAheadVFSOptions extends OPFSVFSOptions {
   /**
    * Number of temporary files to preallocate
    */
