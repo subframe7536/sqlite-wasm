@@ -42,8 +42,8 @@ export async function initSQLiteCore(
   // Asyncify call suspends. handleAsync is a plain function only on
   // Asyncify builds (async function on JSPI, null on sync builds).
   if (
-    sqliteModule.asyncMode === undefined
-    && sqliteModule.handleAsync?.constructor?.name === 'Function'
+    sqliteModule.asyncMode === undefined &&
+    sqliteModule.handleAsync?.constructor?.name === 'Function'
   ) {
     sqliteModule.asyncMode = 'asyncify'
   }
