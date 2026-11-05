@@ -37,6 +37,16 @@ export async function initSQLiteCore(
   options: Promisable<InitSQLiteOptions>,
 ): Promise<SQLiteDBCore> {
   const { path, sqliteModule, vfsFn, vfsOptions, readonly, beforeOpen } = await options
+  // wa-sqlite <1.2.0 builds lack the Module.asyncMode marker; without it
+  // step_asap() calls the raw export, which returns garbage when an
+  // Asyncify call suspends. handleAsync is a plain function only on
+  // Asyncify builds (async function on JSPI, null on sync builds).
+  if (
+    sqliteModule.asyncMode === undefined
+    && sqliteModule.handleAsync?.constructor?.name === 'Function'
+  ) {
+    sqliteModule.asyncMode = 'asyncify'
+  }
   const sqlite = Factory(sqliteModule)
   const vfs = await vfsFn(path, sqliteModule, vfsOptions)
   sqlite.vfs_register(vfs as unknown as SQLiteVFS, true)

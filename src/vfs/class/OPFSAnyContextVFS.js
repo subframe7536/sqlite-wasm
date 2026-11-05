@@ -1,5 +1,5 @@
 /* eslint-disable */
-// This is a copy of `OPFSAnyContextVFS` in `wa-sqlite@1.1.0`,
+// This is a copy of `OPFSAnyContextVFS` in `wa-sqlite@1.2.0`,
 // add fs handle as param when creating `OPFSAnyContextVFS` and simplify fs handle getter
 
 // Copyright 2024 Roy T. Hashimoto. All Rights Reserved.
@@ -31,6 +31,8 @@ class File {
   /** @type {FileSystemFileHandle} */ fileHandle
   /** @type {Blob?} */ blob
   /** @type {FileSystemWritableFileStream?} */ writable
+  /** @type {number} */ writableSize
+  /** @type {boolean} */ overwrite = false
 
   constructor(pathname, flags) {
     this.pathname = pathname
@@ -215,10 +217,15 @@ export class OPFSAnyContextVFS extends WebLocksMixin(FacadeVFS) {
       const file = this.mapIdToFile.get(fileId);
 
       if (!file.writable) {
-        file.writable = await file.fileHandle.createWritable({ keepExistingData: true });
+        await this.#openWritable(file);
       }
       await file.writable.seek(iOffset);
-      await file.writable.write(pData.subarray());
+      // TODO: restore the subarray() call below once WebKit honors a view's
+      // byteOffset and byteLength instead of writing the whole ArrayBuffer,
+      // which here is the WASM heap: https://bugs.webkit.org/show_bug.cgi?id=302733
+      // await file.writable.write(pData.subarray());
+      await file.writable.write(pData.slice());
+      file.writableSize = Math.max(file.writableSize, iOffset + pData.byteLength);
       file.blob = null;
 
       return VFS.SQLITE_OK;
@@ -238,9 +245,10 @@ export class OPFSAnyContextVFS extends WebLocksMixin(FacadeVFS) {
       const file = this.mapIdToFile.get(fileId);
 
       if (!file.writable) {
-        file.writable = await file.fileHandle.createWritable({ keepExistingData: true });
+        await this.#openWritable(file);
       }
       await file.writable.truncate(iSize);
+      file.writableSize = iSize;
       file.blob = null;
       return VFS.SQLITE_OK;
     } catch (e) {
@@ -257,9 +265,11 @@ export class OPFSAnyContextVFS extends WebLocksMixin(FacadeVFS) {
   async jSync(fileId, flags) {
     try {
       const file = this.mapIdToFile.get(fileId);
-      await file.writable?.close();
-      file.writable = null;
-      file.blob = null;
+      if (!file.overwrite) {
+        // An overwritten database is published by
+        // SQLITE_FCNTL_COMMIT_PHASETWO instead, after its truncation.
+        await this.#closeWritable(file);
+      }
       return VFS.SQLITE_OK;
     } catch (e) {
       this.lastError = e;
@@ -276,10 +286,11 @@ export class OPFSAnyContextVFS extends WebLocksMixin(FacadeVFS) {
     try {
       const file = this.mapIdToFile.get(fileId);
 
+      // Answer from the open writable rather than close it, which would
+      // copy the whole file once more.
       if (file.writable) {
-        await file.writable.close();
-        file.writable = null;
-        file.blob = null;
+        pSize64.setBigInt64(0, BigInt(file.writableSize), true);
+        return VFS.SQLITE_OK;
       }
       if (!file.blob) {
         file.blob = await file.fileHandle.getFile();
@@ -306,6 +317,81 @@ export class OPFSAnyContextVFS extends WebLocksMixin(FacadeVFS) {
 
     // Call the actual unlock implementation.
     return super.jLock(fileId, lockType);
+  }
+
+  /**
+   * @param {number} fileId
+   * @param {number} lockType
+   * @returns {Promise<number>}
+   */
+  async jUnlock(fileId, lockType) {
+    // Never hand the lock over with changes still unpublished, which an I/O
+    // error can leave behind.
+    let rc = VFS.SQLITE_OK;
+    const file = this.mapIdToFile.get(fileId);
+    if (file?.writable) {
+      try {
+        await this.#closeWritable(file);
+      } catch (e) {
+        this.lastError = e;
+        rc = VFS.SQLITE_IOERR_UNLOCK;
+      }
+      file.writable = null;
+      file.blob = null;
+    }
+
+    const unlockResult = await super.jUnlock(fileId, lockType);
+    return rc === VFS.SQLITE_OK ? unlockResult : rc;
+  }
+
+  /**
+   * @param {number} fileId
+   * @param {number} op
+   * @param {DataView} pArg
+   * @returns {Promise<number>}
+   */
+  async jFileControl(fileId, op, pArg) {
+    // Changes in an open writable are not visible to other contexts until
+    // it is closed, so close it where SQLite ends its writes.
+    const file = this.mapIdToFile.get(fileId);
+    try {
+      switch (op) {
+        case VFS.SQLITE_FCNTL_OVERWRITE:
+          // A VACUUM: wait for its truncation before publishing.
+          file.overwrite = true;
+          break;
+        case VFS.SQLITE_FCNTL_SYNC:
+          if (!file.overwrite) {
+            await this.#closeWritable(file);
+          }
+          break;
+        case VFS.SQLITE_FCNTL_COMMIT_PHASETWO:
+          await this.#closeWritable(file);
+          file.overwrite = false;
+          break;
+      }
+    } catch (e) {
+      this.lastError = e;
+      return VFS.SQLITE_IOERR;
+    }
+    return super.jFileControl(fileId, op, pArg);
+  }
+
+  /**
+   * @param {File} file
+   */
+  async #openWritable(file) {
+    file.writableSize = (file.blob ?? await file.fileHandle.getFile()).size;
+    file.writable = await file.fileHandle.createWritable({ keepExistingData: true });
+  }
+
+  /**
+   * @param {File} file
+   */
+  async #closeWritable(file) {
+    await file.writable?.close();
+    file.writable = null;
+    file.blob = null;
   }
 
   jGetLastError(zBuf) {

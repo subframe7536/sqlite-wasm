@@ -21,7 +21,8 @@ export async function getHandle(
   if ((vfs as any).releaser instanceof FileSystemDirectoryHandle) {
     ;[root] = await (vfs as unknown as OPFSAnyContextVFS).getPathComponents(path, create)
   } else {
-    root = await navigator.storage.getDirectory()
+    const getRoot = (vfs as any).options?.getRoot
+    root = typeof getRoot === 'function' ? await getRoot() : await navigator.storage.getDirectory()
   }
   return await root.getFileHandle(path, { create })
 }

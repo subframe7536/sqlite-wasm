@@ -21,6 +21,15 @@ import OpfsWorker from './worker?worker'
 
 let db: SQLiteDB | undefined
 
+// Live workers hold OPFS locks, access handles and BroadcastChannels;
+// keep references so Clear storage can release them.
+const workers = new Set<Worker>()
+function spawnWorker(): Worker {
+  const worker = new OpfsWorker()
+  workers.add(worker)
+  return worker
+}
+
 const supportModuleWorker = isModuleWorkerSupport()
 const supportIDB = isIdbSupported()
 const supportOPFS = await isOpfsSupported()
@@ -41,6 +50,7 @@ document.querySelector('.main-idb')?.addEventListener('click', async () => {
     sql: (await db.run('select sqlite_version() as a'))[0]?.a,
   })
   await db.close()
+  db = undefined
 })
 document.querySelector('.main-memory')?.addEventListener('click', async () => {
   await runSQL((await initSQLite(useMemoryStorage({ url: syncUrl }))).run)
@@ -75,10 +85,11 @@ document.querySelector('.download')?.addEventListener('click', async () => {
 })
 
 document.querySelector('.downloadW')?.addEventListener('click', async () => {
-  const worker = new OpfsWorker()
+  const worker = spawnWorker()
   worker.postMessage('dl')
   worker.onmessage = (buf: MessageEvent) => {
     download(buf.data)
+    workers.delete(worker)
     worker.terminate()
   }
 })
@@ -120,10 +131,12 @@ function test(): AsyncIterableIterator<any> {
 }
 
 document.querySelector('.worker')?.addEventListener('click', async () => {
-  const worker = new OpfsWorker()
+  const worker = spawnWorker()
   worker.onmessage = ({ data }) => {
     if (data === 'done') {
       ee.emit('done')
+      workers.delete(worker)
+      worker.terminate()
     } else {
       ee.emit('data', data)
     }
@@ -134,10 +147,12 @@ document.querySelector('.worker')?.addEventListener('click', async () => {
   }
 })
 document.querySelector('.importW')?.addEventListener('click', async () => {
-  const worker = new OpfsWorker()
+  const worker = spawnWorker()
   worker.onmessage = ({ data }) => {
     if (data === 'done') {
       ee.emit('done')
+      workers.delete(worker)
+      worker.terminate()
     } else {
       ee.emit('data', data)
     }
@@ -148,6 +163,8 @@ document.querySelector('.importW')?.addEventListener('click', async () => {
   } catch (error) {
     // eslint-disable-next-line no-alert
     alert(`${error}`)
+    workers.delete(worker)
+    worker.terminate()
     return
   }
   worker.postMessage(file)
@@ -156,7 +173,16 @@ document.querySelector('.importW')?.addEventListener('click', async () => {
   }
 })
 document.querySelector('.clear')?.addEventListener('click', async () => {
-  await db?.close()
+  try {
+    await db?.close()
+  } catch (e) {
+    console.warn('close failed, continue clearing', e)
+  }
+  db = undefined
+  for (const worker of workers) {
+    worker.terminate()
+  }
+  workers.clear()
   const root = await navigator.storage.getDirectory()
   for await (const [name] of root.entries()) {
     await root.removeEntry(name, { recursive: true })
